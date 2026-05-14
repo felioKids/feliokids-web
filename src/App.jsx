@@ -4,25 +4,25 @@ import { getActivities } from './data/activities.js'
 // ─── SLIDES ───────────────────────────────────────────────────────────────────
 const SLIDES = [
   {
-    // Dziewczynka z pomalowaną twarzą
+    // Dziewczynka z pomalowaną twarzą — zdjęcie 1 od Kasi
     img: 'https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800&q=85',
     label: 'FRANCE · SORTIES FAMILLE',
     title: "Que faire avec les enfants aujourd'hui ?",
     sub: 'Trouvez des idées proches, gratuites ou petit budget, avec parking et où manger.',
   },
   {
-    // Dzieci śmiejące się razem
-    img: 'https://images.unsplash.com/photo-1543342384-1f1350e27861?w=800&q=85',
+    // Dzieci śmiejące się — zdjęcie 2 od Kasi
+    img: 'https://images.unsplash.com/photo-1585504198199-20277593b94f?w=800&q=85',
     label: 'FRANCE · FAMILLES · WEEKEND',
     title: 'Des sorties inoubliables en famille.',
     sub: 'Activités, parking, budget et restaurants proches — en quelques secondes.',
   },
   {
-    // Starsze dzieci / grupa różnorodna — 10-12 lat
-    img: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=85',
+    // Dzieci ok. 12 lat bawiące się razem
+    img: 'https://images.unsplash.com/photo-1491308056676-205b7c9a7dc1?w=800&q=85',
     label: 'FRANCE · ADOS · DÉCOUVERTE',
     title: 'Des activités pour tous les âges.',
-    sub: "Petits et grands, de 3 à 15 ans — des idées pour toute la famille.",
+    sub: "De 3 à 15 ans — des idées pour toute la famille, petits et grands.",
   },
 ]
 
@@ -79,7 +79,7 @@ function HeroSlideshow() {
         {/* Logo */}
         <div style={{ display:'flex', alignItems:'center', gap:9 }}>
           <div style={{ width:36, height:36, borderRadius:10, background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 4px 14px rgba(255,107,74,0.45)' }}>
-            <span style={{ fontWeight:900, fontSize:14, color:'#fff', letterSpacing:'-0.5px' }}>fk</span>
+            <span style={{ fontWeight:900, fontSize:14, color:'#fff', letterSpacing:'-0.5px' }}>f<span style={{textTransform:'uppercase'}}>K</span></span>
           </div>
           <div>
             <div style={{ fontWeight:800, fontSize:16, color:'#fff', lineHeight:1, textShadow:'0 1px 6px rgba(0,0,0,0.3)' }}>FelioKids</div>
