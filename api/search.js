@@ -1,5 +1,0 @@
-export default async function handler(req, res) {
-  return res.status(200).json({
-    message: "FelioKids API placeholder. Claude API sera ajouté plus tard."
-  })
-}
