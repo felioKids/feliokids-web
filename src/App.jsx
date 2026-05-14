@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import {
   Search, MapPin, Navigation, ParkingCircle, Utensils, Star, ChevronRight,
   Bell, Sparkles, X, Heart, Activity, Landmark, Trees, Clapperboard,
-  Gamepad2, CalendarDays, SmilePlus, Umbrella, SunMedium, BadgeEuro
+  Gamepad2, CalendarDays, Umbrella, SunMedium, BadgeEuro
 } from 'lucide-react'
 import { categories, places, heroImage } from './data/activities'
 
@@ -50,17 +50,17 @@ function buildSuggestions({ query, budget, selectedCategory }) {
   if (selectedCategory === 'nature') {
     return {
       icon: <Trees size={20} />,
-      label: 'Envie de respirer',
-      text: 'Les idées nature marchent très bien pour déconnecter: forêt, lac, pique-nique ou cascade.',
+      label: 'Idéal pour une sortie dehors',
+      text: 'Forêt, lac, pique-nique ou cascade: des idées pour respirer en famille.',
       chips: ['Forêt', 'Lac', 'Pique-nique', 'Cascade']
     }
   }
 
-  if (selectedCategory === 'sport' || q.includes('sport') || q.includes('piscine')) {
+  if (selectedCategory === 'sport' || q.includes('sport') || q.includes('piscine') || q.includes('vélo') || q.includes('velo')) {
     return {
       icon: <Activity size={20} />,
-      label: 'Bouger avec les enfants',
-      text: 'Essayez une activité qui défoule: piscine, vélo, football ou accrobranche.',
+      label: 'Idées actives en famille',
+      text: 'Piscine, vélo, football ou accrobranche: parfait pour dépenser leur énergie.',
       chips: ['Piscine', 'Vélo', 'Foot', 'Accrobranche']
     }
   }
@@ -119,9 +119,7 @@ function App() {
     <main className="page">
       <header className="top">
         <div className="brand">
-          <div className="brand-mark">
-            <SmilePlus size={23} strokeWidth={2.5} />
-          </div>
+          <div className="brand-mark">fk</div>
           <div><strong>FelioKids</strong><span>Family discovery</span></div>
         </div>
         <button className="alert"><Bell size={16} /> Alertes</button>
@@ -131,8 +129,8 @@ function App() {
         <div className="hero-shade" />
         <div className="hero-content">
           <p className="kicker">France · familles · weekend</p>
-          <h1>Explorez les meilleures sorties avec vos enfants.</h1>
-          <p className="intro">Activités, parking, budget et restaurants proches — en quelques secondes.</p>
+          <h1>Que faire avec les enfants aujourd’hui ?</h1>
+          <p className="intro">Trouver des idées proches, gratuites ou petit budget.</p>
         </div>
       </section>
 
