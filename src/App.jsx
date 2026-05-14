@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import {
   Search, MapPin, Navigation, ParkingCircle, Utensils, Star, ChevronRight,
   Bell, Sparkles, X, Heart, Activity, Landmark, Trees, Clapperboard,
-  Gamepad2, CalendarDays, Umbrella, SunMedium, BadgeEuro
+  Gamepad2, CalendarDays, Umbrella, SunMedium, BadgeEuro, SlidersHorizontal
 } from 'lucide-react'
 import { categories, places, heroImage } from './data/activities'
 
@@ -28,58 +28,22 @@ function CategoryIcon({ name, size = 24 }) {
 
 function buildSuggestions({ query, budget, selectedCategory }) {
   const q = query.toLowerCase()
-
   if (q.includes('pluie') || q.includes('rain') || q.includes('intérieur') || q.includes('interieur')) {
-    return {
-      icon: <Umbrella size={20} />,
-      label: 'Parfait quand il pleut',
-      text: 'Cinéma, bowling, musée ou ateliers créatifs: des idées simples quand il faut rester au sec.',
-      chips: ['Cinéma', 'Bowling', 'Musée', 'Atelier']
-    }
+    return { icon: <Umbrella size={20} />, label: 'Parfait quand il pleut', text: 'Cinéma, bowling, musée ou ateliers créatifs: des idées simples quand il faut rester au sec.', chips: ['Cinéma', 'Bowling', 'Musée', 'Atelier'] }
   }
-
   if (budget === 'Gratuit') {
-    return {
-      icon: <BadgeEuro size={20} />,
-      label: 'Petit budget aujourd’hui',
-      text: 'On privilégie les sorties gratuites: parc, forêt, aire de jeux ou balade en famille.',
-      chips: ['Parc', 'Forêt', 'Aire de jeux', 'Balade']
-    }
+    return { icon: <BadgeEuro size={20} />, label: 'Petit budget aujourd’hui', text: 'On privilégie les sorties gratuites: parc, forêt, aire de jeux ou balade en famille.', chips: ['Parc', 'Forêt', 'Aire de jeux', 'Balade'] }
   }
-
   if (selectedCategory === 'nature') {
-    return {
-      icon: <Trees size={20} />,
-      label: 'Idéal pour une sortie dehors',
-      text: 'Forêt, lac, pique-nique ou cascade: des idées pour respirer en famille.',
-      chips: ['Forêt', 'Lac', 'Pique-nique', 'Cascade']
-    }
+    return { icon: <Trees size={20} />, label: 'Idéal pour une sortie dehors', text: 'Forêt, lac, pique-nique ou cascade: des idées pour respirer en famille.', chips: ['Forêt', 'Lac', 'Pique-nique', 'Cascade'] }
   }
-
   if (selectedCategory === 'sport' || q.includes('sport') || q.includes('piscine') || q.includes('vélo') || q.includes('velo')) {
-    return {
-      icon: <Activity size={20} />,
-      label: 'Idées actives en famille',
-      text: 'Piscine, vélo, football ou accrobranche: parfait pour dépenser leur énergie.',
-      chips: ['Piscine', 'Vélo', 'Foot', 'Accrobranche']
-    }
+    return { icon: <Activity size={20} />, label: 'Idées actives en famille', text: 'Piscine, vélo, football ou accrobranche: parfait pour dépenser leur énergie.', chips: ['Piscine', 'Vélo', 'Foot', 'Accrobranche'] }
   }
-
   if (selectedCategory === 'evenements') {
-    return {
-      icon: <CalendarDays size={20} />,
-      label: 'Idées du weekend',
-      text: 'Fêtes, marchés, spectacles et festivals famille: parfait pour changer de routine.',
-      chips: ['Festival', 'Marché', 'Spectacle', 'Expo']
-    }
+    return { icon: <CalendarDays size={20} />, label: 'Idées du weekend', text: 'Fêtes, marchés, spectacles et festivals famille: parfait pour changer de routine.', chips: ['Festival', 'Marché', 'Spectacle', 'Expo'] }
   }
-
-  return {
-    icon: <SunMedium size={20} />,
-    label: 'Suggestions du moment',
-    text: 'Commencez par une idée facile: sortie gratuite, activité en intérieur ou balade proche.',
-    chips: ['Gratuit', 'Ce weekend', 'Pluie', 'Nature']
-  }
+  return { icon: <SunMedium size={20} />, label: 'Suggestions du moment', text: 'Commencez par une idée facile: sortie gratuite, activité en intérieur ou balade proche.', chips: ['Gratuit', 'Ce weekend', 'Pluie', 'Nature'] }
 }
 
 function App() {
@@ -91,7 +55,6 @@ function App() {
   const [selectedSubcategory, setSelectedSubcategory] = useState('')
   const [expanded, setExpanded] = useState(null)
   const resultsRef = useRef(null)
-
   const smart = buildSuggestions({ query, budget, selectedCategory })
 
   const filteredPlaces = useMemo(() => {
@@ -120,32 +83,46 @@ function App() {
       <header className="top">
         <div className="brand">
           <div className="brand-mark">fk</div>
-          <div><strong>FelioKids</strong><span>Family discovery</span></div>
+          <div><strong>FelioKids</strong></div>
         </div>
-        <button className="alert"><Bell size={16} /> Alertes</button>
+        <div className="top-actions">
+          <button className="weekend"><Sparkles size={16} /> Weekend</button>
+          <button className="alert"><Bell size={16} /> Alertes</button>
+        </div>
       </header>
 
       <section className="hero-card" style={{ backgroundImage: `url(${heroImage})` }}>
         <div className="hero-shade" />
         <div className="hero-content">
-          <p className="kicker">France · familles · weekend</p>
+          <p className="kicker">France · sorties famille</p>
           <h1>Que faire avec les enfants aujourd’hui ?</h1>
-          <p className="intro">Trouver des idées proches, gratuites ou petit budget.</p>
+          <p className="intro">Trouvez des idées proches, gratuites ou petit budget, avec parking et où manger.</p>
         </div>
       </section>
 
       <form className="search-box" onSubmit={handleSearch}>
-        <label className="city">
-          <MapPin size={17} />
-          <input value={postalCode} onChange={e => setPostalCode(e.target.value.replace(/\D/g, '').slice(0, 5))} placeholder="Code postal" />
-        </label>
-
-        <div className="chips">
-          {[5, 10, 20, 30].map(km => <button type="button" key={km} className={Number(radius) === km ? 'active' : ''} onClick={() => setRadius(km)}>{km} km</button>)}
+        <div className="search-row">
+          <label className="city">
+            <MapPin size={17} />
+            <input value={postalCode} onChange={e => setPostalCode(e.target.value.replace(/\D/g, '').slice(0, 5))} placeholder="Où voulez-vous aller ?" />
+          </label>
+          <button className="search-button desktop-search" type="submit">
+            <Search size={18} />
+            Trouver des activités
+          </button>
         </div>
 
-        <div className="chips budget">
-          {['Gratuit', '-20€', '-50€', '-100€', 'Libre'].map(b => <button type="button" key={b} className={budget === b ? 'active' : ''} onClick={() => setBudget(b)}>{b}</button>)}
+        <div className="chips">
+          <button type="button" className={!selectedCategory && budget === 'Libre' ? 'soft-active' : ''} onClick={() => { setSelectedCategory(null); setBudget('Libre'); setSelectedSubcategory('') }}>Tous</button>
+          {['Gratuit', '-20€', '-50€', '-100€'].map(b => <button type="button" key={b} className={budget === b ? 'active' : ''} onClick={() => setBudget(b)}>{b}</button>)}
+          <button type="button" className={selectedCategory === 'nature' ? 'active' : ''} onClick={() => setSelectedCategory('nature')}>Nature</button>
+          <button type="button" className={query.toLowerCase().includes('pluie') ? 'active' : ''} onClick={() => setQuery('pluie')}>Intérieur</button>
+          <button type="button" className={selectedCategory === 'sport' ? 'active' : ''} onClick={() => setSelectedCategory('sport')}>Sport</button>
+          <button type="button" className="filter-chip"><SlidersHorizontal size={15} /> Filtres</button>
+        </div>
+
+        <div className="chips small-radius">
+          {[5, 10, 20, 30].map(km => <button type="button" key={km} className={Number(radius) === km ? 'active dark' : ''} onClick={() => setRadius(km)}>{km} km</button>)}
         </div>
 
         <label className="search-line">
@@ -153,29 +130,50 @@ function App() {
           <input value={query} onChange={e => setQuery(e.target.value)} placeholder='"bowling", "château gratuit", "piscine"...' />
         </label>
 
-        <button className="search-button" type="submit">
+        <button className="search-button mobile-search" type="submit">
           <Search size={18} />
           Trouver des activités
         </button>
       </form>
 
+      <section className="smart-row">
+        <div className="section-inline-title">
+          <span className="small-icon"><Sparkles size={17} /></span>
+          <h2>Suggestions du moment</h2>
+        </div>
+        <button className="see-all">Voir tout <ChevronRight size={16}/></button>
+      </section>
+
+      <div className="suggestion-strip">
+        {[
+          ['🌧️', 'Parfait pluie', 'https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?auto=format&fit=crop&w=900&q=80'],
+          ['💚', 'Petit budget', 'https://images.unsplash.com/photo-1567427018141-0584cfcbf1b8?auto=format&fit=crop&w=900&q=80'],
+          ['🌲', "Nature aujourd'hui", 'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=900&q=80'],
+          ['🏃', 'Bouger en famille', 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&w=900&q=80'],
+          ['🎨', 'Activités créatives', 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=900&q=80']
+        ].map(([emoji, label, image]) => (
+          <button key={label} className="mini-suggestion" onClick={() => quickSearch(label)}>
+            <div style={{ backgroundImage: `url(${image})` }} />
+            <span>{emoji} {label}</span>
+          </button>
+        ))}
+      </div>
+
       <section className="smart-card">
         <div className="smart-icon">{smart.icon}</div>
         <div className="smart-copy">
-          <p>✨ Suggestions du moment</p>
+          <p>Suggestion active</p>
           <h2>{smart.label}</h2>
           <span>{smart.text}</span>
           <div className="smart-chips">
-            {smart.chips.map(chip => (
-              <button key={chip} onClick={() => quickSearch(chip)}>{chip}</button>
-            ))}
+            {smart.chips.map(chip => <button key={chip} onClick={() => quickSearch(chip)}>{chip}</button>)}
           </div>
         </div>
       </section>
 
       <section className="categories-section">
         <div className="section-title">
-          <div><p>Catégories</p><h2>Choisissez une ambiance</h2></div>
+          <div><p>Explorer</p><h2>Catégories</h2></div>
           {(selectedCategory || selectedSubcategory) && <button className="reset" onClick={() => { setSelectedCategory(null); setSelectedSubcategory('') }}><X size={16} /> Effacer</button>}
         </div>
 
@@ -195,11 +193,7 @@ function App() {
 
               {selectedCategory === category.id && (
                 <div className="inline-subcategories" style={{ '--accent': category.color }}>
-                  {category.subcategories.map(sub => (
-                    <button key={sub} className={selectedSubcategory === sub ? 'active' : ''} onClick={() => setSelectedSubcategory(sub)}>
-                      {sub}
-                    </button>
-                  ))}
+                  {category.subcategories.map(sub => <button key={sub} className={selectedSubcategory === sub ? 'active' : ''} onClick={() => setSelectedSubcategory(sub)}>{sub}</button>)}
                 </div>
               )}
             </div>
@@ -210,7 +204,6 @@ function App() {
       <section className="results" ref={resultsRef}>
         <div className="section-title">
           <div><p>Résultats</p><h2>{filteredPlaces.length} idées près de {postalCode}</h2></div>
-          <span className="ai-off"><Sparkles size={15} /> Sans API payante</span>
         </div>
 
         {filteredPlaces.length === 0 && (
