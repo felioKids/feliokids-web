@@ -1,3 +1,5 @@
+export const heroImage = 'https://images.unsplash.com/photo-1607453998774-d533f65dac99?auto=format&fit=crop&w=1600&q=90'
+
 export const categories = [
   { id:'gratuit', title:'Gratuit', subtitle:'Sorties sans se ruiner', icon:'💚', color:'#19A974', image:'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&w=1400&q=85', subcategories:['Places de jeux','Parcs & jardins','Forêts & balades','Musées gratuits','Événements gratuits'] },
   { id:'sport', title:'Sport', subtitle:'Bouger en famille', icon:'⚽', color:'#2F80ED', image:'https://images.unsplash.com/photo-1519311965067-36d3e5f33d39?auto=format&fit=crop&w=1400&q=85', subcategories:['Football','Piscines','Vélo & VTT','Accrobranche','Skateparks'] },

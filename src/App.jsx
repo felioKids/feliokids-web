@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Search, MapPin, Navigation, ParkingCircle, Utensils, Star, ChevronRight, Bell, Sparkles, X } from 'lucide-react'
-import { categories, places } from './data/activities'
+import { categories, places, heroImage } from './data/activities'
 
 function mapsUrl(query) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`
@@ -36,27 +36,30 @@ function App() {
         <button className="alert"><Bell size={16} /> Alertes</button>
       </header>
 
-      <section className="hero">
-        <p className="kicker">France · familles · weekend</p>
-        <h1>Explorez les meilleures sorties avec vos enfants.</h1>
-        <p className="intro">Activités, parking, budget et restaurants proches — en quelques secondes.</p>
-
-        <div className="search-box">
-          <label className="city">
-            <MapPin size={17} />
-            <input value={postalCode} onChange={e => setPostalCode(e.target.value.replace(/\D/g, '').slice(0, 5))} placeholder="Code postal" />
-          </label>
-          <div className="chips">
-            {[5, 10, 20, 30].map(km => <button key={km} className={Number(radius) === km ? 'active' : ''} onClick={() => setRadius(km)}>{km} km</button>)}
-          </div>
-          <div className="chips budget">
-            {['Gratuit', '-20€', '-50€', '-100€', 'Libre'].map(b => <button key={b} className={budget === b ? 'active' : ''} onClick={() => setBudget(b)}>{b}</button>)}
-          </div>
-          <label className="search-line">
-            <Search size={17} />
-            <input value={query} onChange={e => setQuery(e.target.value)} placeholder='"bowling", "château gratuit", "piscine"...' />
-          </label>
+      <section className="hero-card" style={{ backgroundImage: `url(${heroImage})` }}>
+        <div className="hero-shade" />
+        <div className="hero-content">
+          <p className="kicker">France · familles · weekend</p>
+          <h1>Explorez les meilleures sorties avec vos enfants.</h1>
+          <p className="intro">Activités, parking, budget et restaurants proches — en quelques secondes.</p>
         </div>
+      </section>
+
+      <section className="search-box">
+        <label className="city">
+          <MapPin size={17} />
+          <input value={postalCode} onChange={e => setPostalCode(e.target.value.replace(/\D/g, '').slice(0, 5))} placeholder="Code postal" />
+        </label>
+        <div className="chips">
+          {[5, 10, 20, 30].map(km => <button key={km} className={Number(radius) === km ? 'active' : ''} onClick={() => setRadius(km)}>{km} km</button>)}
+        </div>
+        <div className="chips budget">
+          {['Gratuit', '-20€', '-50€', '-100€', 'Libre'].map(b => <button key={b} className={budget === b ? 'active' : ''} onClick={() => setBudget(b)}>{b}</button>)}
+        </div>
+        <label className="search-line">
+          <Search size={17} />
+          <input value={query} onChange={e => setQuery(e.target.value)} placeholder='"bowling", "château gratuit", "piscine"...' />
+        </label>
       </section>
 
       <section className="categories-section">
@@ -65,11 +68,11 @@ function App() {
           {(selectedCategory || selectedSubcategory) && <button className="reset" onClick={() => { setSelectedCategory(null); setSelectedSubcategory('') }}><X size={16} /> Effacer</button>}
         </div>
 
-        <div className="mosaic">
-          {categories.map((category, index) => (
+        <div className="equal-grid">
+          {categories.map((category) => (
             <div className="category-wrap" key={category.id}>
               <button
-                className={`photo-card ${index % 3 === 0 ? 'wide' : ''} ${selectedCategory === category.id ? 'selected' : ''}`}
+                className={`photo-card ${selectedCategory === category.id ? 'selected' : ''}`}
                 style={{ backgroundImage: `url(${category.image})`, '--accent': category.color }}
                 onClick={() => { setSelectedCategory(category.id); setSelectedSubcategory('') }}
               >
