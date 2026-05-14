@@ -1,21 +1,19 @@
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --cream: #FFF8F1; --coral: #FF6B4A; --coral-d: #E85A3A;
-  --navy: #1B2B4B; --navy-m: #3D4F6B; --text-l: #8A9BB0;
-  --border: #EDE8E1; --white: #fff;
-  --font: 'Plus Jakarta Sans', sans-serif;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#FFF8F1;--coral:#FF6B4A;--navy:#1B2B4B;
+  --text-m:#5A6A82;--text-l:#9AAABB;--border:#EDE8E1;
+  --font:'Plus Jakarta Sans',sans-serif;
 }
-html { scroll-behavior: smooth; }
-body { font-family: var(--font); background: var(--cream); color: var(--navy); min-height: 100vh; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-button { cursor: pointer; font-family: var(--font); border: none; background: none; }
-input  { font-family: var(--font); border: none; outline: none; background: none; }
-::-webkit-scrollbar { height: 3px; width: 3px; }
-::-webkit-scrollbar-thumb { background: var(--coral); border-radius: 99px; }
-.scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-.scroll-x::-webkit-scrollbar { display: none; }
-@keyframes fadeSlide { 0%{opacity:0;transform:scale(1.04)} 8%{opacity:1;transform:scale(1)} 33%{opacity:1;transform:scale(1)} 41%{opacity:0;transform:scale(0.98)} 100%{opacity:0} }
-@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
-@keyframes fadeIn { from{opacity:0} to{opacity:1} }
-@keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
-.anim-up { animation: fadeUp 0.32s cubic-bezier(.22,.68,0,1.2) both; }
-.anim-in { animation: fadeIn 0.22s ease both; }
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--cream);color:var(--navy);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{cursor:pointer;font-family:var(--font);border:none;background:none}
+input{font-family:var(--font);border:none;outline:none;background:none}
+.scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.scroll-x::-webkit-scrollbar{display:none}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.anim-up{animation:fadeUp .3s cubic-bezier(.22,.68,0,1.2) both}
+.anim-in{animation:fadeIn .22s ease both}
+.anim-down{animation:slideDown .25s ease both}
