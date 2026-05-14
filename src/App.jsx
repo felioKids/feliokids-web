@@ -186,14 +186,57 @@ function SubsPanel({ cat, activeSub, onSub }) {
 }
 
 // ─── ACTIVITY CARD ────────────────────────────────────────────────────────────
+
+const TYPE_IMGS = {
+  'Parc':           'https://images.unsplash.com/photo-1575783970733-1aaedde1db74?w=600&q=75',
+  'Jardin':         'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&q=75',
+  'Promenade':      'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=75',
+  'Forêt':          'https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&q=75',
+  'Plage':          'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=75',
+  'Lac':            'https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=600&q=75',
+  'Zoo':            'https://images.unsplash.com/photo-1534567153574-2b12153a87f0?w=600&q=75',
+  'Ferme':          'https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=600&q=75',
+  'Aquarium':       'https://images.unsplash.com/photo-1520694478166-daaaaec95b69?w=600&q=75',
+  'Musée':          'https://images.unsplash.com/photo-1554907984-15263bfd63bd?w=600&q=75',
+  'Château':        'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=75',
+  'Patrimoine':     'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=600&q=75',
+  'Piscine':        'https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=600&q=75',
+  'Patinoire':      'https://images.unsplash.com/photo-1607532941433-304659e8198a?w=600&q=75',
+  'Accrobranche':   'https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=75',
+  'Vélo':           'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=75',
+  'Bowling':        'https://images.unsplash.com/photo-1545158535-c3f7168c28b6?w=600&q=75',
+  'Escape game':    'https://images.unsplash.com/photo-1606167668584-78701c57f13d?w=600&q=75',
+  'Laser game':     'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=600&q=75',
+  'Trampoline':     'https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=600&q=75',
+  'Cinéma':         'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=600&q=75',
+  'Théâtre':        'https://images.unsplash.com/photo-1503095396549-807759245b35?w=600&q=75',
+  'Planétarium':    'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=600&q=75',
+  'Restaurant':     'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=75',
+  'Boulangerie':    'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=75',
+  'Glacier':        'https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=600&q=75',
+  'Festival':       'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600&q=75',
+  'Marché':         'https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=600&q=75',
+  'default':        'https://images.unsplash.com/photo-1560969184-10fe8719e047?w=600&q=75',
+}
+
+function getTypeImg(type) {
+  if (!type) return TYPE_IMGS.default
+  const t = type.toLowerCase()
+  for (const [key, url] of Object.entries(TYPE_IMGS)) {
+    if (t.includes(key.toLowerCase())) return url
+  }
+  return TYPE_IMGS.default
+}
+
 function ActivityCard({ a, idx }) {
   const [restoOpen, setRestoOpen] = useState(false)
   const addr = encodeURIComponent(a.address)
+  const cardImg = getTypeImg(a.type)
   return (
     <div className="anim-up" style={{ animationDelay:`${idx*0.06}s`, background:'#fff', borderRadius:20, overflow:'hidden', boxShadow:'0 2px 16px rgba(27,43,75,0.09)', marginBottom:14, border:'1px solid #F0EBE3' }}>
-      <div style={{ position:'relative', height:155, background:'linear-gradient(135deg,#FFE4D6,#EDE8E1)', display:'flex', alignItems:'center', justifyContent:'center' }}>
-        <span style={{ fontSize:40 }}>🎡</span>
-        <div style={{ position:'absolute', inset:0, background:'linear-gradient(to top,rgba(27,43,75,0.68) 0%,transparent 55%)' }} />
+      <div style={{ position:'relative', height:155, overflow:'hidden' }}>
+        <img src={cardImg} alt={a.name} style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
+        <div style={{ position:'absolute', inset:0, background:'linear-gradient(to top,rgba(27,43,75,0.72) 0%,rgba(0,0,0,0.1) 60%)' }} />
         <div style={{ position:'absolute', top:12, left:12 }}>
           {a.isFree && <span style={{ background:'#3DAA6E', color:'#fff', fontSize:11, fontWeight:700, padding:'4px 11px', borderRadius:99 }}>💚 Gratuit</span>}
         </div>
