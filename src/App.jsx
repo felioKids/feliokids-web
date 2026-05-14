@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import {
   Search, MapPin, Navigation, ParkingCircle, Utensils, Star, ChevronRight,
   Bell, Sparkles, X, Heart, Activity, Landmark, Trees, Clapperboard,
-  Gamepad2, CalendarDays, SmilePlus
+  Gamepad2, CalendarDays, SmilePlus, Umbrella, SunMedium, BadgeEuro
 } from 'lucide-react'
 import { categories, places, heroImage } from './data/activities'
 
@@ -26,6 +26,62 @@ function CategoryIcon({ name, size = 24 }) {
   return icons[name] || <Sparkles {...props} />
 }
 
+function buildSuggestions({ query, budget, selectedCategory }) {
+  const q = query.toLowerCase()
+
+  if (q.includes('pluie') || q.includes('rain') || q.includes('intérieur') || q.includes('interieur')) {
+    return {
+      icon: <Umbrella size={20} />,
+      label: 'Parfait quand il pleut',
+      text: 'Cinéma, bowling, musée ou ateliers créatifs: des idées simples quand il faut rester au sec.',
+      chips: ['Cinéma', 'Bowling', 'Musée', 'Atelier']
+    }
+  }
+
+  if (budget === 'Gratuit') {
+    return {
+      icon: <BadgeEuro size={20} />,
+      label: 'Petit budget aujourd’hui',
+      text: 'On privilégie les sorties gratuites: parc, forêt, aire de jeux ou balade en famille.',
+      chips: ['Parc', 'Forêt', 'Aire de jeux', 'Balade']
+    }
+  }
+
+  if (selectedCategory === 'nature') {
+    return {
+      icon: <Trees size={20} />,
+      label: 'Envie de respirer',
+      text: 'Les idées nature marchent très bien pour déconnecter: forêt, lac, pique-nique ou cascade.',
+      chips: ['Forêt', 'Lac', 'Pique-nique', 'Cascade']
+    }
+  }
+
+  if (selectedCategory === 'sport' || q.includes('sport') || q.includes('piscine')) {
+    return {
+      icon: <Activity size={20} />,
+      label: 'Bouger avec les enfants',
+      text: 'Essayez une activité qui défoule: piscine, vélo, football ou accrobranche.',
+      chips: ['Piscine', 'Vélo', 'Foot', 'Accrobranche']
+    }
+  }
+
+  if (selectedCategory === 'evenements') {
+    return {
+      icon: <CalendarDays size={20} />,
+      label: 'Idées du weekend',
+      text: 'Fêtes, marchés, spectacles et festivals famille: parfait pour changer de routine.',
+      chips: ['Festival', 'Marché', 'Spectacle', 'Expo']
+    }
+  }
+
+  return {
+    icon: <SunMedium size={20} />,
+    label: 'Suggestions du moment',
+    text: 'Commencez par une idée facile: sortie gratuite, activité en intérieur ou balade proche.',
+    chips: ['Gratuit', 'Ce weekend', 'Pluie', 'Nature']
+  }
+}
+
 function App() {
   const [postalCode, setPostalCode] = useState('75001')
   const [radius, setRadius] = useState(20)
@@ -35,6 +91,8 @@ function App() {
   const [selectedSubcategory, setSelectedSubcategory] = useState('')
   const [expanded, setExpanded] = useState(null)
   const resultsRef = useRef(null)
+
+  const smart = buildSuggestions({ query, budget, selectedCategory })
 
   const filteredPlaces = useMemo(() => {
     const maxBudget = budget === 'Gratuit' ? 0 : budget === '-20€' ? 20 : budget === '-50€' ? 50 : budget === '-100€' ? 100 : Infinity
@@ -50,6 +108,11 @@ function App() {
   function handleSearch(e) {
     e?.preventDefault()
     resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  function quickSearch(value) {
+    setQuery(value)
+    setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80)
   }
 
   return (
@@ -98,6 +161,20 @@ function App() {
         </button>
       </form>
 
+      <section className="smart-card">
+        <div className="smart-icon">{smart.icon}</div>
+        <div className="smart-copy">
+          <p>✨ Suggestions du moment</p>
+          <h2>{smart.label}</h2>
+          <span>{smart.text}</span>
+          <div className="smart-chips">
+            {smart.chips.map(chip => (
+              <button key={chip} onClick={() => quickSearch(chip)}>{chip}</button>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="categories-section">
         <div className="section-title">
           <div><p>Catégories</p><h2>Choisissez une ambiance</h2></div>
@@ -137,6 +214,14 @@ function App() {
           <div><p>Résultats</p><h2>{filteredPlaces.length} idées près de {postalCode}</h2></div>
           <span className="ai-off"><Sparkles size={15} /> Sans API payante</span>
         </div>
+
+        {filteredPlaces.length === 0 && (
+          <div className="empty-state">
+            <Sparkles size={28} />
+            <h3>Aucune activité trouvée pour ce filtre.</h3>
+            <p>Essayez un budget plus large, un autre mot-clé ou un rayon plus grand.</p>
+          </div>
+        )}
 
         <div className="result-grid">
           {filteredPlaces.map(place => (
