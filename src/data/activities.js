@@ -1,88 +1,203 @@
-export const MOCK_ACTIVITIES = {
-  gratuit: [
-    { id: 1, name: "Parc de la Tête d'Or", type: "Parc", address: "Place du Général Leclerc, Lyon", distance: "1,2 km", price: "Gratuit", isFree: true, rating: 4.8, reviews: 8420, openNow: true, hours: "Ouvert 7j/7 · 6h-23h", description: "Immense parc urbain avec zoo gratuit, lac avec barques et grandes prairies. Le poumon vert de Lyon, idéal pour pique-niquer en famille !", tags: ["Plein air", "Zoo", "Lac", "Pique-nique"], restaurants: [{ name: "Brasserie du Parc", type: "Brasserie", distance: "0,3 km", price: "€€" }, { name: "Pizza Carlo", type: "Pizzeria", distance: "0,8 km", price: "€" }, { name: "Le Petit Lyonnais", type: "Lyonnaise", distance: "1,1 km", price: "€€" }] },
-    { id: 2, name: "Jardins de la Confluence", type: "Jardin", address: "Cours Charlemagne, Lyon 2", distance: "2,4 km", price: "Gratuit", isFree: true, rating: 4.5, reviews: 3210, openNow: true, hours: "Ouvert 7j/7 · 7h-21h", description: "Jardins modernes au bord de la Saône avec aires de jeux pour enfants et fontaines interactives. Architecture contemporaine impressionnante.", tags: ["Jardin", "Jeux", "Architecture"], restaurants: [{ name: "McDonald's Confluence", type: "Fast food", distance: "0,2 km", price: "€" }, { name: "Sushi Shop", type: "Japonais", distance: "0,5 km", price: "€€" }] },
-    { id: 3, name: "Musée Gadagne", type: "Musée", address: "1 Pl. du Petit Collège, Lyon 5", distance: "3,1 km", price: "Gratuit 1er dimanche", isFree: true, rating: 4.3, reviews: 1850, openNow: false, hours: "Mer-Dim · 11h-18h30", description: "Musée d'histoire de Lyon installé dans un magnifique hôtel Renaissance. Collections sur l'histoire de la ville et musée des marionnettes Guignol.", tags: ["Histoire", "Culture", "Guignol"], restaurants: [{ name: "Café des Artistes", type: "Café", distance: "0,1 km", price: "€" }, { name: "Le Bouchon Lyonnais", type: "Lyonnaise", distance: "0,4 km", price: "€€€" }] },
-    { id: 4, name: "Parc Blandan", type: "Parc", address: "Rue du Repos, Lyon 7", distance: "1,8 km", price: "Gratuit", isFree: true, rating: 4.6, reviews: 2940, openNow: true, hours: "Lun-Ven 8h-20h · Week-end 8h-21h", description: "Ancien fort militaire reconverti en parc urbain. Skatepark, terrain de pétanque, prairie et aires de jeux. Ambiance conviviale et familiale.", tags: ["Skate", "Sport", "Pétanque"], restaurants: [{ name: "La Cantina", type: "Mexicain", distance: "0,3 km", price: "€€" }, { name: "Burger Republic", type: "Burgers", distance: "0,6 km", price: "€€" }] },
-    { id: 5, name: "Berges du Rhône", type: "Promenade", address: "Quai Claude Bernard, Lyon 7", distance: "2,0 km", price: "Gratuit", isFree: true, rating: 4.7, reviews: 11200, openNow: true, hours: "Accès libre 24h/24", description: "5 km de berges aménagées le long du Rhône pour vélo, running et promenades. Aires de jeux, ping-pong et espaces pique-nique ombragés.", tags: ["Vélo", "Running", "Bord de l'eau"], restaurants: [{ name: "Le Sucré Salé", type: "Snack", distance: "0,2 km", price: "€" }, { name: "Ninkasi Gerland", type: "Brasserie", distance: "1,2 km", price: "€€" }] },
-    { id: 6, name: "Bibliothèque Part-Dieu", type: "Bibliothèque", address: "30 Bd Vivier Merle, Lyon 3", distance: "3,5 km", price: "Gratuit", isFree: true, rating: 4.4, reviews: 980, openNow: true, hours: "Mar-Sam · 10h-19h", description: "Plus grande bibliothèque de province avec espace jeunesse animé, ateliers lecture et accès Internet gratuit. Nombreux événements familiaux.", tags: ["Lecture", "Ateliers", "Culture"], restaurants: [{ name: "Paul Boulangerie", type: "Boulangerie", distance: "0,1 km", price: "€" }, { name: "Jour de Fête", type: "Salon de thé", distance: "0,3 km", price: "€€" }] },
-  ],
-  sport: [
-    { id: 7, name: "Accrobranche Parc Miribel", type: "Accrobranche", address: "Parc de Miribel-Jonage, Beynost", distance: "8,5 km", price: "18€ adulte · 14€ enfant", isFree: false, rating: 4.6, reviews: 2340, openNow: true, hours: "Sam-Dim · 10h-18h", description: "Parcours acrobatiques dans les arbres pour toute la famille avec 8 niveaux de difficulté. Du circuit débutant pour les petits jusqu'au Tarzan pour les plus courageux !", tags: ["Aventure", "Nature", "Sensations"], restaurants: [{ name: "La Guinguette du Lac", type: "Guinguette", distance: "1,2 km", price: "€€" }, { name: "Snack du Parc", type: "Snack", distance: "0,5 km", price: "€" }] },
-    { id: 8, name: "Piscine du Rhône", type: "Piscine", address: "6 Quai Claude Bernard, Lyon 7", distance: "2,1 km", price: "3,80€ / personne", isFree: false, rating: 4.2, reviews: 1560, openNow: true, hours: "Lun-Ven 7h-21h · Week-end 9h-18h", description: "Piscine olympique en bord de Rhône avec bassins extérieurs en été. Idéale pour les familles avec bassin enfants et toboggan aquatique.", tags: ["Natation", "Toboggan", "Été"], restaurants: [{ name: "Café du Rhône", type: "Café", distance: "0,1 km", price: "€" }, { name: "O'Tacos", type: "Fast food", distance: "0,8 km", price: "€" }] },
-    { id: 9, name: "Patinoire Charlemagne", type: "Patinoire", address: "5 Rue Rachais, Lyon 7", distance: "2,8 km", price: "7€ adulte · 5€ enfant + 3€ patins", isFree: false, rating: 4.4, reviews: 3210, openNow: true, hours: "Mar-Dim · 10h-22h", description: "Grande patinoire couverte ouverte toute l'année avec sessions famille le week-end. Location de patins disponible, cours pour débutants.", tags: ["Glace", "Hiver", "Couvert"], restaurants: [{ name: "Subway", type: "Sandwichs", distance: "0,2 km", price: "€" }, { name: "Hippopotamus", type: "Grillades", distance: "0,5 km", price: "€€€" }] },
-    { id: 10, name: "VTT Forêt de Fontainebleau", type: "Vélo", address: "Route Ronde, Fontainebleau", distance: "12,3 km", price: "Gratuit · Location vélo 15€", isFree: false, rating: 4.7, reviews: 4520, openNow: true, hours: "Accès libre", description: "Réseau de pistes VTT balisées pour tous niveaux dans la magnifique forêt. Location de vélos sur place, circuits familiaux fléchés.", tags: ["VTT", "Forêt", "Nature"], restaurants: [{ name: "Auberge de la Forêt", type: "Auberge", distance: "2,1 km", price: "€€" }, { name: "Le Relais", type: "Brasserie", distance: "3,5 km", price: "€€" }] },
-    { id: 11, name: "Tennis Club de Lyon", type: "Tennis", address: "12 Rue Antoine Lumière, Lyon 8", distance: "4,2 km", price: "12€/heure terrain", isFree: false, rating: 4.3, reviews: 890, openNow: true, hours: "Lun-Dim · 8h-22h", description: "Club avec 15 courts couverts et extérieurs. Cours collectifs pour enfants dès 5 ans, location de raquettes disponible.", tags: ["Tennis", "Cours", "Couvert"], restaurants: [{ name: "Le Club House", type: "Brasserie", distance: "0,0 km", price: "€€" }, { name: "Boulangerie Martin", type: "Boulangerie", distance: "0,4 km", price: "€" }] },
-    { id: 12, name: "Trampoline Park Jump Zone", type: "Trampoline", address: "45 Rue de la Villette, Lyon 3", distance: "3,7 km", price: "15€/heure · -12 ans 12€", isFree: false, rating: 4.5, reviews: 2780, openNow: true, hours: "Mar-Ven 14h-21h · Week-end 10h-21h", description: "Immense parc de trampolines avec zones foam pit, basket trampoline et espace tout-petits. Ambiance festive garantie pour toute la famille !", tags: ["Trampoline", "Couvert", "Fun"], restaurants: [{ name: "Domino's Pizza", type: "Pizza", distance: "0,3 km", price: "€€" }, { name: "KFC", type: "Fast food", distance: "0,5 km", price: "€" }] },
-  ],
-  enfants: [
-    { id: 13, name: "Ferme de Chosal", type: "Ferme pédagogique", address: "Chemin de Chosal, Brignais", distance: "11,2 km", price: "8€ adulte · 6€ enfant", isFree: false, rating: 4.7, reviews: 1890, openNow: true, hours: "Mar-Dim · 10h-17h30", description: "Vraie ferme avec vaches, moutons, lapins et cochons. Les enfants peuvent nourrir les animaux et assister à la traite. Boutique de produits fermiers.", tags: ["Animaux", "Nature", "Pédagogique"], restaurants: [{ name: "La Ferme Restaurant", type: "Ferme", distance: "0,0 km", price: "€€" }, { name: "Le Bistrot du Village", type: "Bistrot", distance: "2,3 km", price: "€€" }] },
-    { id: 14, name: "Zoo de Lyon Saint-Martin", type: "Zoo", address: "Parc de la Tête d'Or, Lyon 6", distance: "1,8 km", price: "Gratuit", isFree: true, rating: 4.5, reviews: 12300, openNow: true, hours: "Ouvert 7j/7 · 9h-18h", description: "Zoo gratuit dans le parc de la Tête d'Or avec girafes, rhinocéros et flamants roses. Un des rares zoos gratuits de France, incontournable !", tags: ["Animaux", "Gratuit", "Plein air"], restaurants: [{ name: "Café du Parc", type: "Café", distance: "0,5 km", price: "€€" }, { name: "L'Orangerie", type: "Brasserie", distance: "0,8 km", price: "€€€" }] },
-    { id: 15, name: "Escape Game Famille Enigma", type: "Escape game", address: "23 Rue de la République, Lyon 1", distance: "3,2 km", price: "22€/personne · -12 ans 18€", isFree: false, rating: 4.8, reviews: 3410, openNow: true, hours: "Lun-Dim · 10h-22h", description: "Escape rooms spécialement conçues pour les familles avec enfants dès 8 ans. Scénarios aventure et mystère, animateur dédié, durée 60 minutes.", tags: ["Aventure", "Réflexion", "Couvert"], restaurants: [{ name: "La Poularde", type: "Lyonnaise", distance: "0,2 km", price: "€€€" }, { name: "Subway République", type: "Sandwichs", distance: "0,1 km", price: "€" }] },
-    { id: 16, name: "Aquarium du Grand Lyon", type: "Aquarium", address: "Place des Terreaux, Lyon 1", distance: "4,1 km", price: "14€ adulte · 9€ enfant", isFree: false, rating: 4.4, reviews: 2150, openNow: true, hours: "Mar-Dim · 10h-19h", description: "Découvrez 3000 poissons de 300 espèces différentes. Tunnel sous-marin, bassin tactile raies et étoiles de mer. Spectacle de nourrissage quotidien.", tags: ["Aquatique", "Science", "Couvert"], restaurants: [{ name: "Café des Terreaux", type: "Café", distance: "0,1 km", price: "€€" }, { name: "Le Nord Bocuse", type: "Lyonnaise", distance: "0,3 km", price: "€€€" }] },
-    { id: 17, name: "Atelier Poterie Enfants", type: "Atelier créatif", address: "8 Rue Bonnefoi, Lyon 3", distance: "2,9 km", price: "20€/enfant · parent gratuit", isFree: false, rating: 4.9, reviews: 560, openNow: false, hours: "Mer et Sam · 14h-17h", description: "Ateliers de poterie pour enfants de 4 à 12 ans. Chaque enfant repart avec sa création cuite et peinte. Animatrice diplômée, groupes de 8 max.", tags: ["Créatif", "Art", "Couvert"], restaurants: [{ name: "Crêperie Bretonne", type: "Crêperie", distance: "0,3 km", price: "€€" }, { name: "L'Artisan Glacier", type: "Glacier", distance: "0,2 km", price: "€" }] },
-    { id: 18, name: "Parc d'Attractions Walibi Rhône-Alpes", type: "Parc d'attractions", address: "Chemin des Grandes Combes, Les Avenières", distance: "45,0 km", price: "35€ adulte · 28€ enfant", isFree: false, rating: 4.5, reviews: 18900, openNow: true, hours: "Sam-Dim · 10h-19h (saison)", description: "Grand parc d'attractions avec manèges pour tous les âges, shows aquatiques en été et zone enfants Walibiworld. Une journée mémorable en famille !", tags: ["Manèges", "Sensations", "Journée"], restaurants: [{ name: "Restaurant du Parc", type: "Self-service", distance: "0,0 km", price: "€€" }, { name: "Burger Walibi", type: "Fast food", distance: "0,0 km", price: "€€" }] },
-  ],
-  culture: [
-    { id: 19, name: "Château de Pierre-Scize", type: "Château", address: "Rue Pierre-Scize, Lyon 5", distance: "4,5 km", price: "Gratuit extérieur", isFree: true, rating: 4.2, reviews: 1230, openNow: true, hours: "Accès extérieur libre", description: "Ruines d'un château médiéval dominant la Saône avec vue panoramique sur Lyon. Lieu chargé d'histoire, idéal pour une balade historique en famille.", tags: ["Histoire", "Vue", "Médiéval"], restaurants: [{ name: "Les Adrets", type: "Lyonnaise", distance: "1,2 km", price: "€€€" }, { name: "Café du Château", type: "Café", distance: "0,8 km", price: "€€" }] },
-    { id: 20, name: "Musée des Confluences", type: "Musée des sciences", address: "86 Quai Perrache, Lyon 2", distance: "3,8 km", price: "12€ adulte · Gratuit -18 ans", isFree: false, rating: 4.7, reviews: 9870, openNow: true, hours: "Mar-Ven 11h-19h · Week-end 10h-19h", description: "Musée spectaculaire sur l'origine du monde, des espèces et des sociétés. Architecture futuriste époustouflante et collections permanentes fascinantes.", tags: ["Sciences", "Architecture", "Permanent"], restaurants: [{ name: "Le Confluent", type: "Brasserie", distance: "0,2 km", price: "€€€" }, { name: "Café des Sciences", type: "Café", distance: "0,0 km", price: "€€" }] },
-    { id: 21, name: "Planétarium de Vaulx-en-Velin", type: "Planétarium", address: "1 Rue Professeur Zimmermann, Vaulx-en-Velin", distance: "7,2 km", price: "7€ adulte · 5€ enfant", isFree: false, rating: 4.6, reviews: 2100, openNow: false, hours: "Mer, Sam, Dim · 14h-18h", description: "Voyagez dans l'espace sous un dôme de 15m de diamètre. Séances adaptées aux enfants dès 5 ans, animation par des astronomes passionnés.", tags: ["Espace", "Science", "Couvert"], restaurants: [{ name: "Brasserie du Centre", type: "Brasserie", distance: "1,5 km", price: "€€" }, { name: "La Pause Café", type: "Café", distance: "1,2 km", price: "€" }] },
-    { id: 22, name: "Vieux-Lyon — Traboules", type: "Patrimoine", address: "Rue Saint-Jean, Lyon 5", distance: "3,9 km", price: "Gratuit", isFree: true, rating: 4.8, reviews: 15600, openNow: true, hours: "Accès libre 8h-20h", description: "Découvrez les célèbres traboules, passages secrets à travers les immeubles Renaissance. Le quartier le mieux conservé de Lyon classé UNESCO.", tags: ["UNESCO", "Histoire", "Balade"], restaurants: [{ name: "Le Musée", type: "Bouchon Lyonnais", distance: "0,1 km", price: "€€€" }, { name: "Café Comptoir Abel", type: "Lyonnaise", distance: "0,3 km", price: "€€€" }] },
-    { id: 23, name: "Musée Lumière", type: "Musée", address: "25 Rue du Premier Film, Lyon 8", distance: "5,1 km", price: "8€ adulte · 6€ enfant", isFree: false, rating: 4.7, reviews: 4320, openNow: true, hours: "Mar-Dim · 10h-18h30", description: "Maison natale des frères Lumière, inventeurs du cinéma. Découvrez l'histoire du 7ème art avec projections de films originaux et collections fascinantes.", tags: ["Cinéma", "Histoire", "Culture"], restaurants: [{ name: "Brasserie Georges", type: "Brasserie", distance: "2,1 km", price: "€€€" }, { name: "Le Cinéma Café", type: "Café", distance: "0,2 km", price: "€€" }] },
-    { id: 24, name: "Théâtre Guignol de Lyon", type: "Théâtre enfants", address: "2 Montée du Gourguillon, Lyon 5", distance: "4,2 km", price: "9€ adulte · 7€ enfant", isFree: false, rating: 4.9, reviews: 1870, openNow: false, hours: "Mer, Sam, Dim · 15h et 16h30", description: "Le théâtre de marionnettes traditionnel lyonnais avec Guignol, le personnage emblématique de Lyon. Spectacles familiaux pour enfants dès 3 ans.", tags: ["Marionnettes", "Tradition", "Enfants"], restaurants: [{ name: "Crêperie du Vieux-Lyon", type: "Crêperie", distance: "0,3 km", price: "€€" }, { name: "La Ficelle", type: "Lyonnaise", distance: "0,5 km", price: "€€€" }] },
-  ],
-  nature: [
-    { id: 25, name: "Forêt de Bonnevaux", type: "Forêt", address: "Route de Bonnevaux, Morestel", distance: "35,0 km", price: "Gratuit", isFree: true, rating: 4.5, reviews: 890, openNow: true, hours: "Accès libre", description: "Forêt de 2000 hectares avec sentiers balisés pour familles. Faune sauvage, étangs et cabanes dans les arbres. Ressourcement garanti au grand air.", tags: ["Randonnée", "Nature", "Calme"], restaurants: [{ name: "Auberge de Morestel", type: "Auberge", distance: "3,5 km", price: "€€" }] },
-    { id: 26, name: "Plage des Îles du Rhône", type: "Plage", address: "Île du Grand Gravier, Grigny", distance: "14,5 km", price: "Gratuit", isFree: true, rating: 4.3, reviews: 2340, openNow: true, hours: "Accès libre en saison", description: "Plage naturelle en bord de Rhône avec eau douce, sable fin et zone de baignade surveillée en été. Aires de pique-nique ombragées.", tags: ["Plage", "Baignade", "Été"], restaurants: [{ name: "Guinguette du Rhône", type: "Guinguette", distance: "0,5 km", price: "€€" }] },
-    { id: 27, name: "Jardins du Palais Royal de Versailles", type: "Jardin botanique", address: "Pl. d'Armes, Versailles", distance: "22,3 km", price: "Gratuit jardins · 20€ château", isFree: true, rating: 4.9, reviews: 45000, openNow: true, hours: "Ouvert 7j/7 · 8h-20h30", description: "Les jardins à la française les plus célèbres du monde. Fontaines musicales le week-end, bosquets mystérieux et parterres fleuris. Féerique en famille.", tags: ["Histoire", "Jardins", "UNESCO"], restaurants: [{ name: "Ore Ducasse", type: "Gastronomique", distance: "0,1 km", price: "€€€€" }, { name: "La Flottille", type: "Brasserie", distance: "0,8 km", price: "€€€" }] },
-    { id: 28, name: "Cueillette de Fraises de Chaponnay", type: "Cueillette", address: "Route de Saint-Pierre, Chaponnay", distance: "18,7 km", price: "Prix au kilo · ~3€/kg", isFree: false, rating: 4.6, reviews: 1230, openNow: true, hours: "Mai-Juillet · 9h-12h et 14h-18h", description: "Cueillez vous-même fraises, framboises et groseilles dans les champs. Activité adorée des enfants, produits ultra-frais directement du producteur.", tags: ["Cueillette", "Nature", "Enfants"], restaurants: [{ name: "Ferme de Chaponnay", type: "Ferme", distance: "0,0 km", price: "€" }] },
-    { id: 29, name: "Gorges du Fier", type: "Site naturel", address: "Chemin du Fier, Lovagny", distance: "52,0 km", price: "7€ adulte · 4€ enfant", isFree: false, rating: 4.7, reviews: 3450, openNow: true, hours: "Avr-Oct · 9h-18h", description: "Passerelle suspendue au-dessus de gorges spectaculaires creusées par la rivière Fier. Sensations fortes et nature sauvage pour toute la famille.", tags: ["Gorges", "Sensations", "Nature"], restaurants: [{ name: "Auberge du Fier", type: "Auberge", distance: "1,0 km", price: "€€" }] },
-    { id: 30, name: "Lac d'Annecy Plage d'Albigny", type: "Lac", address: "Avenue d'Albigny, Annecy", distance: "98,0 km", price: "Gratuit", isFree: true, rating: 4.9, reviews: 28000, openNow: true, hours: "Accès libre", description: "L'eau la plus pure d'Europe ! Baignade dans le lac d'Annecy avec montagnes en toile de fond. Incontournable en été pour une journée de rêve en famille.", tags: ["Lac", "Baignade", "Montagne"], restaurants: [{ name: "Brasserie du Lac", type: "Brasserie", distance: "0,3 km", price: "€€€" }, { name: "L'Esquisse", type: "Gastronomique", distance: "1,5 km", price: "€€€€" }] },
-  ],
-  cinema: [
-    { id: 31, name: "UGC Ciné Cité Confluence", type: "Cinéma", address: "112 Cours Charlemagne, Lyon 2", distance: "2,8 km", price: "11,90€ adulte · 8,50€ enfant", isFree: false, rating: 4.4, reviews: 5670, openNow: true, hours: "Séances 10h-23h", description: "Multiplexe moderne avec 14 salles et écrans IMAX. Programme complet de films familiaux, salle confort et snack bar. Séances enfants le mercredi matin.", tags: ["IMAX", "Confort", "Multiplexe"], restaurants: [{ name: "McDonald's Confluence", type: "Fast food", distance: "0,1 km", price: "€" }, { name: "Côté Sushi", type: "Japonais", distance: "0,3 km", price: "€€" }] },
-    { id: 32, name: "Cinéma Opéra", type: "Cinéma d'art", address: "6 Rue Joseph Serlin, Lyon 1", distance: "3,5 km", price: "9€ adulte · 7€ enfant", isFree: false, rating: 4.6, reviews: 2340, openNow: true, hours: "Séances 14h-22h", description: "Cinéma indépendant de qualité avec films d'auteur et classiques en VO. Programmation enfants le mercredi avec goûter offert pour les -12 ans.", tags: ["Art et essai", "VO", "Classiques"], restaurants: [{ name: "Brasserie de l'Opéra", type: "Brasserie", distance: "0,1 km", price: "€€€" }, { name: "Le Petit Comptoir", type: "Bistrot", distance: "0,2 km", price: "€€" }] },
-    { id: 33, name: "Ciné Plein Air Parc Blandan", type: "Ciné plein air", address: "Rue du Repos, Lyon 7", distance: "1,8 km", price: "Gratuit", isFree: true, rating: 4.8, reviews: 890, openNow: false, hours: "Juillet-Août · Vendredi 21h30", description: "Séances de cinéma gratuites en plein air chaque vendredi d'été. Apportez votre plaid et pique-nique ! Films familiaux et grands classiques projetés.", tags: ["Gratuit", "Plein air", "Été"], restaurants: [{ name: "Food Trucks sur place", type: "Street food", distance: "0,0 km", price: "€€" }] },
-    { id: 34, name: "Institut Lumière Cinéma", type: "Cinéma patrimoine", address: "25 Rue du Premier Film, Lyon 8", distance: "5,1 km", price: "8€ adulte · 5€ enfant", isFree: false, rating: 4.8, reviews: 1230, openNow: true, hours: "Mar-Dim · 14h-22h", description: "Projection de films dans la villa familiale des frères Lumière, inventeurs du cinéma. Expérience unique et émouvante dans un lieu historique exceptionnel.", tags: ["Patrimoine", "Histoire", "Unique"], restaurants: [{ name: "Café Lumière", type: "Café", distance: "0,0 km", price: "€€" }, { name: "Brasserie du Cinéma", type: "Brasserie", distance: "0,3 km", price: "€€" }] },
-  ],
-  loisirs: [
-    { id: 35, name: "Bowling Carré de Soie", type: "Bowling", address: "7 Place Carré de Soie, Vaulx-en-Velin", distance: "6,2 km", price: "9€/partie adulte · 7€ enfant + loc chaussures 3€", isFree: false, rating: 4.3, reviews: 3450, openNow: true, hours: "Lun-Jeu 14h-23h · Ven-Dim 10h-1h", description: "24 pistes de bowling avec billard, baby-foot et arcade. Ambiance festive, bar et restauration sur place. Idéal pour un après-midi en famille !", tags: ["Bowling", "Jeux", "Soirée"], restaurants: [{ name: "Restaurant du Bowling", type: "Américain", distance: "0,0 km", price: "€€" }, { name: "Pizza Hut", type: "Pizza", distance: "0,5 km", price: "€€" }] },
-    { id: 36, name: "Laser Game Evolution Lyon", type: "Laser game", address: "14 Quai Rambaud, Lyon 2", distance: "2,9 km", price: "12€/partie · Pack famille 40€", isFree: false, rating: 4.5, reviews: 2100, openNow: true, hours: "Mar-Ven 14h-22h · Week-end 10h-23h", description: "Arène de laser game de 600m² sur 2 niveaux avec effets spéciaux et musique. Accessible dès 6 ans, parfait pour anniversaires et sorties famille.", tags: ["Laser", "Action", "Couvert"], restaurants: [{ name: "Burger King Confluence", type: "Fast food", distance: "0,4 km", price: "€" }, { name: "La Guérite", type: "Brasserie", distance: "0,8 km", price: "€€" }] },
-    { id: 37, name: "Atelier Cuisine Enfants Toqués", type: "Atelier cuisine", address: "32 Rue Chevreul, Lyon 7", distance: "2,1 km", price: "28€/enfant · parent gratuit", isFree: false, rating: 4.9, reviews: 780, openNow: false, hours: "Mer et Sam · 10h-12h et 14h-16h", description: "Ateliers de cuisine pour enfants de 5 à 14 ans. Chaque enfant repart avec ses créations ! Pizzas, gâteaux, sushis... Apprentissage ludique et délicieux.", tags: ["Cuisine", "Créatif", "Gourmand"], restaurants: [{ name: "Sur place — dégustation incluse !", type: "Atelier", distance: "0,0 km", price: "€" }] },
-    { id: 38, name: "Gaming Café Respawn", type: "Gaming café", address: "5 Rue Sainte-Catherine, Lyon 1", distance: "3,8 km", price: "5€/heure · 15€ forfait journée", isFree: false, rating: 4.4, reviews: 1560, openNow: true, hours: "Lun-Ven 14h-23h · Week-end 11h-23h", description: "Plus de 50 PC gaming et consoles (PS5, Xbox, Switch) disponibles. Zone enfants sécurisée avec jeux appropriés, snack bar et tournois familiaux.", tags: ["Gaming", "Consoles", "Couvert"], restaurants: [{ name: "Snack du Café", type: "Snack", distance: "0,0 km", price: "€" }, { name: "Crêperie Saint-Jean", type: "Crêperie", distance: "0,3 km", price: "€€" }] },
-    { id: 39, name: "Escape Game The Room Lyon", type: "Escape game", address: "11 Rue Grôlée, Lyon 2", distance: "3,2 km", price: "24€/personne · min 3 joueurs", isFree: false, rating: 4.7, reviews: 4230, openNow: true, hours: "Lun-Dim · 10h-22h", description: "5 salles d'escape game immersives sur thèmes aventure, horreur soft et mystère. Scénario famille disponible dès 10 ans, durée 60-75 minutes.", tags: ["Réflexion", "Aventure", "Équipe"], restaurants: [{ name: "Ninkasi Opéra", type: "Brasserie", distance: "0,2 km", price: "€€" }, { name: "Le Comptoir", type: "Bistrot", distance: "0,4 km", price: "€€" }] },
-    { id: 40, name: "Café Jeux La Parenthèse", type: "Café jeux", address: "18 Rue de Condé, Lyon 2", distance: "3,5 km", price: "5€/personne jeux illimités", isFree: false, rating: 4.8, reviews: 1120, openNow: true, hours: "Mar-Dim · 14h-23h", description: "Plus de 500 jeux de société disponibles dans un café cosy. Ambiance chaleureuse, boissons artisanales et conseils d'un ludothécaire passionné.", tags: ["Jeux de société", "Convivial", "Famille"], restaurants: [{ name: "Sur place — snacks et boissons", type: "Café", distance: "0,0 km", price: "€€" }] },
-  ],
-  manger: [
-    { id: 41, name: "Big Fernand Lyon Confluence", type: "Burgers", address: "9 Place Nautique, Lyon 2", distance: "2,6 km", price: "12-16€/personne", isFree: false, rating: 4.5, reviews: 3780, openNow: true, hours: "Lun-Dim · 11h30-23h", description: "Burgers artisanaux français avec pain brioché maison. Menu enfant avec burger mini et frites. Cadre moderne et convivial, idéal en famille.", tags: ["Burgers", "Artisanal", "Enfants"], restaurants: [] },
-    { id: 42, name: "La Maison de l'Entremet", type: "Glacier & pâtisserie", address: "4 Rue du Plat, Lyon 2", distance: "3,1 km", price: "3-8€/personne", isFree: false, rating: 4.8, reviews: 2340, openNow: true, hours: "Mar-Dim · 10h-19h30", description: "Artisan glacier et pâtissier avec 40 parfums de glaces maison. Coupes glacées spectaculaires, sundaes et sorbets de fruits frais. File d'attente mais ça vaut le coup !", tags: ["Glacier", "Pâtisserie", "Gourmand"], restaurants: [] },
-    { id: 43, name: "Aire de Pique-nique Parc Miribel", type: "Pique-nique", address: "Parc de Miribel-Jonage, Beynost", distance: "8,5 km", price: "Gratuit", isFree: true, rating: 4.6, reviews: 5670, openNow: true, hours: "Accès libre · 6h-22h", description: "Immense aire de pique-nique avec tables, barbecues et toilettes. Bord du lac, ombragée par de grands arbres. Parfait pour un repas en plein air en famille.", tags: ["Pique-nique", "Barbecue", "Gratuit"], restaurants: [] },
-    { id: 44, name: "Restaurant Fleur de Sel", type: "Cuisine française", address: "22 Rue Saint-Jean, Lyon 5", distance: "4,0 km", price: "18-28€/adulte · menu enfant 10€", isFree: false, rating: 4.7, reviews: 1890, openNow: true, hours: "Mar-Sam · 12h-14h et 19h-22h", description: "Restaurant familial dans le Vieux-Lyon avec terrasse pavée. Cuisine française traditionnelle, menu enfant adapté et chaises hautes disponibles.", tags: ["Familial", "Terrasse", "Traditionnel"], restaurants: [] },
-    { id: 45, name: "La Boulangerie du Coin", type: "Boulangerie", address: "12 Rue Garibaldi, Lyon 3", distance: "2,4 km", price: "2-6€/personne", isFree: false, rating: 4.9, reviews: 1230, openNow: true, hours: "Lun-Sam · 7h-19h30", description: "Boulangerie artisanale avec pains au levain, viennoiseries et sandwichs frais. Brunch le week-end et formule goûter enfants avec jus de fruits frais.", tags: ["Artisanal", "Brunch", "Goûter"], restaurants: [] },
-    { id: 46, name: "Pizzeria Napoli Mia", type: "Pizzeria", address: "7 Rue Mercière, Lyon 2", distance: "3,3 km", price: "11-18€/pizza", isFree: false, rating: 4.6, reviews: 4560, openNow: true, hours: "Lun-Dim · 12h-14h30 et 19h-23h", description: "Authentique pizzeria napolitaine avec four à bois. Pâtes fraîches maison, demi-portion disponible pour les enfants. Réservation conseillée le week-end.", tags: ["Pizza", "Authentique", "Four à bois"], restaurants: [] },
-  ],
-  events: [
-    { id: 47, name: "Fête des Lumières Lyon 2025", type: "Festival", address: "Centre ville, Lyon", distance: "3,0 km", price: "Gratuit", isFree: true, rating: 4.9, reviews: 89000, openNow: false, hours: "8-11 Décembre · 18h-23h", description: "Le plus grand festival de lumières au monde ! Œuvres d'artistes projetées sur les bâtiments de Lyon. 2 millions de visiteurs chaque année, féerique pour les enfants.", tags: ["Festival", "Lumières", "Gratuit"], restaurants: [{ name: "Nombreux food trucks", type: "Street food", distance: "0,0 km", price: "€€" }] },
-    { id: 48, name: "Marché de Noël Bellecour", type: "Marché de Noël", address: "Place Bellecour, Lyon 2", distance: "3,2 km", price: "Gratuit entrée · achats libres", isFree: true, rating: 4.7, reviews: 23400, openNow: false, hours: "Nov-Déc · 11h-20h", description: "Marché de Noël traditionnel avec 150 chalets, manège, vin chaud et spécialités alsaciennes. Patinoire éphémère et grotte du Père Noël pour les enfants.", tags: ["Noël", "Marché", "Hivernal"], restaurants: [{ name: "Chalets du marché", type: "Street food", distance: "0,0 km", price: "€€" }] },
-    { id: 49, name: "Festival Street Food Lyon", type: "Festival food", address: "Halle Tony Garnier, Lyon 7", distance: "3,5 km", price: "5€ entrée · consommations en sus", isFree: false, rating: 4.5, reviews: 8900, openNow: false, hours: "2 weekends en juin · 11h-22h", description: "Plus de 50 food trucks du monde entier réunis pour un weekend gourmand. Animations musicales, ateliers enfants et concours de cuisine amateur.", tags: ["Food", "Festival", "Musique"], restaurants: [] },
-    { id: 50, name: "Brocante Mensuelle Croix-Rousse", type: "Brocante", address: "Boulevard de la Croix-Rousse, Lyon 4", distance: "4,1 km", price: "Gratuit", isFree: true, rating: 4.4, reviews: 3210, openNow: false, hours: "1er dimanche du mois · 7h-13h", description: "Grande brocante avec antiquaires, brocanteurs et particuliers. Chine pour les jouets vintage, livres d'occasion et trésors cachés. Animation conviviale.", tags: ["Brocante", "Gratuit", "Dimanche"], restaurants: [{ name: "Café de la Brocante", type: "Café", distance: "0,2 km", price: "€€" }] },
-    { id: 51, name: "Expo Dinos Géants Eurexpo", type: "Exposition temporaire", address: "Avenue Louis Blériot, Chassieu", distance: "9,8 km", price: "14€ adulte · 10€ enfant", isFree: false, rating: 4.6, reviews: 6780, openNow: true, hours: "Mar-Dim · 10h-18h", description: "Exposition de dinosaures animatroniques grandeur nature. T-Rex, Triceratops et Vélociraptor en mouvement ! Atelier fouilles archéologiques pour les enfants.", tags: ["Dinos", "Science", "Enfants"], restaurants: [{ name: "Cafétéria Eurexpo", type: "Self-service", distance: "0,1 km", price: "€€" }] },
-    { id: 52, name: "Spectacle Cirque Alexis Gruss", type: "Cirque", address: "Chapiteau Grand Palais, Paris 8", distance: "15,0 km", price: "35€ adulte · 22€ enfant", isFree: false, rating: 4.8, reviews: 4560, openNow: true, hours: "Mar-Dim · 15h et 20h", description: "Le plus grand cirque traditionnel de France avec acrobates, cavaliers et clowns. Spectacle magique pour toute la famille dans une tradition de 4 générations.", tags: ["Cirque", "Spectacle", "Magie"], restaurants: [{ name: "Buffet du Cirque", type: "Buffet", distance: "0,0 km", price: "€€€" }] },
-  ],
-}
-
-export const getActivities = (catId, subCategory = null, budgetFilter = 'Libre') => {
-  let acts = MOCK_ACTIVITIES[catId] || []
-  if (budgetFilter === 'Gratuit') acts = acts.filter(a => a.isFree)
-  else if (budgetFilter === '-20€') acts = acts.filter(a => a.isFree || (parseFloat(a.price) <= 20))
-  if (subCategory) {
-    const q = subCategory.toLowerCase()
-    const filtered = acts.filter(a =>
-      a.type.toLowerCase().includes(q) ||
-      a.tags?.some(t => t.toLowerCase().includes(q)) ||
-      a.description.toLowerCase().includes(q)
-    )
-    if (filtered.length >= 3) acts = filtered
+export const categories = [
+  {
+    id: 'gratuit',
+    title: 'Gratuit',
+    icon: '💚',
+    subtitle: 'Sorties sans se ruiner',
+    image: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1200&q=85',
+    subcategories: ['Places de jeux', 'Parcs & jardins', 'Forêts & balades', 'Musées gratuits', 'Événements gratuits']
+  },
+  {
+    id: 'sport',
+    title: 'Sport',
+    icon: '⚽',
+    subtitle: 'Bouger en famille',
+    image: 'https://images.unsplash.com/photo-1519311965067-36d3e5f33d39?auto=format&fit=crop&w=1200&q=85',
+    subcategories: ['Football', 'Piscines', 'Vélo & VTT', 'Accrobranche', 'Skateparks']
+  },
+  {
+    id: 'enfants',
+    title: 'Enfants',
+    icon: '🎠',
+    subtitle: 'Pour petits et grands',
+    image: 'https://images.unsplash.com/photo-1607453998774-d533f65dac99?auto=format&fit=crop&w=1200&q=85',
+    subcategories: ['Fermes pédagogiques', 'Zoos', 'Ateliers créatifs', 'Parcs d’attractions', 'Aquariums']
+  },
+  {
+    id: 'culture',
+    title: 'Culture',
+    icon: '🏰',
+    subtitle: 'Découvrir et apprendre',
+    image: 'https://images.unsplash.com/photo-1564399579883-451a5d44ec08?auto=format&fit=crop&w=1200&q=85',
+    subcategories: ['Châteaux', 'Musées', 'Théâtre enfants', 'Planétarium', 'Ateliers scientifiques']
+  },
+  {
+    id: 'nature',
+    title: 'Nature',
+    icon: '🌲',
+    subtitle: 'Respirer dehors',
+    image: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=85',
+    subcategories: ['Forêts', 'Lacs', 'Jardins botaniques', 'Cascades', 'Pique-nique']
+  },
+  {
+    id: 'cinema',
+    title: 'Cinéma',
+    icon: '🎬',
+    subtitle: 'Quand il pleut',
+    image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1200&q=85',
+    subcategories: ['Films enfants', 'Cinémas proches', 'Ciné plein air', 'Goûter après']
+  },
+  {
+    id: 'loisirs',
+    title: 'Loisirs',
+    icon: '🎲',
+    subtitle: 'Fun immédiat',
+    image: 'https://images.unsplash.com/photo-1549057446-9f5c6ac91a04?auto=format&fit=crop&w=1200&q=85',
+    subcategories: ['Bowling', 'Escape game', 'Laser game', 'Gaming café', 'Ateliers cuisine']
+  },
+  {
+    id: 'manger',
+    title: 'Manger',
+    icon: '🍔',
+    subtitle: 'Family friendly',
+    image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=1200&q=85',
+    subcategories: ['Restaurants famille', 'Glaciers', 'Boulangeries', 'Pique-nique', 'Resto pas cher']
+  },
+  {
+    id: 'evenements',
+    title: 'Événements',
+    icon: '🎉',
+    subtitle: 'Ce weekend',
+    image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1200&q=85',
+    subcategories: ['Festivals famille', 'Marchés', 'Spectacles', 'Expos temporaires', 'Saisonnier']
   }
-  return acts.slice(0, 6)
-}
+]
+
+export const places = [
+  {
+    id: 1,
+    name: 'Parc Aventure des Familles',
+    category: 'gratuit',
+    subcategory: 'Parcs & jardins',
+    age: '3–12 ans',
+    distance: 4.2,
+    price: 0,
+    rating: 4.8,
+    badge: 'Gratuit',
+    image: 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&w=1200&q=85',
+    description: 'Grand parc avec jeux, pelouse, zones ombragées et parcours vélo.',
+    restaurants: ['Le Petit Goûter', 'Boulangerie du Parc', 'Pizza Family']
+  },
+  {
+    id: 2,
+    name: 'Bowling Family Night',
+    category: 'loisirs',
+    subcategory: 'Bowling',
+    age: '6+ ans',
+    distance: 6.5,
+    price: 28,
+    rating: 4.5,
+    badge: 'Soirée',
+    image: 'https://images.unsplash.com/photo-1538511059256-46e4942a0c13?auto=format&fit=crop&w=1200&q=85',
+    description: 'Bowling adapté aux enfants avec pistes sécurisées et formules famille.',
+    restaurants: ['Burger Family', 'Crêperie Sourire', 'Glacier Central']
+  },
+  {
+    id: 3,
+    name: 'Cinéma Junior Club',
+    category: 'cinema',
+    subcategory: 'Films enfants',
+    age: '4+ ans',
+    distance: 3.8,
+    price: 22,
+    rating: 4.4,
+    badge: 'Pluie',
+    image: 'https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?auto=format&fit=crop&w=1200&q=85',
+    description: 'Séances enfants, fauteuils confortables et goûter à proximité.',
+    restaurants: ['Popcorn Café', 'Pizzeria Lumière', 'Snack Ciné']
+  },
+  {
+    id: 4,
+    name: 'Forêt des Petits Explorateurs',
+    category: 'nature',
+    subcategory: 'Forêts',
+    age: 'Tout âge',
+    distance: 9.1,
+    price: 0,
+    rating: 4.9,
+    badge: 'Nature',
+    image: 'https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1200&q=85',
+    description: 'Balade facile, tables de pique-nique et sentier accessible.',
+    restaurants: ['Cabane Gourmande', 'Snack Forêt', 'Boulangerie Verte']
+  },
+  {
+    id: 5,
+    name: 'Château des Jeunes Chevaliers',
+    category: 'culture',
+    subcategory: 'Châteaux',
+    age: '7+ ans',
+    distance: 14.7,
+    price: 32,
+    rating: 4.7,
+    badge: 'Histoire',
+    image: 'https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1200&q=85',
+    description: 'Parcours historique, chasse au trésor et visite ludique.',
+    restaurants: ['Auberge du Château', 'Le Menu Enfant', 'Glacier Royal']
+  },
+  {
+    id: 6,
+    name: 'Piscine Aqua Kids',
+    category: 'sport',
+    subcategory: 'Piscines',
+    age: '2–14 ans',
+    distance: 5.6,
+    price: 18,
+    rating: 4.3,
+    badge: 'Sport',
+    image: 'https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?auto=format&fit=crop&w=1200&q=85',
+    description: 'Pataugeoire, bassin ludique, toboggan et vestiaires famille.',
+    restaurants: ['Pasta Splash', 'Sandwich Club', 'Glaces du Centre']
+  },
+  {
+    id: 7,
+    name: 'Ferme Pédagogique Soleil',
+    category: 'enfants',
+    subcategory: 'Fermes pédagogiques',
+    age: '2–10 ans',
+    distance: 11.8,
+    price: 24,
+    rating: 4.8,
+    badge: 'Animaux',
+    image: 'https://images.unsplash.com/photo-1511117833895-4b473c0b85d6?auto=format&fit=crop&w=1200&q=85',
+    description: 'Animaux, atelier pain, balade poney et espace goûter.',
+    restaurants: ['Table de la Ferme', 'Goûter Campagne', 'Food Truck Local']
+  },
+  {
+    id: 8,
+    name: 'Festival Famille du Weekend',
+    category: 'evenements',
+    subcategory: 'Festivals famille',
+    age: 'Tout âge',
+    distance: 7.9,
+    price: 12,
+    rating: 4.6,
+    badge: 'Weekend',
+    image: 'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&fit=crop&w=1200&q=85',
+    description: 'Ateliers, spectacles, food trucks et jeux géants.',
+    restaurants: ['Marché Gourmand', 'Stand Sucré', 'Chez Mamie']
+  },
+  {
+    id: 9,
+    name: 'Glacier du Lac',
+    category: 'manger',
+    subcategory: 'Glaciers',
+    age: 'Tout âge',
+    distance: 2.9,
+    price: 15,
+    rating: 4.6,
+    badge: 'Goûter',
+    image: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=1200&q=85',
+    description: 'Glaces artisanales, terrasse familiale et promenade au bord du lac.',
+    restaurants: ['Boulangerie Bleue', 'Snack Nautique', 'Crêpes du Lac']
+  }
+]
