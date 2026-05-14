@@ -31,15 +31,15 @@ const SLIDES = [
 
 // ─── CATEGORIES ───────────────────────────────────────────────────────────────
 const CATS = [
-  { id:'gratuit', e:'🌟', l:'Gratuit',    sub:'Sorties sans se ruiner', c:'#3DAA6E', img:'https://images.unsplash.com/photo-1575783970733-1aaedde1db74?w=400&q=75', subs:['Places de jeux','Forêts & balades','Pistes cyclables','Parcs & jardins','Plages & lacs','Musées gratuits','Événements gratuits'] },
-  { id:'sport',   e:'⚽', l:'Sport',      sub:'Bouger en famille',      c:'#2F80ED', img:'https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=400&q=75', subs:['Football & terrains','Vélo & VTT','Piscines & bassins','Accrobranche','Ski & glisse','Tennis & padel','Patinoire'] },
-  { id:'enfants', e:'🎪', l:'Enfants',    sub:'Pour petits et grands',  c:'#FF6B4A', img:'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=400&q=75', subs:['Fermes pédagogiques','Zoos & animaleries','Spectacles enfants','Ateliers créatifs',"Parcs d'attractions",'Aquariums'] },
-  { id:'culture', e:'🏛️', l:'Culture',    sub:'Découvrir et apprendre', c:'#7C3AED', img:'https://images.unsplash.com/photo-1554907984-15263bfd63bd?w=400&q=75', subs:["Châteaux & histoire","Musées d'art",'Musées des sciences','Théâtre enfants','Planétarium','Ateliers scientifiques'] },
-  { id:'nature',  e:'🌿', l:'Nature',     sub:'Respirer dehors',        c:'#059669', img:'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&q=75', subs:['Forêts & balades','Plages & lacs','Jardins botaniques','Cueillette fruits','Camping & picnic','Rivières & cascades'] },
-  { id:'cinema',  e:'🎥', l:'Cinéma',    sub:'Quand il pleut',         c:'#DC2626', img:'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=400&q=75', subs:['Films enfants','Cinémas proches','Ciné plein air','Où manger après'] },
-  { id:'loisirs', e:'🎯', l:'Loisirs',   sub:'Fun immédiat',           c:'#D97706', img:'https://images.unsplash.com/photo-1626847037635-03f9f1ad4c45?w=400&q=75', subs:['Bowling','Escape game','Gaming café','Laser game','Ateliers cuisine','Ateliers créatifs'] },
-  { id:'manger',  e:'🥗', l:'Manger',    sub:'Family friendly',        c:'#E91E8C', img:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=75', subs:['Restaurants famille','Fast food famille','Spots pique-nique','Glacier & goûter','Boulangeries','Salons de thé'] },
-  { id:'events',  e:'✨', l:'Événements',sub:'Ce weekend',             c:'#1B2B4B', img:'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=75', subs:['Ce weekend','Fêtes & marchés','Festivals famille','Événements saisonniers','Expos temporaires'] },
+  { id:'gratuit', l:'Gratuit',    sub:'Sorties sans se ruiner', c:'#3DAA6E', img:'https://images.unsplash.com/photo-1575783970733-1aaedde1db74?w=400&q=75', subs:['Places de jeux','Forêts & balades','Pistes cyclables','Parcs & jardins','Plages & lacs','Musées gratuits','Événements gratuits'] },
+  { id:'sport',   l:'Sport',      sub:'Bouger en famille',      c:'#2F80ED', img:'https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=400&q=75', subs:['Football & terrains','Vélo & VTT','Piscines & bassins','Accrobranche','Ski & glisse','Tennis & padel','Patinoire'] },
+  { id:'enfants', l:'Enfants',    sub:'Pour petits et grands',  c:'#FF6B4A', img:'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=400&q=75', subs:['Fermes pédagogiques','Zoos & animaleries','Spectacles enfants','Ateliers créatifs',"Parcs d'attractions",'Aquariums'] },
+  { id:'culture', l:'Culture',    sub:'Découvrir et apprendre', c:'#7C3AED', img:'https://images.unsplash.com/photo-1554907984-15263bfd63bd?w=400&q=75', subs:["Châteaux & histoire","Musées d'art",'Musées des sciences','Théâtre enfants','Planétarium','Ateliers scientifiques'] },
+  { id:'nature',  l:'Nature',     sub:'Respirer dehors',        c:'#059669', img:'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&q=75', subs:['Forêts & balades','Plages & lacs','Jardins botaniques','Cueillette fruits','Camping & picnic','Rivières & cascades'] },
+  { id:'cinema',  l:'Cinéma',    sub:'Quand il pleut',         c:'#DC2626', img:'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=400&q=75', subs:['Films enfants','Cinémas proches','Ciné plein air','Où manger après'] },
+  { id:'loisirs', l:'Loisirs',   sub:'Fun immédiat',           c:'#D97706', img:'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=400&q=75', subs:['Bowling','Escape game','Gaming café','Laser game','Ateliers cuisine','Ateliers créatifs'] },
+  { id:'manger',  l:'Manger',    sub:'Family friendly',        c:'#E91E8C', img:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=75', subs:['Restaurants famille','Fast food famille','Spots pique-nique','Glacier & goûter','Boulangeries','Salons de thé'] },
+  { id:'events',  l:'Événements',sub:'Ce weekend',             c:'#1B2B4B', img:'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=75', subs:['Ce weekend','Fêtes & marchés','Festivals famille','Événements saisonniers','Expos temporaires'] },
 ]
 
 const RADII   = [5, 10, 20, 30]
@@ -140,15 +140,16 @@ function CatTile({ cat, active, onClick, delay }) {
     }}>
       <img src={cat.img} alt={cat.l} loading="lazy"
         style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
-      <div style={{ position:'absolute', inset:0, background:'linear-gradient(160deg,rgba(0,0,0,0.04) 0%,rgba(0,0,0,0.65) 100%)' }} />
+      <div style={{ position:'absolute', inset:0, background:'linear-gradient(160deg,rgba(0,0,0,0.04) 0%,rgba(0,0,0,0.68) 100%)' }} />
+
+      {/* Active color bar at top */}
+      {active && <div style={{ position:'absolute', top:0, left:0, right:0, height:3, background:cat.c }} />}
+
       <div style={{ position:'absolute', bottom:10, left:10, right:28 }}>
-        <div style={{ width:28, height:28, borderRadius:8, background:'rgba(255,255,255,0.18)', backdropFilter:'blur(8px)', border:'1px solid rgba(255,255,255,0.3)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:14, marginBottom:5 }}>
-          {cat.e}
-        </div>
-        <div style={{ fontSize:13, fontWeight:800, color:'#fff', lineHeight:1.1, textShadow:'0 1px 5px rgba(0,0,0,0.5)' }}>{cat.l}</div>
-        <div style={{ fontSize:9, color:'rgba(255,255,255,0.72)', fontWeight:500, marginTop:2 }}>{cat.sub}</div>
+        <div style={{ fontSize:13, fontWeight:800, color:'#fff', lineHeight:1.15, textShadow:'0 1px 5px rgba(0,0,0,0.5)' }}>{cat.l}</div>
+        <div style={{ fontSize:9, color:'rgba(255,255,255,0.75)', fontWeight:500, marginTop:3, lineHeight:1.3 }}>{cat.sub}</div>
       </div>
-      <div style={{ position:'absolute', right:8, bottom:13, width:22, height:22, borderRadius:7, background:'rgba(255,255,255,0.18)', backdropFilter:'blur(6px)', border:'1px solid rgba(255,255,255,0.25)', display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontSize:13, fontWeight:700 }}>
+      <div style={{ position:'absolute', right:8, bottom:13, width:20, height:20, borderRadius:6, background:'rgba(255,255,255,0.22)', backdropFilter:'blur(6px)', border:'1px solid rgba(255,255,255,0.28)', display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontSize:13, fontWeight:700 }}>
         ›
       </div>
     </button>
