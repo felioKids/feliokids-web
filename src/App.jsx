@@ -4,23 +4,26 @@ import { getActivities } from './data/activities.js'
 // ─── SLIDES ───────────────────────────────────────────────────────────────────
 const SLIDES = [
   {
-    // Dziewczynka z pomalowaną twarzą — zdjęcie 1 od Kasi
-    img: 'https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800&q=85',
-    label: 'FRANCE · SORTIES FAMILLE',
+    img: 'https://images.unsplash.com/photo-1519331379826-f10be5486c6f?w=800&q=85',
+    label: 'FRANCE · NATURE · DÉCOUVERTE',
     title: "Que faire avec les enfants aujourd'hui ?",
     sub: 'Trouvez des idées proches, gratuites ou petit budget, avec parking et où manger.',
   },
   {
-    // Dzieci śmiejące się — zdjęcie 2 od Kasi
-    img: 'https://images.unsplash.com/photo-1585504198199-20277593b94f?w=800&q=85',
-    label: 'FRANCE · FAMILLES · WEEKEND',
-    title: 'Des sorties inoubliables en famille.',
+    img: 'https://images.unsplash.com/photo-1472162072942-cd5147eb3902?w=800&q=85',
+    label: 'FRANCE · PLEIN AIR · DÉTENTE',
+    title: 'Des moments magiques en famille.',
+    sub: 'Parcs, balades, nature — des souvenirs inoubliables près de chez vous.',
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1504450874802-0ba2bcd9b5ae?w=800&q=85',
+    label: 'FRANCE · LIBERTÉ · ENSEMBLE',
+    title: 'Des sorties inoubliables ensemble.',
     sub: 'Activités, parking, budget et restaurants proches — en quelques secondes.',
   },
   {
-    // Dzieci ok. 12 lat bawiące się razem
-    img: 'https://images.unsplash.com/photo-1491308056676-205b7c9a7dc1?w=800&q=85',
-    label: 'FRANCE · ADOS · DÉCOUVERTE',
+    img: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&q=85',
+    label: 'FRANCE · SPORT · ENFANTS',
     title: 'Des activités pour tous les âges.',
     sub: "De 3 à 15 ans — des idées pour toute la famille, petits et grands.",
   },
@@ -28,15 +31,15 @@ const SLIDES = [
 
 // ─── CATEGORIES ───────────────────────────────────────────────────────────────
 const CATS = [
-  { id:'gratuit', e:'💚', l:'Gratuit',    sub:'Sorties sans se ruiner', c:'#3DAA6E', img:'https://images.unsplash.com/photo-1575783970733-1aaedde1db74?w=400&q=75', subs:['Places de jeux','Forêts & balades','Pistes cyclables','Parcs & jardins','Plages & lacs','Musées gratuits','Événements gratuits'] },
-  { id:'sport',   e:'🏃', l:'Sport',      sub:'Bouger en famille',      c:'#2F80ED', img:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&q=75', subs:['Football & terrains','Vélo & VTT','Piscines & bassins','Accrobranche','Ski & glisse','Tennis & padel','Patinoire'] },
-  { id:'enfants', e:'🎠', l:'Enfants',    sub:'Pour petits et grands',  c:'#FF6B4A', img:'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=400&q=75', subs:['Fermes pédagogiques','Zoos & animaleries','Spectacles enfants','Ateliers créatifs',"Parcs d'attractions",'Aquariums'] },
-  { id:'culture', e:'🏰', l:'Culture',    sub:'Découvrir et apprendre', c:'#7C3AED', img:'https://images.unsplash.com/photo-1554907984-15263bfd63bd?w=400&q=75', subs:["Châteaux & histoire","Musées d'art",'Musées des sciences','Théâtre enfants','Planétarium','Ateliers scientifiques'] },
-  { id:'nature',  e:'🌲', l:'Nature',     sub:'Respirer dehors',        c:'#059669', img:'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&q=75', subs:['Forêts & balades','Plages & lacs','Jardins botaniques','Cueillette fruits','Camping & picnic','Rivières & cascades'] },
-  { id:'cinema',  e:'🎬', l:'Cinéma',    sub:'Quand il pleut',         c:'#DC2626', img:'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=400&q=75', subs:['Films enfants','Cinémas proches','Ciné plein air','Où manger après'] },
-  { id:'loisirs', e:'🎲', l:'Loisirs',   sub:'Fun immédiat',           c:'#D97706', img:'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400&q=75', subs:['Bowling','Escape game','Gaming café','Laser game','Ateliers cuisine','Ateliers créatifs'] },
-  { id:'manger',  e:'🍽️', l:'Manger',    sub:'Family friendly',        c:'#E91E8C', img:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=75', subs:['Restaurants famille','Fast food famille','Spots pique-nique','Glacier & goûter','Boulangeries','Salons de thé'] },
-  { id:'events',  e:'🎉', l:'Événements',sub:'Ce weekend',             c:'#1B2B4B', img:'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=75', subs:['Ce weekend','Fêtes & marchés','Festivals famille','Événements saisonniers','Expos temporaires'] },
+  { id:'gratuit', e:'🌟', l:'Gratuit',    sub:'Sorties sans se ruiner', c:'#3DAA6E', img:'https://images.unsplash.com/photo-1575783970733-1aaedde1db74?w=400&q=75', subs:['Places de jeux','Forêts & balades','Pistes cyclables','Parcs & jardins','Plages & lacs','Musées gratuits','Événements gratuits'] },
+  { id:'sport',   e:'⚽', l:'Sport',      sub:'Bouger en famille',      c:'#2F80ED', img:'https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=400&q=75', subs:['Football & terrains','Vélo & VTT','Piscines & bassins','Accrobranche','Ski & glisse','Tennis & padel','Patinoire'] },
+  { id:'enfants', e:'🎪', l:'Enfants',    sub:'Pour petits et grands',  c:'#FF6B4A', img:'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=400&q=75', subs:['Fermes pédagogiques','Zoos & animaleries','Spectacles enfants','Ateliers créatifs',"Parcs d'attractions",'Aquariums'] },
+  { id:'culture', e:'🏛️', l:'Culture',    sub:'Découvrir et apprendre', c:'#7C3AED', img:'https://images.unsplash.com/photo-1554907984-15263bfd63bd?w=400&q=75', subs:["Châteaux & histoire","Musées d'art",'Musées des sciences','Théâtre enfants','Planétarium','Ateliers scientifiques'] },
+  { id:'nature',  e:'🌿', l:'Nature',     sub:'Respirer dehors',        c:'#059669', img:'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&q=75', subs:['Forêts & balades','Plages & lacs','Jardins botaniques','Cueillette fruits','Camping & picnic','Rivières & cascades'] },
+  { id:'cinema',  e:'🎥', l:'Cinéma',    sub:'Quand il pleut',         c:'#DC2626', img:'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=400&q=75', subs:['Films enfants','Cinémas proches','Ciné plein air','Où manger après'] },
+  { id:'loisirs', e:'🎯', l:'Loisirs',   sub:'Fun immédiat',           c:'#D97706', img:'https://images.unsplash.com/photo-1626847037635-03f9f1ad4c45?w=400&q=75', subs:['Bowling','Escape game','Gaming café','Laser game','Ateliers cuisine','Ateliers créatifs'] },
+  { id:'manger',  e:'🥗', l:'Manger',    sub:'Family friendly',        c:'#E91E8C', img:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=75', subs:['Restaurants famille','Fast food famille','Spots pique-nique','Glacier & goûter','Boulangeries','Salons de thé'] },
+  { id:'events',  e:'✨', l:'Événements',sub:'Ce weekend',             c:'#1B2B4B', img:'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=75', subs:['Ce weekend','Fêtes & marchés','Festivals famille','Événements saisonniers','Expos temporaires'] },
 ]
 
 const RADII   = [5, 10, 20, 30]
@@ -451,18 +454,41 @@ export default function App() {
               <span style={{ fontSize:14, color:'#9AAABB', flexShrink:0 }}>🔍</span>
               <input
                 style={{ flex:1, fontSize:13, fontWeight:500, color:'#1B2B4B' }}
-                placeholder='"bowling", "château gratuit", "piscine couverte"...'
+                placeholder='"bowling", "château gratuit", "piscine"...'
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 onKeyDown={e => {
                   if (e.key === 'Enter' && query.trim()) {
-                    const match = CATS.find(c => c.subs.some(s => s.toLowerCase().includes(query.toLowerCase().split(' ')[0])))
+                    const q = query.toLowerCase()
+                    const match = CATS.find(c =>
+                      c.l.toLowerCase().includes(q) ||
+                      c.subs.some(s => s.toLowerCase().includes(q))
+                    )
                     const cat = match || CATS[0]
-                    setActiveCat(cat.id); doSearch(cat.id, null, budget)
+                    setActiveCat(cat.id)
+                    doSearch(cat.id, null, budget)
                   }
                 }}
               />
-              {query && <button onClick={() => setQuery('')} style={{ color:'#C5C5C5', fontSize:14 }}>✕</button>}
+              {query
+                ? <button onClick={() => setQuery('')} style={{ color:'#C5C5C5', fontSize:14, flexShrink:0 }}>✕</button>
+                : null
+              }
+              <button
+                onClick={() => {
+                  if (!query.trim()) return
+                  const q = query.toLowerCase()
+                  const match = CATS.find(c =>
+                    c.l.toLowerCase().includes(q) ||
+                    c.subs.some(s => s.toLowerCase().includes(q))
+                  )
+                  const cat = match || CATS[0]
+                  setActiveCat(cat.id)
+                  doSearch(cat.id, null, budget)
+                }}
+                style={{ background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', color:'#fff', padding:'7px 13px', borderRadius:9, fontSize:12, fontWeight:700, flexShrink:0, whiteSpace:'nowrap' }}>
+                Chercher
+              </button>
             </div>
           </div>
         </div>
