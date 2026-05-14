@@ -1,9 +1,29 @@
-import { useMemo, useState } from 'react'
-import { Search, MapPin, Navigation, ParkingCircle, Utensils, Star, ChevronRight, Bell, Sparkles, X } from 'lucide-react'
+import { useMemo, useRef, useState } from 'react'
+import {
+  Search, MapPin, Navigation, ParkingCircle, Utensils, Star, ChevronRight,
+  Bell, Sparkles, X, Heart, Activity, Landmark, Trees, Clapperboard,
+  Gamepad2, CalendarDays, SmilePlus
+} from 'lucide-react'
 import { categories, places, heroImage } from './data/activities'
 
 function mapsUrl(query) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`
+}
+
+function CategoryIcon({ name, size = 24 }) {
+  const props = { size, strokeWidth: 2.35 }
+  const icons = {
+    heart: <Heart {...props} />,
+    activity: <Activity {...props} />,
+    sparkles: <Sparkles {...props} />,
+    landmark: <Landmark {...props} />,
+    trees: <Trees {...props} />,
+    clapperboard: <Clapperboard {...props} />,
+    gamepad: <Gamepad2 {...props} />,
+    utensils: <Utensils {...props} />,
+    calendar: <CalendarDays {...props} />
+  }
+  return icons[name] || <Sparkles {...props} />
 }
 
 function App() {
@@ -14,6 +34,7 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [selectedSubcategory, setSelectedSubcategory] = useState('')
   const [expanded, setExpanded] = useState(null)
+  const resultsRef = useRef(null)
 
   const filteredPlaces = useMemo(() => {
     const maxBudget = budget === 'Gratuit' ? 0 : budget === '-20€' ? 20 : budget === '-50€' ? 50 : budget === '-100€' ? 100 : Infinity
@@ -23,15 +44,22 @@ function App() {
       .filter(place => place.price <= maxBudget)
       .filter(place => !selectedCategory || place.category === selectedCategory)
       .filter(place => !selectedSubcategory || place.subcategory === selectedSubcategory)
-      .filter(place => !text || `${place.name} ${place.subcategory} ${place.description} ${place.badge}`.toLowerCase().includes(text))
+      .filter(place => !text || `${place.name} ${place.subcategory} ${place.description} ${place.badge} ${place.age}`.toLowerCase().includes(text))
   }, [radius, budget, query, selectedCategory, selectedSubcategory])
+
+  function handleSearch(e) {
+    e?.preventDefault()
+    resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 
   return (
     <main className="page">
       <header className="top">
         <div className="brand">
-          <div className="brand-mark">✹</div>
-          <div><strong>FelioKids</strong><span>Sorties famille</span></div>
+          <div className="brand-mark">
+            <SmilePlus size={23} strokeWidth={2.5} />
+          </div>
+          <div><strong>FelioKids</strong><span>Family discovery</span></div>
         </div>
         <button className="alert"><Bell size={16} /> Alertes</button>
       </header>
@@ -45,22 +73,30 @@ function App() {
         </div>
       </section>
 
-      <section className="search-box">
+      <form className="search-box" onSubmit={handleSearch}>
         <label className="city">
           <MapPin size={17} />
           <input value={postalCode} onChange={e => setPostalCode(e.target.value.replace(/\D/g, '').slice(0, 5))} placeholder="Code postal" />
         </label>
+
         <div className="chips">
-          {[5, 10, 20, 30].map(km => <button key={km} className={Number(radius) === km ? 'active' : ''} onClick={() => setRadius(km)}>{km} km</button>)}
+          {[5, 10, 20, 30].map(km => <button type="button" key={km} className={Number(radius) === km ? 'active' : ''} onClick={() => setRadius(km)}>{km} km</button>)}
         </div>
+
         <div className="chips budget">
-          {['Gratuit', '-20€', '-50€', '-100€', 'Libre'].map(b => <button key={b} className={budget === b ? 'active' : ''} onClick={() => setBudget(b)}>{b}</button>)}
+          {['Gratuit', '-20€', '-50€', '-100€', 'Libre'].map(b => <button type="button" key={b} className={budget === b ? 'active' : ''} onClick={() => setBudget(b)}>{b}</button>)}
         </div>
+
         <label className="search-line">
           <Search size={17} />
           <input value={query} onChange={e => setQuery(e.target.value)} placeholder='"bowling", "château gratuit", "piscine"...' />
         </label>
-      </section>
+
+        <button className="search-button" type="submit">
+          <Search size={18} />
+          Trouver des activités
+        </button>
+      </form>
 
       <section className="categories-section">
         <div className="section-title">
@@ -77,8 +113,8 @@ function App() {
                 onClick={() => { setSelectedCategory(category.id); setSelectedSubcategory('') }}
               >
                 <div className="shade" />
-                <div className="icon-bubble">{category.icon}</div>
-                <div className="arrow"><ChevronRight size={21} /></div>
+                <div className="icon-bubble"><CategoryIcon name={category.icon} /></div>
+                <div className="arrow"><ChevronRight size={20} /></div>
                 <div className="card-text"><h3>{category.title}</h3><p>{category.subtitle}</p></div>
               </button>
 
@@ -96,7 +132,7 @@ function App() {
         </div>
       </section>
 
-      <section className="results">
+      <section className="results" ref={resultsRef}>
         <div className="section-title">
           <div><p>Résultats</p><h2>{filteredPlaces.length} idées près de {postalCode}</h2></div>
           <span className="ai-off"><Sparkles size={15} /> Sans API payante</span>
