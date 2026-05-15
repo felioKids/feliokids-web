@@ -52,7 +52,7 @@ const CATS = [
 ]
 
 const RADII   = [5, 10, 20, 30]
-const BUDGETS = ['Tous', 'Gratuit', '-20€', '-50€', '-100€', 'Nature', 'Intérieur', 'Sport']
+const BUDGETS = ['Tous', 'Gratuit', '-20€', '-50€', '-100€']
 
 // ─── HERO SLIDESHOW ───────────────────────────────────────────────────────────
 function HeroSlideshow() {
