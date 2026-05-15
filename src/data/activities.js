@@ -97,6 +97,8 @@ MOCK_ACTIVITIES.halte = [
   { id: 406, name: "Piscine avec Garderie Aqua-Bébé", type: "Piscine avec garderie", address: "Rue Rachais, Lyon 7", distance: "2,8 km", price: "4€ / enfant · séance 1h", isFree: false, rating: 4.4, reviews: 445, openNow: true, hours: "Mar, Jeu, Sam · 10h-12h", description: "Pendant votre séance aquatique, votre enfant (2-6 ans) est gardé par une animatrice dans l'espace jeux attenant à la piscine. Réservation obligatoire.", tags: ["2-6 ans", "Sport parents", "Réservation"], restaurants: [] },
 ]
 
+MOCK_ACTIVITIES.ensemble = ]
+
 MOCK_ACTIVITIES.ensemble = [
   { id: 301, name: "Cours Bébé Nageur Piscine du Rhône", type: "Bébé nageur", address: "6 Quai Claude Bernard, Lyon 7", distance: "2,1 km", price: "8€ / séance", isFree: false, rating: 4.8, reviews: 654, openNow: true, hours: "Mar, Jeu · 10h-11h30", description: "Éveil aquatique parent-enfant dans eau à 32°C. Parent dans l'eau avec bébé — moment de complicité unique. Dès 3 mois jusqu'à 3 ans.", tags: ["0-3 ans", "Eau", "Complicité"], restaurants: [{ name: "Café du Rhône", type: "Café", distance: "0,1 km", price: "€" }] },
   { id: 302, name: "Atelier Peinture Parent-Enfant", type: "Atelier peinture", address: "8 Rue Bonnefoi, Lyon 3", distance: "2,9 km", price: "22€ / duo parent-enfant", isFree: false, rating: 4.9, reviews: 287, openNow: false, hours: "Sam · 14h-16h30", description: "Créez ensemble une grande toile ! Parent et enfant peignent côte à côte sur le même tableau. Repartez avec votre œuvre commune. Dès 4 ans.", tags: ["4+ ans", "Créatif", "Souvenir"], restaurants: [] },
