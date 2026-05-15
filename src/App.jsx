@@ -94,8 +94,8 @@ function HeroSlideshow() {
             <span style={{ fontWeight:900, fontSize:14, color:'#fff', letterSpacing:'-0.5px' }}>f<span style={{textTransform:'uppercase'}}>K</span></span>
           </div>
           <div>
-            <div style={{ fontWeight:800, fontSize:16, color:'#fff', lineHeight:1, textShadow:'0 1px 6px rgba(0,0,0,0.3)' }}>FelioKids</div>
-            <div style={{ fontSize:9, color:'rgba(255,255,255,0.65)', fontWeight:600, letterSpacing:'0.8px' }}>FAMILY DISCOVERY</div>
+            <div style={{ fontWeight:800, fontSize:16, color:'#fff', lineHeight:1, textShadow:'0 1px 6px rgba(0,0,0,0.3)', fontFamily:'var(--font-head)' }}>FelioKids</div>
+            <div style={{ fontSize:9, color:'rgba(255,255,255,0.65)', fontWeight:600, letterSpacing:'0.8px', fontFamily:'var(--font-body)' }}>FAMILY DISCOVERY</div>
           </div>
         </div>
         {/* Right buttons */}
@@ -446,15 +446,20 @@ export default function App() {
 
         {/* ── SEARCH CARD ── */}
         <div style={{ padding:'0 14px', marginTop:-26, position:'relative', zIndex:10 }}>
-          <div style={{ background:'#fff', borderRadius:22, padding:'16px 15px', boxShadow:'0 8px 40px rgba(27,43,75,0.14)', border:'1px solid #F0EBE3' }}>
+          <div style={{ background:'#fff', borderRadius:24, padding:'22px 18px', boxShadow:'0 8px 40px rgba(27,43,75,0.13)', border:'1px solid #F0EBE3' }}>
 
-            {/* City + Trouver button */}
-            <div style={{ position:'relative', marginBottom:11 }}>
-              <div style={{ display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:13, padding:'11px 14px', gap:9, border:'1.5px solid #EDE8E1' }}>
-                <span style={{ fontSize:15, flexShrink:0, color:'#9AAABB' }}>📍</span>
+            {/* Label mode 1 */}
+            <p style={{ fontFamily:'var(--font-body)', fontSize:12, fontWeight:600, color:'#9AAABB', marginBottom:12, letterSpacing:'0.2px' }}>
+              Vous savez déjà ce que vous cherchez ? 👇
+            </p>
+
+            {/* Ville input */}
+            <div style={{ position:'relative', marginBottom:10 }}>
+              <div style={{ display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:14, padding:'12px 15px', gap:10, border:'1.5px solid #EDE8E1' }}>
+                <span style={{ fontSize:16, flexShrink:0 }}>📍</span>
                 <input
-                  style={{ flex:1, fontSize:14, fontWeight:600, color:'#1B2B4B' }}
-                  placeholder="Où voulez-vous aller ?"
+                  style={{ flex:1, fontSize:15, fontWeight:600, color:'#1B2B4B', fontFamily:'var(--font-body)' }}
+                  placeholder="Ville ou commune..."
                   value={city}
                   onChange={e => handleCityInput(e.target.value)}
                   onKeyDown={e => { if(e.key==='Enter' && citySuggs[0]) chooseSugg(citySuggs[0]) }}
@@ -462,14 +467,9 @@ export default function App() {
                   onBlur={() => setTimeout(() => setShowSugg(false), 180)}
                 />
                 {weather && <span style={{ fontSize:12, color:'#9AAABB', fontWeight:600, flexShrink:0 }}>{weather.icon} {weather.temp}°C</span>}
-                <button
-                  onClick={() => { if(activeCat) doSearch(); else { setActiveCat(CATS[0].id); doSearch(CATS[0].id, null, budget) } }}
-                  style={{ background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', color:'#fff', padding:'8px 14px', borderRadius:10, fontSize:12, fontWeight:700, flexShrink:0, display:'flex', alignItems:'center', gap:5, boxShadow:'0 3px 10px rgba(255,107,74,0.38)', whiteSpace:'nowrap' }}>
-                  🔍 Trouver des activités
-                </button>
+                {city && !weather && <button onClick={() => { setCity(''); setWeather(null) }} style={{ color:'#C5C5C5', fontSize:14 }}>✕</button>}
               </div>
 
-              {/* City suggestions dropdown */}
               {showSugg && citySuggs.length > 0 && (
                 <div className="anim-down" style={{ position:'absolute', top:'110%', left:0, right:0, background:'#fff', borderRadius:15, boxShadow:'0 8px 32px rgba(27,43,75,0.13)', zIndex:50, overflow:'hidden', border:'1px solid #F0EBE3' }}>
                   {citySuggs.map((s, i) => (
@@ -478,97 +478,91 @@ export default function App() {
                       onMouseDown={() => chooseSugg(s)}
                       onMouseEnter={e => e.currentTarget.style.background='#FFF8F1'}
                       onMouseLeave={e => e.currentTarget.style.background='#fff'}>
-                      <span style={{ fontSize:13 }}>📍</span>
-                      {s.display_name.split(',').slice(0,3).join(', ')}
+                      <span>📍</span>{s.display_name.split(',').slice(0,3).join(', ')}
                     </div>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* Budget filter chips */}
-            <div className="scroll-x" style={{ display:'flex', gap:6, marginBottom:9, paddingBottom:2 }}>
-              {BUDGETS.map(b => (
-                <button key={b} onClick={() => { setBudget(b); if(activeCat) doSearch(activeCat, activeSub, b) }}
-                  style={{ padding:'7px 14px', borderRadius:99, fontSize:12, fontWeight:700, flexShrink:0, transition:'all .15s', whiteSpace:'nowrap', background: budget===b ? (b==='Gratuit'?'#3DAA6E':'#FF6B4A') : '#F5F3F0', color: budget===b ? '#fff' : '#5A6A82', border: budget===b ? 'none' : '1.5px solid #EDE8E1' }}>
-                  {b}
-                </button>
-              ))}
-              <button style={{ padding:'7px 14px', borderRadius:99, fontSize:12, fontWeight:700, flexShrink:0, background:'#F5F3F0', color:'#5A6A82', border:'1.5px solid #EDE8E1', display:'flex', alignItems:'center', gap:4, whiteSpace:'nowrap' }}>
-                ⚙️ Filtres
-              </button>
-            </div>
-
-            {/* Radius chips */}
-            <div className="scroll-x" style={{ display:'flex', gap:6, marginBottom:10, paddingBottom:2 }}>
-              {RADII.map(r => (
-                <button key={r} onClick={() => { setRadius(r); if(activeCat) doSearch(activeCat, activeSub, budget) }}
-                  style={{ padding:'7px 13px', borderRadius:99, fontSize:12, fontWeight:700, flexShrink:0, transition:'all .15s', background: radius===r ? '#1B2B4B' : '#F5F3F0', color: radius===r ? '#fff' : '#5A6A82', border: radius===r ? 'none' : '1.5px solid #EDE8E1' }}>
-                  {r} km
-                </button>
-              ))}
-            </div>
-
-            {/* Keyword search */}
-            <div style={{ display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:12, padding:'10px 13px', gap:8, border:'1.5px solid #EDE8E1' }}>
-              <span style={{ fontSize:14, color:'#9AAABB', flexShrink:0 }}>🔍</span>
-              <input
-                style={{ flex:1, fontSize:13, fontWeight:500, color:'#1B2B4B' }}
-                placeholder='"bowling", "château gratuit", "piscine"...'
-                value={query}
-                onChange={e => setQuery(e.target.value)}
-                onKeyDown={e => {
-                  if (e.key === 'Enter' && query.trim()) {
-                    const q = query.toLowerCase()
-                    const match = CATS.find(c =>
-                      c.l.toLowerCase().includes(q) ||
-                      c.subs.some(s => s.toLowerCase().includes(q))
-                    )
-                    const cat = match || CATS[0]
-                    setActiveCat(cat.id)
-                    doSearch(cat.id, null, budget)
-                  }
-                }}
-              />
-              {query
-                ? <button onClick={() => setQuery('')} style={{ color:'#C5C5C5', fontSize:14, flexShrink:0 }}>✕</button>
-                : null
-              }
+            {/* Keyword search — multi */}
+            <div style={{ display:'flex', gap:8, marginBottom:14 }}>
+              <div style={{ flex:1, display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:14, padding:'12px 15px', gap:10, border:'1.5px solid #EDE8E1' }}>
+                <span style={{ fontSize:16, flexShrink:0, color:'#9AAABB' }}>🔍</span>
+                <input
+                  style={{ flex:1, fontSize:14, fontWeight:500, color:'#1B2B4B', fontFamily:'var(--font-body)' }}
+                  placeholder="Bowling, cinéma, zoo, anniversaire…"
+                  value={query}
+                  onChange={e => setQuery(e.target.value)}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' && query.trim()) {
+                      const terms = query.toLowerCase().split(',').map(t => t.trim()).filter(Boolean)
+                      const matches = terms.map(term =>
+                        CATS.find(c => c.l.toLowerCase().includes(term) || c.subs.some(s => s.toLowerCase().includes(term)))
+                      ).filter(Boolean)
+                      const cat = matches[0] || CATS[0]
+                      setActiveCat(cat.id)
+                      doSearch(cat.id, null, budget)
+                    }
+                  }}
+                />
+                {query && <button onClick={() => setQuery('')} style={{ color:'#C5C5C5', fontSize:14 }}>✕</button>}
+              </div>
               <button
                 onClick={() => {
-                  if (!query.trim()) return
-                  const q = query.toLowerCase()
-                  const match = CATS.find(c =>
-                    c.l.toLowerCase().includes(q) ||
-                    c.subs.some(s => s.toLowerCase().includes(q))
-                  )
-                  const cat = match || CATS[0]
+                  if (!query.trim() && !city) return
+                  const terms = query.toLowerCase().split(',').map(t => t.trim()).filter(Boolean)
+                  const matches = terms.map(term =>
+                    CATS.find(c => c.l.toLowerCase().includes(term) || c.subs.some(s => s.toLowerCase().includes(term)))
+                  ).filter(Boolean)
+                  const cat = matches[0] || CATS[0]
                   setActiveCat(cat.id)
                   doSearch(cat.id, null, budget)
                 }}
-                style={{ background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', color:'#fff', padding:'7px 13px', borderRadius:9, fontSize:12, fontWeight:700, flexShrink:0, whiteSpace:'nowrap' }}>
-                Chercher
+                style={{ background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', color:'#fff', padding:'12px 18px', borderRadius:14, fontSize:14, fontWeight:700, flexShrink:0, boxShadow:'0 4px 14px rgba(255,107,74,0.38)', fontFamily:'var(--font-body)', whiteSpace:'nowrap' }}>
+                Trouver →
               </button>
+            </div>
+
+            {/* Filtres discrets */}
+            <div style={{ borderTop:'1px solid #F5F1EC', paddingTop:12 }}>
+              {/* Radius */}
+              <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:8 }}>
+                <span style={{ fontSize:11, fontWeight:600, color:'#C5C5C5', flexShrink:0 }}>📏</span>
+                <div className="scroll-x" style={{ display:'flex', gap:5 }}>
+                  {RADII.map(r => (
+                    <button key={r} onClick={() => { setRadius(r); if(activeCat) doSearch(activeCat, activeSub, budget) }}
+                      style={{ padding:'5px 11px', borderRadius:99, fontSize:12, fontWeight:600, flexShrink:0, transition:'all .15s', background: radius===r ? '#1B2B4B' : 'transparent', color: radius===r ? '#fff' : '#9AAABB', border: radius===r ? 'none' : '1px solid #EDE8E1', fontFamily:'var(--font-body)' }}>
+                      {r} km
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {/* Budget */}
+              <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                <span style={{ fontSize:11, fontWeight:600, color:'#C5C5C5', flexShrink:0 }}>💰</span>
+                <div className="scroll-x" style={{ display:'flex', gap:5 }}>
+                  {BUDGETS.map(b => (
+                    <button key={b} onClick={() => { setBudget(b); if(activeCat) doSearch(activeCat, activeSub, b) }}
+                      style={{ padding:'5px 11px', borderRadius:99, fontSize:12, fontWeight:600, flexShrink:0, transition:'all .15s', background: budget===b ? (b==='Gratuit'?'#3DAA6E':'#FF6B4A') : 'transparent', color: budget===b ? '#fff' : '#9AAABB', border: budget===b ? 'none' : '1px solid #EDE8E1', fontFamily:'var(--font-body)', whiteSpace:'nowrap' }}>
+                      {b}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* ── EFFACER ── */}
-        {activeCat && (
-          <div style={{ padding:'12px 14px 0', display:'flex', justifyContent:'flex-end' }}>
-            <button onClick={() => { setActiveCat(null); setActiveSub(null); setResults([]); setHasSearched(false) }}
-              style={{ padding:'7px 16px', borderRadius:99, background:'#fff', border:'1.5px solid #EDE8E1', color:'#5A6A82', fontSize:13, fontWeight:700, display:'flex', alignItems:'center', gap:5, boxShadow:'0 2px 8px rgba(27,43,75,0.07)' }}>
-              ✕ Effacer
-            </button>
-          </div>
-        )}
+        {/* ── SEPARATOR ── */}
+        <div style={{ padding:'24px 18px 16px', display:'flex', alignItems:'center', gap:12 }}>
+          <div style={{ flex:1, height:1, background:'#EDE8E1' }} />
+          <span style={{ fontSize:12, fontWeight:600, color:'#C5C5C5', whiteSpace:'nowrap', fontFamily:'var(--font-body)' }}>ou explorez par catégorie</span>
+          <div style={{ flex:1, height:1, background:'#EDE8E1' }} />
+        </div>
 
         {/* ── CATEGORIES ── */}
-        <div style={{ padding:'20px 14px 0' }}>
-          <div style={{ marginBottom:14 }}>
-            <div style={{ fontSize:10, fontWeight:700, color:'#FF6B4A', textTransform:'uppercase', letterSpacing:'1.5px', marginBottom:4 }}>EXPLORER</div>
-            <div style={{ fontSize:26, fontWeight:900, color:'#1B2B4B' }}>Catégories</div>
-          </div>
+        <div style={{ padding:'0 14px 0' }}>
           {renderCatGrid()}
         </div>
 
@@ -583,8 +577,9 @@ export default function App() {
           {!loading && results.length > 0 && (
             <>
               <div style={{ marginBottom:16 }}>
-                <div style={{ fontSize:10, fontWeight:700, color:'#FF6B4A', textTransform:'uppercase', letterSpacing:'1.5px', marginBottom:4 }}>RÉSULTATS</div>
-                <div style={{ fontSize:22, fontWeight:900, color:'#1B2B4B' }}>{results.length} idées{city ? ` près de ${city}` : ''}</div>
+                <div style={{ fontFamily:'var(--font-head)', fontSize:22, fontWeight:800, color:'#1B2B4B' }}>
+                  {results.length} idées{city ? ` près de ${city}` : ''}
+                </div>
               </div>
               {results.map((a, i) => <ActivityCard key={a.id} a={a} idx={i} />)}
             </>

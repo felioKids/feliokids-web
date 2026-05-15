@@ -1,13 +1,17 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --cream:#FFF8F1;--coral:#FF6B4A;--navy:#1B2B4B;
-  --text-m:#5A6A82;--text-l:#9AAABB;--border:#EDE8E1;
-  --font:'Plus Jakarta Sans',sans-serif;
+  --cream:#FFF8F1;--cream2:#FFF4EC;
+  --coral:#FF6B4A;--coral-l:#FF9A6C;
+  --navy:#1B2B4B;--navy-m:#3D4F6B;
+  --text-m:#5A6A82;--text-l:#9AAABB;
+  --border:#EDE8E1;--white:#fff;
+  --font-head:'Bricolage Grotesque',sans-serif;
+  --font-body:'Outfit',sans-serif;
 }
 html{scroll-behavior:smooth}
-body{font-family:var(--font);background:var(--cream);color:var(--navy);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-button{cursor:pointer;font-family:var(--font);border:none;background:none}
-input{font-family:var(--font);border:none;outline:none;background:none}
+body{font-family:var(--font-body);background:var(--cream);color:var(--navy);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{cursor:pointer;font-family:var(--font-body);border:none;background:none}
+input{font-family:var(--font-body);border:none;outline:none;background:none}
 .scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .scroll-x::-webkit-scrollbar{display:none}
 @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
