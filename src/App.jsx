@@ -33,7 +33,6 @@ const SLIDES = [
 const CATS = [
   { id:'gratuit',      l:'Gratuit',        sub:'Sorties sans se ruiner',   c:'#3DAA6E', img:'https://images.unsplash.com/photo-1575783970733-1aaedde1db74?w=400&q=75', subs:['Places de jeux','Forêts & balades','Pistes cyclables','Parcs & jardins','Plages & lacs','Musées gratuits','Événements gratuits'] },
   { id:'anniversaire', l:'Anniversaires',  sub:"L'anniversaire parfait",   c:'#FF4081', img:'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=75', subs:["Salles d'anniversaire",'Bowling & laser game','Accrobranche','Parcs aquatiques','Restaurants fête','Ateliers créatifs','Escape game'] },
-  { id:'ensemble',     l:'Ensemble',       sub:'Parent & enfant à 100%',   c:'#F59E0B', img:'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=400&q=75', subs:['Bébé nageur','Atelier peinture','Cuisine parent-enfant','Yoga parent-enfant','Éveil musical','Escalade débutants'] },
   { id:'enfants',      l:'Enfants',        sub:'Pour petits et grands',    c:'#FF6B4A', img:'https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=400&q=75', subs:['Fermes pédagogiques','Zoos & animaleries','Spectacles enfants','Ateliers créatifs',"Parcs d'attractions",'Aquariums'] },
   { id:'halte',        l:'Halte Enfants',  sub:'1h pour vous ressourcer',  c:'#8B5CF6', img:'https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=400&q=75', subs:['Sport avec garderie','IKEA Småland','Centres de loisirs','Ateliers sans parents','Piscines avec garderie','Galeries avec espace kids'] },
   { id:'sport',        l:'Sport',          sub:'Bouger en famille',        c:'#2F80ED', img:'https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=400&q=75', subs:['Football & terrains','Vélo & VTT','Piscines & bassins','Accrobranche','Ski & glisse','Tennis & padel','Patinoire'] },
@@ -43,7 +42,6 @@ const CATS = [
   { id:'loisirs',      l:'Loisirs',       sub:'Fun immédiat',             c:'#D97706', img:'https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=400&q=75', subs:['Bowling','Escape game','Gaming café','Laser game','Ateliers cuisine'] },
   { id:'manger',       l:'Manger',        sub:'Family friendly',          c:'#E91E8C', img:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=75', subs:['Restaurants famille','Fast food famille','Spots pique-nique','Glacier & goûter','Boulangeries'] },
   { id:'events',       l:'Événements',    sub:'Ce weekend',               c:'#1B2B4B', img:'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&q=75', subs:['Ce weekend','Fêtes & marchés','Festivals famille','Événements saisonniers','Expos temporaires'] },
-  { id:'bebe',         l:'Bébé & Maman',  sub:'Sorties avec bébé',        c:'#F06292', img:'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=400&q=75', subs:['Cafés baby-friendly','Parcs couverts','Groupes de jeux','Piscines bébé','Ateliers éveil','Bibliothèques jeunesse'] },
 ]
 
 const RADII   = [5, 10, 20, 30]
