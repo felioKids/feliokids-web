@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { getActivities } from './data/activities.js'
+import NewsletterPopup from './components/NewsletterPopup'
 
 // ─── SLIDES ───────────────────────────────────────────────────────────────────
 const SLIDES = [
@@ -58,6 +59,7 @@ const BUDGETS = ['Tous', 'Gratuit', '-20€', '-50€', '-100€']
 function HeroSlideshow() {
   const [cur, setCur] = useState(0)
   const [prevCur, setPrevCur] = useState(null)
+const [popupOpen, setPopupOpen] = useState(false)
 
   useEffect(() => {
     const t = setInterval(() => {
@@ -103,9 +105,9 @@ function HeroSlideshow() {
           <div style={{ background:'rgba(255,255,255,0.18)', backdropFilter:'blur(8px)', color:'#fff', padding:'6px 12px', borderRadius:99, fontSize:11, fontWeight:700, border:'1px solid rgba(255,255,255,0.28)', display:'flex', alignItems:'center', gap:5 }}>
             ✨ Weekend
           </div>
-          <div style={{ background:'rgba(255,255,255,0.18)', backdropFilter:'blur(8px)', color:'#fff', padding:'6px 12px', borderRadius:99, fontSize:11, fontWeight:700, border:'1px solid rgba(255,255,255,0.28)', display:'flex', alignItems:'center', gap:5 }}>
+        <button onClick={() => setPopupOpen(true)} style={{ background:'rgba(255,255,255,0.18)', backdropFilter:'blur(8px)', color:'#fff', padding:'6px 12px', borderRadius:99, fontSize:11, fontWeight:700, border:'1px solid rgba(255,255,255,0.28)', display:'flex', alignItems:'center', gap:5, cursor:'pointer' }}>
             🔔 Alertes
-          </div>
+          </button>
         </div>
       </div>
 
@@ -132,6 +134,7 @@ function HeroSlideshow() {
           }} />
         ))}
       </div>
+   <NewsletterPopup isOpen={popupOpen} onClose={() => setPopupOpen(false)} />
     </div>
   )
 }
@@ -358,6 +361,7 @@ export default function App() {
   const [citySuggs,   setCitySuggs]   = useState([])
   const [showSugg,    setShowSugg]    = useState(false)
   const [showEmail,   setShowEmail]   = useState(false)
+  const [popupOpen,   setPopupOpen]   = useState(false)
   const [hasSearched, setHasSearched] = useState(false)
   const cityTimer = useRef(null)
 
@@ -590,7 +594,8 @@ export default function App() {
         <div style={{ textAlign:'center', padding:'20px 0 32px', color:'#C5C5C5', fontSize:12, fontFamily:'var(--font-body)' }}>
           🎡 FelioKids · <a href="mailto:contact.feliokids@gmail.com" style={{ color:'#FF6B4A', fontWeight:600 }}>contact.feliokids@gmail.com</a>
         </div>
-      </div>
+     </div>
+      <NewsletterPopup isOpen={popupOpen} onClose={() => setPopupOpen(false)} />
     </div>
   )
 }
