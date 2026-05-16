@@ -31,23 +31,23 @@ const SLIDES = [
 
 // ─── CATEGORIES ───────────────────────────────────────────────────────────────
 const CATS = [
-  { id:'gratuit',      l:'Gratuit',              sub:'Tout gratuit près de toi',    c:'#3DAA6E', img:'https://images.unsplash.com/photo-1575783970733-1aaedde1db74?w=400&q=75',
+  { id:'gratuit',      l:'Gratuit',              sub:'Tout gratuit près de toi',    c:'#3DAA6E', img:'https://images.unsplash.com/photo-1519331379826-f10be5486c6f?w=400&q=80',
     subs:['Parcs & jardins','Forêts & balades','Plages & lacs','Musées gratuits','Événements gratuits','Pistes cyclables','Bibliothèques','Zoos gratuits','Fontaines & jets d\'eau'] },
-  { id:'anniversaire', l:'Anniversaires',         sub:"L'anniversaire parfait",      c:'#FF4081', img:'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=75',
+  { id:'anniversaire', l:'Anniversaires',         sub:"L'anniversaire parfait",      c:'#FF4081', img:'https://images.unsplash.com/photo-1464349153735-7db50ed83c84?w=400&q=80',
     subs:['Bowling & laser game','Accrobranche','Restaurants fête','Ateliers créatifs','Escape game','Cinéma privatisé','Karting enfants','Parcs aquatiques'] },
-  { id:'pluie',        l:'Pluie & Intérieur',     sub:'Quand il pleut dehors',       c:'#4A6FA5', img:'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&q=75',
+  { id:'pluie',        l:'Pluie & Intérieur',     sub:'Quand il pleut dehors',       c:'#4A6FA5', img:'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=400&q=80',
     subs:['Cinéma','Bowling','Aquarium','Trampoline','Laser game','Musées interactifs','Piscines couvertes','Bibliothèques & médiathèques','Cafés jeux','Ateliers créatifs'] },
-  { id:'culture',      l:'Culture & Découverte',  sub:'Apprendre en s\'amusant',     c:'#7C3AED', img:'https://images.unsplash.com/photo-1564399579883-451a5d44ec08?w=400&q=75',
+  { id:'culture',      l:'Culture & Découverte',  sub:'Apprendre en s\'amusant',     c:'#7C3AED', img:'https://images.unsplash.com/photo-1549144511-f099e773c147?w=400&q=80',
     subs:['Châteaux & histoire','Musées d\'art','Théâtre enfants','Planétarium','Sciences & découverte','Patrimoine UNESCO','Visites guidées famille','Cirque'] },
-  { id:'nature',       l:'Nature & Animaux',      sub:'Plein air & rencontres',      c:'#059669', img:'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&q=75',
+  { id:'nature',       l:'Nature & Animaux',      sub:'Plein air & rencontres',      c:'#059669', img:'https://images.unsplash.com/photo-1448375240586-882707db888b?w=400&q=80',
     subs:['Forêts & randonnée','Lacs & baignade','Plages','Zoos & parcs animaliers','Fermes pédagogiques','Cascades','Pêche en famille','Barbecue légal','Cueillette fruits','Camping & picnic','Observation oiseaux'] },
-  { id:'sport',        l:'Sport & Activités',     sub:'Bougez en famille',           c:'#2F80ED', img:'https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=400&q=75',
+  { id:'sport',        l:'Sport & Activités',     sub:'Bougez en famille',           c:'#2F80ED', img:'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&q=80',
     subs:['Vélo & VTT','Football & terrains','Piscines','Ski & glisse','Tennis & padel','Accrobranche','Skateparks','Patinoire','Escalade','Ping-pong','Sports nautiques'] },
-  { id:'events',       l:'Weekend & Événements',  sub:'Ce weekend près de toi',      c:'#1B2B4B', img:'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&q=75',
+  { id:'events',       l:'Weekend & Événements',  sub:'Ce weekend près de toi',      c:'#1B2B4B', img:'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=400&q=80',
     subs:['Festivals famille','Fêtes & marchés','Brocante','Spectacles','Expos temporaires','Concerts gratuits','Feux d\'artifice','Événements saisonniers','Compétitions sportives'] },
-  { id:'halte',        l:'Halte Garderie',        sub:'1h pour vous ressourcer',     c:'#8B5CF6', img:'https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=400&q=75',
+  { id:'halte',        l:'Halte Garderie',        sub:'1h pour vous ressourcer',     c:'#8B5CF6', img:'https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=400&q=80',
     subs:['Sport avec garderie','IKEA Småland','Centres de loisirs','Ateliers sans parents','Espaces kids galeries','Piscines avec garderie','Associations locales'] },
-  { id:'ateliers',     l:'Ateliers Créatifs',     sub:'Créer & s\'exprimer',         c:'#D97706', img:'https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=400&q=75',
+  { id:'ateliers',     l:'Ateliers Créatifs',     sub:'Créer & s\'exprimer',         c:'#D97706', img:'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400&q=80',
     subs:['Ateliers peinture','Poterie enfants','Cuisine créative','Ateliers musique','Bibliothèques & médiathèques','Ateliers science','Couture & DIY','Théâtre enfants','Ateliers numériques'] },
 ]
 
