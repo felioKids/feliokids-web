@@ -592,7 +592,7 @@ export default function App() {
         </div>
 
         <div style={{ textAlign:'center', padding:'20px 0 32px', color:'#C5C5C5', fontSize:12, fontFamily:'var(--font-body)' }}>
-          🎡 FelioKids · <a href="mailto:contact.feliokids@gmail.com" style={{ color:'#FF6B4A', fontWeight:600 }}>contact.feliokids@gmail.com</a>
+          <span style={{ display:'inline-flex', alignItems:'center', justifyContent:'center', width:22, height:22, borderRadius:6, background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', marginRight:7, verticalAlign:'middle' }}><span style={{ fontWeight:900, fontSize:10, color:'#fff', letterSpacing:'-0.5px' }}>f<span style={{textTransform:'uppercase'}}>K</span></span></span>FelioKids · <a href="mailto:contact.feliokids@gmail.com" style={{ color:'#FF6B4A', fontWeight:600 }}>contact.feliokids@gmail.com</a>
         </div>
      </div>
       <NewsletterPopup isOpen={popupOpen} onClose={() => setPopupOpen(false)} />
