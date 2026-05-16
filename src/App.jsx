@@ -43,7 +43,7 @@ const CATS = [
     subs:['Forêts & randonnée','Lacs & baignade','Plages','Zoos & parcs animaliers','Fermes pédagogiques','Cascades','Pêche en famille','Barbecue légal','Cueillette fruits','Camping & picnic','Observation oiseaux'] },
   { id:'sport',        l:'Sport & Activités',     sub:'Bougez en famille',           c:'#2F80ED', img:'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&q=80',
     subs:['Vélo & VTT','Football & terrains','Piscines','Ski & glisse','Tennis & padel','Accrobranche','Skateparks','Patinoire','Escalade','Ping-pong','Sports nautiques'] },
-  { id:'events',       l:'Weekend & Événements',  sub:'Ce weekend près de toi',      c:'#1B2B4B', img:'https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&q=80',
+  { id:'events',       l:'Weekend & Événements',  sub:'Ce weekend près de toi',      c:'#1B2B4B', img:'https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?w=400&q=80',
     subs:['Festivals famille','Fêtes & marchés','Brocante','Spectacles','Expos temporaires','Concerts gratuits','Feux d\'artifice','Événements saisonniers','Compétitions sportives'] },
   { id:'halte',        l:'Halte Garderie',        sub:'1h pour vous ressourcer',     c:'#8B5CF6', img:'https://images.unsplash.com/photo-1526634332515-d56c5fd16991?w=400&q=80',
     subs:['Sport avec garderie','IKEA Småland','Centres de loisirs','Ateliers sans parents','Espaces kids galeries','Piscines avec garderie','Associations locales'] },
