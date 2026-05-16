@@ -448,13 +448,8 @@ export default function App() {
         <div style={{ padding:'0 14px', marginTop:-26, position:'relative', zIndex:10 }}>
           <div style={{ background:'#fff', borderRadius:24, padding:'22px 18px', boxShadow:'0 8px 40px rgba(27,43,75,0.13)', border:'1px solid #F0EBE3' }}>
 
-            {/* Label mode 1 */}
-            <p style={{ fontFamily:'var(--font-body)', fontSize:12, fontWeight:600, color:'#9AAABB', marginBottom:12, letterSpacing:'0.2px' }}>
-              Vous savez déjà ce que vous cherchez ? 👇
-            </p>
-
-            {/* Ville input */}
-            <div style={{ position:'relative', marginBottom:10 }}>
+            {/* Ville input — FIRST */}
+            <div style={{ position:'relative', marginBottom:14 }}>
               <div style={{ display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:14, padding:'12px 15px', gap:10, border:'1.5px solid #EDE8E1' }}>
                 <span style={{ fontSize:16, flexShrink:0 }}>📍</span>
                 <input
@@ -485,7 +480,12 @@ export default function App() {
               )}
             </div>
 
-            {/* Keyword search — multi */}
+            {/* Label */}
+            <p style={{ fontFamily:'var(--font-body)', fontSize:12, fontWeight:600, color:'#9AAABB', marginBottom:10, letterSpacing:'0.2px' }}>
+              Vous savez déjà ce que vous cherchez ? 👇
+            </p>
+
+            {/* Keyword search + Trouver */}
             <div style={{ display:'flex', gap:8, marginBottom:14 }}>
               <div style={{ flex:1, display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:14, padding:'12px 15px', gap:10, border:'1.5px solid #EDE8E1' }}>
                 <span style={{ fontSize:16, flexShrink:0, color:'#9AAABB' }}>🔍</span>
@@ -524,9 +524,8 @@ export default function App() {
               </button>
             </div>
 
-            {/* Filtres discrets */}
+            {/* Filtres — km + budget */}
             <div style={{ borderTop:'1px solid #F5F1EC', paddingTop:12 }}>
-              {/* Radius */}
               <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:8 }}>
                 <span style={{ fontSize:11, fontWeight:600, color:'#C5C5C5', flexShrink:0 }}>📏</span>
                 <div className="scroll-x" style={{ display:'flex', gap:5 }}>
@@ -538,7 +537,6 @@ export default function App() {
                   ))}
                 </div>
               </div>
-              {/* Budget */}
               <div style={{ display:'flex', alignItems:'center', gap:8 }}>
                 <span style={{ fontSize:11, fontWeight:600, color:'#C5C5C5', flexShrink:0 }}>💰</span>
                 <div className="scroll-x" style={{ display:'flex', gap:5 }}>
