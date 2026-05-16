@@ -583,17 +583,12 @@ export default function App() {
             </>
           )}
           {!loading && !hasSearched && (
-            <div style={{ textAlign:'center', padding:'28px 0 40px' }}>
-              <div style={{ fontSize:44, marginBottom:12 }}>👨‍👩‍👧‍👦</div>
-              <div style={{ color:'#9AAABB', fontSize:14, lineHeight:1.8, fontWeight:500 }}>
-                Clique sur une catégorie<br />pour découvrir des activités !
-              </div>
-            </div>
+            <div style={{ padding:'20px 0' }} />
           )}
         </div>
 
-        <div style={{ textAlign:'center', padding:'20px 0 0', color:'#C5C5C5', fontSize:11 }}>
-          🎡 FelioKids · <a href="mailto:feliokids@gmail.com" style={{ color:'#C5C5C5' }}>feliokids@gmail.com</a>
+        <div style={{ textAlign:'center', padding:'20px 0 32px', color:'#C5C5C5', fontSize:12, fontFamily:'var(--font-body)' }}>
+          🎡 FelioKids · <a href="mailto:contact.feliokids@gmail.com" style={{ color:'#FF6B4A', fontWeight:600 }}>contact.feliokids@gmail.com</a>
         </div>
       </div>
     </div>
