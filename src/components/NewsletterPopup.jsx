@@ -115,7 +115,7 @@ export default function NewsletterPopup({ isOpen, onClose }) {
         ) : (
           <div className="fk-success">
             <span className="fk-success-icon">🎉</span>
-            <p className="fk-success-title">Merci, tu es inscrit·e !</p>
+            <p className="fk-success-title">Merci, tu es inscrite !</p>
             <p className="fk-success-sub">
               Chaque semaine, les meilleures idées famille arrivent dans ta boîte.
             </p>
