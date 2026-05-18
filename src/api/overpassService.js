@@ -4,7 +4,7 @@ import { getFiltersForSub, getSourceForSub } from './categoryConfig.js'
 import { searchActivitiesGoogle } from './googlePlacesService.js'
 
 const NOMINATIM_URL = 'https://nominatim.openstreetmap.org'
-const OVERPASS_URL  = 'https://overpass-api.de/api/interpreter'
+const OVERPASS_URL  = '/api/overpass'
 
 export async function geocodeCity(cityName) {
   const params = new URLSearchParams({
@@ -32,8 +32,8 @@ function buildQuery(lat, lng, radiusMeters, filters) {
 async function fetchOverpass(query) {
   const res = await fetch(OVERPASS_URL, {
     method: 'POST',
-    body: `data=${encodeURIComponent(query)}`,
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query }),
   })
   if (!res.ok) throw new Error(`Overpass error: ${res.status}`)
   const data = await res.json()

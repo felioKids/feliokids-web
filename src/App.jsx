@@ -642,9 +642,13 @@ const [showRadiusPicker, setShowRadiusPicker] = useState(false)
   </div>
 )}{loading && (
             <div style={{ textAlign:'center', padding:'44px 0' }}>
-              <div style={{ fontSize:44, display:'inline-block', animation:'spin 1s linear infinite' }}>🎡</div>
-              <div style={{ color:'#9AAABB', fontSize:14, fontWeight:600, marginTop:12 }}>Recherche en cours...</div>
-            </div>
+  <div style={{ animation:'spin 1s linear infinite', display:'inline-block' }}>
+    <div style={{ width:52, height:52, borderRadius:14, background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 4px 18px rgba(255,107,74,0.4)' }}>
+      <span style={{ fontWeight:900, fontSize:22, color:'#fff', letterSpacing:'-1px' }}>f<span style={{textTransform:'uppercase'}}>K</span></span>
+    </div>
+  </div>
+  <div style={{ color:'#9AAABB', fontSize:14, fontWeight:600, marginTop:14 }}>Recherche en cours...</div>
+</div>
           )}
           {!loading && results.length > 0 && (
             <>
