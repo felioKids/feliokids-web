@@ -52,7 +52,7 @@ const CATS = [
     subs:['Ateliers peinture','Poterie enfants','Cuisine créative','Ateliers musique','Bibliothèques & médiathèques','Ateliers science','Couture & DIY','Théâtre enfants','Ateliers numériques'] },
 ]
 
-const RADII   = [5, 10, 20, 30]
+
 const BUDGETS = ['Tous', 'Gratuit', '-20€', '-50€', '-100€']
 
 // ─── HERO SLIDESHOW ───────────────────────────────────────────────────────────
@@ -350,7 +350,8 @@ function EmailModal({ onClose }) {
 // ─── MAIN APP ─────────────────────────────────────────────────────────────────
 export default function App() {
   const [city,        setCity]        = useState('')
-  const [radius,      setRadius]      = useState(20)
+  const [radius,      setRadius]      = useState(10)
+const [showRadiusPicker, setShowRadiusPicker] = useState(false) 
   const [budget,      setBudget]      = useState('Tous')
   const [query,       setQuery]       = useState('')
   const [activeCat,   setActiveCat]   = useState(null)
@@ -565,17 +566,39 @@ export default function App() {
 
             {/* Filtres — km + budget */}
             <div style={{ borderTop:'1px solid #F5F1EC', paddingTop:12 }}>
-              <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:8 }}>
-                <span style={{ fontSize:11, fontWeight:600, color:'#C5C5C5', flexShrink:0 }}>📏</span>
-                <div className="scroll-x" style={{ display:'flex', gap:5 }}>
-                  {RADII.map(r => (
-                    <button key={r} onClick={() => { setRadius(r); if(activeCat) doSearch(activeCat, activeSub, budget) }}
-                      style={{ padding:'5px 11px', borderRadius:99, fontSize:12, fontWeight:600, flexShrink:0, transition:'all .15s', background: radius===r ? '#1B2B4B' : 'transparent', color: radius===r ? '#fff' : '#9AAABB', border: radius===r ? 'none' : '1px solid #EDE8E1', fontFamily:'var(--font-body)' }}>
-                      {r} km
-                    </button>
-                  ))}
-                </div>
-              </div>
+             <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:8 }}>
+  <span style={{ fontSize:11, fontWeight:600, color:'#C5C5C5', flexShrink:0 }}>📏</span>
+  <div style={{ display:'flex', alignItems:'center', gap:0, border:'1.5px solid #EDE8E1', borderRadius:99, overflow:'hidden' }}>
+    <button
+      onPointerDown={() => {
+        const step = () => { setRadius(r => { const next = Math.max(5, r - 5); if(activeCat) doSearch(activeCat, activeSub, budget); return next; }); }
+        step()
+        const t = setInterval(step, 400)
+        window._rTimer = t
+      }}
+      onPointerUp={() => clearInterval(window._rTimer)}
+      onPointerLeave={() => clearInterval(window._rTimer)}
+      style={{ width:36, height:34, fontSize:18, fontWeight:700, color:'#1B2B4B', background:'#F5F3F0', borderRight:'1.5px solid #EDE8E1', flexShrink:0 }}>
+      −
+    </button>
+    <div style={{ minWidth:72, textAlign:'center', padding:'0 10px' }}>
+      <span style={{ fontSize:14, fontWeight:700, color:'#1B2B4B' }}>{radius} km</span>
+    </div>
+    <button
+      onPointerDown={() => {
+        const step = () => { setRadius(r => { const next = Math.min(50, r + 5); if(activeCat) doSearch(activeCat, activeSub, budget); return next; }); }
+        step()
+        const t = setInterval(step, 400)
+        window._rTimer = t
+      }}
+      onPointerUp={() => clearInterval(window._rTimer)}
+      onPointerLeave={() => clearInterval(window._rTimer)}
+      style={{ width:36, height:34, fontSize:18, fontWeight:700, color:'#1B2B4B', background:'#F5F3F0', borderLeft:'1.5px solid #EDE8E1', flexShrink:0 }}>
+      +
+    </button>
+  </div>
+  <span style={{ fontSize:11, color:'#C5C5C5', fontWeight:500 }}>autour de toi</span>
+</div>
               <div style={{ display:'flex', alignItems:'center', gap:8 }}>
                 <span style={{ fontSize:11, fontWeight:600, color:'#C5C5C5', flexShrink:0 }}>💰</span>
                 <div className="scroll-x" style={{ display:'flex', gap:5 }}>

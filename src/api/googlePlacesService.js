@@ -111,9 +111,10 @@ export async function searchActivitiesGoogle({ city, radiusKm, budget, subName, 
   const BUDGET_MAP = { 'Tous': null, 'Gratuit': 0, '-20€': 1, '-50€': 2, '-100€': 3 }
   const maxPrice = BUDGET_MAP[budget] ?? null
 
-  return (data.results ?? [])
+return (data.results ?? [])
     .map(p => normalizePlaceGoogle(p, lat, lng, subName))
     .filter(Boolean)
+    .filter(a => a.distanceKm <= radiusKm)
     .filter(a => maxPrice === null || a.priceNum <= maxPrice)
     .sort((a, b) => a.distanceKm - b.distanceKm)
 }
