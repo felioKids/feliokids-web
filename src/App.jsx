@@ -52,14 +52,11 @@ const CATS = [
     subs:['Ateliers peinture','Poterie enfants','Cuisine créative','Ateliers musique','Bibliothèques & médiathèques','Ateliers science','Couture & DIY','Théâtre enfants','Ateliers numériques'] },
 ]
 
-
-const BUDGETS = ['Tous', 'Gratuit', '-20€', '-50€', '-100€']
-
 // ─── HERO SLIDESHOW ───────────────────────────────────────────────────────────
 function HeroSlideshow() {
   const [cur, setCur] = useState(0)
   const [prevCur, setPrevCur] = useState(null)
-const [popupOpen, setPopupOpen] = useState(false)
+  const [popupOpen, setPopupOpen] = useState(false)
 
   useEffect(() => {
     const t = setInterval(() => {
@@ -88,9 +85,7 @@ const [popupOpen, setPopupOpen] = useState(false)
         </div>
       ))}
 
-      {/* Top nav — always on top */}
       <div style={{ position:'absolute', top:0, left:0, right:0, padding:'14px 16px', display:'flex', justifyContent:'space-between', alignItems:'center', zIndex:10 }}>
-        {/* Logo */}
         <div style={{ display:'flex', alignItems:'center', gap:9 }}>
           <div style={{ width:36, height:36, borderRadius:10, background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 4px 14px rgba(255,107,74,0.45)' }}>
             <span style={{ fontWeight:900, fontSize:14, color:'#fff', letterSpacing:'-0.5px' }}>f<span style={{textTransform:'uppercase'}}>K</span></span>
@@ -100,18 +95,16 @@ const [popupOpen, setPopupOpen] = useState(false)
             <div style={{ fontSize:9, color:'rgba(255,255,255,0.65)', fontWeight:600, letterSpacing:'0.8px', fontFamily:'var(--font-body)' }}>FAMILY DISCOVERY</div>
           </div>
         </div>
-        {/* Right buttons */}
         <div style={{ display:'flex', gap:7, alignItems:'center' }}>
           <div style={{ background:'rgba(255,255,255,0.18)', backdropFilter:'blur(8px)', color:'#fff', padding:'6px 12px', borderRadius:99, fontSize:11, fontWeight:700, border:'1px solid rgba(255,255,255,0.28)', display:'flex', alignItems:'center', gap:5 }}>
             ✨ Weekend
           </div>
-        <button onClick={() => setPopupOpen(true)} style={{ background:'rgba(255,255,255,0.18)', backdropFilter:'blur(8px)', color:'#fff', padding:'6px 12px', borderRadius:99, fontSize:11, fontWeight:700, border:'1px solid rgba(255,255,255,0.28)', display:'flex', alignItems:'center', gap:5, cursor:'pointer' }}>
+          <button onClick={() => setPopupOpen(true)} style={{ background:'rgba(255,255,255,0.18)', backdropFilter:'blur(8px)', color:'#fff', padding:'6px 12px', borderRadius:99, fontSize:11, fontWeight:700, border:'1px solid rgba(255,255,255,0.28)', display:'flex', alignItems:'center', gap:5, cursor:'pointer' }}>
             🔔 Alertes
           </button>
         </div>
       </div>
 
-      {/* Hero text */}
       <div style={{ position:'absolute', bottom:32, left:20, right:20, zIndex:10 }}>
         <div style={{ fontSize:10, fontWeight:700, color:'rgba(255,255,255,0.62)', letterSpacing:'1.8px', marginBottom:8 }}>
           {SLIDES[cur].label}
@@ -124,7 +117,6 @@ const [popupOpen, setPopupOpen] = useState(false)
         </div>
       </div>
 
-      {/* Dots */}
       <div style={{ position:'absolute', bottom:12, right:18, display:'flex', gap:5, zIndex:10 }}>
         {SLIDES.map((_, i) => (
           <button key={i} onClick={() => goTo(i)} style={{
@@ -134,7 +126,7 @@ const [popupOpen, setPopupOpen] = useState(false)
           }} />
         ))}
       </div>
-   <NewsletterPopup isOpen={popupOpen} onClose={() => setPopupOpen(false)} />
+      <NewsletterPopup isOpen={popupOpen} onClose={() => setPopupOpen(false)} />
     </div>
   )
 }
@@ -153,10 +145,7 @@ function CatTile({ cat, active, onClick, delay }) {
       <img src={cat.img} alt={cat.l} loading="lazy"
         style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
       <div style={{ position:'absolute', inset:0, background:'linear-gradient(160deg,rgba(0,0,0,0.04) 0%,rgba(0,0,0,0.68) 100%)' }} />
-
-      {/* Active color bar at top */}
       {active && <div style={{ position:'absolute', top:0, left:0, right:0, height:3, background:cat.c }} />}
-
       <div style={{ position:'absolute', bottom:10, left:10, right:28 }}>
         <div style={{ fontSize:13, fontWeight:800, color:'#fff', lineHeight:1.15, textShadow:'0 1px 5px rgba(0,0,0,0.5)' }}>{cat.l}</div>
         <div style={{ fontSize:9, color:'rgba(255,255,255,0.75)', fontWeight:500, marginTop:3, lineHeight:1.3 }}>{cat.sub}</div>
@@ -177,7 +166,6 @@ function SubsPanel({ cat, activeSub, onSub }) {
       boxShadow:`0 4px 20px rgba(0,0,0,0.09), inset 0 0 0 1.5px ${cat.c}25`,
     }}>
       <div style={{ display:'flex', alignItems:'center', gap:7, marginBottom:10 }}>
-        <span style={{ fontSize:15 }}>{cat.e}</span>
         <span style={{ fontWeight:800, fontSize:13, color:'#1B2B4B' }}>{cat.l}</span>
         <span style={{ fontSize:11, color:'#9AAABB' }}>— Que cherches-tu ?</span>
       </div>
@@ -198,7 +186,6 @@ function SubsPanel({ cat, activeSub, onSub }) {
 }
 
 // ─── ACTIVITY CARD ────────────────────────────────────────────────────────────
-
 const TYPE_IMGS = {
   'parc':           'https://images.unsplash.com/photo-1575783970733-1aaedde1db74?w=600&q=75',
   'jardin':         'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&q=75',
@@ -347,11 +334,41 @@ function EmailModal({ onClose }) {
   )
 }
 
+// ─── WEATHER BUTTONS ─────────────────────────────────────────────────────────
+function WeatherButton({ weather, city, setActiveCat, doSearch, budget }) {
+  if (!weather) return null
+  const { code, temp } = weather
+  const isRain  = code >= 51 && code <= 82
+  const isStorm = code >= 95
+  const isSnow  = code >= 71 && code <= 77
+  const isHot   = temp > 28 && code <= 3
+  const isCold  = temp < 10 && code <= 3
+
+  let bg, text, catId, subName
+  if (isStorm || isRain) { bg='#4A6FA5'; text='🌧️ Idées indoor'; catId='pluie'; subName=null }
+  else if (isSnow)       { bg='#7C9CBF'; text='❄️ Activités hiver'; catId='sport'; subName='Ski & glisse' }
+  else if (isHot)        { bg='#E8734A'; text='🥵 Plages & lacs'; catId='nature'; subName='Lacs & baignade' }
+  else if (isCold)       { bg='#5B7FA6'; text='🥶 Sortez couverts'; catId='sport'; subName=null }
+  else                   { bg='#3DAA6E'; text='☀️ Plein air'; catId='nature'; subName=null }
+
+  return (
+    <button
+      onClick={() => {
+        setActiveCat(catId)
+        doSearch(catId, subName, budget)
+        setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 600)
+      }}
+      style={{ flex:1, padding:'9px 8px', borderRadius:12, background:bg, color:'#fff', fontSize:11, fontWeight:700, border:'none', cursor:'pointer', fontFamily:'var(--font-body)' }}>
+      {text}
+    </button>
+  )
+}
+
 // ─── MAIN APP ─────────────────────────────────────────────────────────────────
 export default function App() {
   const [city,        setCity]        = useState('')
   const [radius,      setRadius]      = useState(10)
-const [showRadiusPicker, setShowRadiusPicker] = useState(false) 
+  const [showRadiusPicker, setShowRadiusPicker] = useState(false)
   const [budget,      setBudget]      = useState('Tous')
   const [query,       setQuery]       = useState('')
   const [activeCat,   setActiveCat]   = useState(null)
@@ -450,8 +467,10 @@ const [showRadiusPicker, setShowRadiusPicker] = useState(false)
     setActiveSub(next); doSearch(activeCat, next, budget)
   }
 
-  // Grid layout: we render tiles in a 3-col grid
-  // But subs panel appears AFTER the row that contains the active tile
+  const scrollToResults = () => {
+    setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 600)
+  }
+
   const renderCatGrid = () => {
     const rows = []
     for (let i = 0; i < CATS.length; i += 3) {
@@ -463,7 +482,6 @@ const [showRadiusPicker, setShowRadiusPicker] = useState(false)
             {row.map((cat, j) => (
               <CatTile key={cat.id} cat={cat} active={activeCat===cat.id} delay={(i+j)*0.04} onClick={() => clickCat(cat.id)} />
             ))}
-            {/* Fill empty slots */}
             {row.length < 3 && Array(3-row.length).fill(0).map((_,k) => <div key={`e${k}`} />)}
           </div>
           {activeInRow && (
@@ -488,7 +506,7 @@ const [showRadiusPicker, setShowRadiusPicker] = useState(false)
         <div style={{ padding:'0 14px', marginTop:-26, position:'relative', zIndex:10 }}>
           <div style={{ background:'#fff', borderRadius:24, padding:'22px 18px', boxShadow:'0 8px 40px rgba(27,43,75,0.13)', border:'1px solid #F0EBE3' }}>
 
-            {/* Ville input — FIRST */}
+            {/* Ville input */}
             <div style={{ position:'relative', marginBottom:14 }}>
               <div style={{ display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:14, padding:'12px 15px', gap:10, border:'1.5px solid #EDE8E1' }}>
                 <span style={{ fontSize:16, flexShrink:0 }}>📍</span>
@@ -520,48 +538,35 @@ const [showRadiusPicker, setShowRadiusPicker] = useState(false)
               )}
             </div>
 
+            {/* 3 przyciski pod miastem */}
+            {city && (
+              <div style={{ display:'flex', gap:7, marginBottom:14 }}>
+                <button
+                  onClick={() => {
+                    setActiveCat('nature')
+                    doSearch('nature', 'Forêts & randonnée', budget)
+                    scrollToResults()
+                  }}
+                  style={{ flex:1, padding:'9px 8px', borderRadius:12, background:'#1B2B4B', color:'#fff', fontSize:11, fontWeight:700, border:'none', cursor:'pointer', fontFamily:'var(--font-body)' }}>
+                  🗺️ Découvrir tout
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveCat('pluie')
+                    doSearch('pluie', 'Cinéma', budget)
+                    scrollToResults()
+                  }}
+                  style={{ flex:1, padding:'9px 8px', borderRadius:12, background:'#4A6FA5', color:'#fff', fontSize:11, fontWeight:700, border:'none', cursor:'pointer', fontFamily:'var(--font-body)' }}>
+                  🎬 Cinéma
+                </button>
+                <WeatherButton weather={weather} city={city} setActiveCat={setActiveCat} doSearch={doSearch} budget={budget} />
+              </div>
+            )}
+
             {/* Label */}
             <p style={{ fontFamily:'var(--font-body)', fontSize:12, fontWeight:600, color:'#9AAABB', marginBottom:10, letterSpacing:'0.2px' }}>
               Vous savez déjà ce que vous cherchez ? 👇
-          {weather && (() => {
-  const { code, temp, icon } = weather
-  const isRain  = code >= 51 && code <= 82
-  const isStorm = code >= 95
-  const isSnow  = code >= 71 && code <= 77
-  const isHot   = temp > 28 && code <= 3
-  const isCold  = temp < 10 && code <= 3
-  const isFine  = temp >= 18 && temp <= 28 && code <= 1
-  const isCloudy= code >= 2 && code <= 45 && !isRain && !isSnow
-
-  let bg, border, textColor, arrow, text, catId, subName
-  if (isStorm)      { bg='#EEF4FF'; border='#C7D9F8'; textColor='#1e3a6e'; text=`⛈️ Orage à ${city} — restez à l'intérieur !`; catId='pluie'; subName=null }
-  else if (isRain)  { bg='#EEF4FF'; border='#C7D9F8'; textColor='#1e3a6e'; text=`🌧️ Il pleut à ${city} — voir nos idées indoor`; catId='pluie'; subName=null }
-  else if (isSnow)  { bg='#EFF6FF'; border='#BAD4F8'; textColor='#1e3a6e'; text=`❄️ Il neige à ${city} — activités hivernales !`; catId='sport'; subName='Ski & glisse' }
-  else if (isHot)   { bg='#FFF3E0'; border='#FFCC80'; textColor='#7c3d00'; text=`🥵 Grosse chaleur à ${city} — plages et lacs près de toi !`; catId='nature'; subName='Lacs & baignade' }
-  else if (isCold)  { bg='#F3F0FF'; border='#D4C9F8'; textColor='#3b2a7e'; text=`🥶 Froid mais beau à ${city} — sortez couverts !`; catId='sport'; subName=null }
-  else if (isFine)  { bg='#FAEEDA'; border='#FAC775'; textColor='#633806'; text=`☀️ Beau temps à ${city} — sorties plein air !`; catId='nature'; subName=null }
-  else if (isCloudy){ bg='#F5F3FF'; border='#DDD6FE'; textColor='#4c3d8f'; text=`⛅ Temps couvert à ${city} — idées culture et découverte`; catId='culture'; subName=null }
-  else return null
-
-  return (
-    <div
-    onClick={() => {
-  setActiveCat(catId)
-  doSearch(catId, subName, budget)
-  setTimeout(() => {
-    document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' })
-  }, 600)
-}}
-      style={{ display:'flex', alignItems:'center', justifyContent:'space-between', background:bg, border:`1px solid ${border}`, borderRadius:12, padding:'10px 14px', marginBottom:12, cursor:'pointer', transition:'opacity .15s' }}
-      onMouseEnter={e => e.currentTarget.style.opacity='0.85'}
-      onMouseLeave={e => e.currentTarget.style.opacity='1'}
-    >
-      <span style={{ fontSize:13, fontWeight:600, color:textColor, lineHeight:1.4 }}>{text}</span>
-      <span style={{ fontSize:15, color:textColor, marginLeft:10, flexShrink:0 }}>→</span>
-    </div>
-  )
-})()}  
-</p>
+            </p>
 
             {/* Keyword search + Trouver */}
             <div style={{ display:'flex', gap:8, marginBottom:14 }}>
@@ -602,42 +607,43 @@ const [showRadiusPicker, setShowRadiusPicker] = useState(false)
               </button>
             </div>
 
-            {/* Filtres — km + budget */}
+            {/* Stepper km */}
             <div style={{ borderTop:'1px solid #F5F1EC', paddingTop:12 }}>
-             <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:8 }}>
-  <span style={{ fontSize:11, fontWeight:600, color:'#C5C5C5', flexShrink:0 }}>📏</span>
-  <div style={{ display:'flex', alignItems:'center', gap:0, border:'1.5px solid #EDE8E1', borderRadius:99, overflow:'hidden' }}>
-    <button
-      onPointerDown={() => {
-        const step = () => { setRadius(r => { const next = Math.max(5, r - 5); if(activeCat) doSearch(activeCat, activeSub, budget); return next; }); }
-        step()
-        const t = setInterval(step, 400)
-        window._rTimer = t
-      }}
-      onPointerUp={() => clearInterval(window._rTimer)}
-      onPointerLeave={() => clearInterval(window._rTimer)}
-      style={{ width:36, height:34, fontSize:18, fontWeight:700, color:'#1B2B4B', background:'#F5F3F0', borderRight:'1.5px solid #EDE8E1', flexShrink:0 }}>
-      −
-    </button>
-    <div style={{ minWidth:72, textAlign:'center', padding:'0 10px' }}>
-      <span style={{ fontSize:14, fontWeight:700, color:'#1B2B4B' }}>{radius} km</span>
-    </div>
-    <button
-      onPointerDown={() => {
-        const step = () => { setRadius(r => { const next = Math.min(50, r + 5); if(activeCat) doSearch(activeCat, activeSub, budget); return next; }); }
-        step()
-        const t = setInterval(step, 400)
-        window._rTimer = t
-      }}
-      onPointerUp={() => clearInterval(window._rTimer)}
-      onPointerLeave={() => clearInterval(window._rTimer)}
-      style={{ width:36, height:34, fontSize:18, fontWeight:700, color:'#1B2B4B', background:'#F5F3F0', borderLeft:'1.5px solid #EDE8E1', flexShrink:0 }}>
-      +
-    </button>
-  </div>
-  <span style={{ fontSize:11, color:'#C5C5C5', fontWeight:500 }}>autour de toi</span>
-</div>
-                       </div>
+              <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:8 }}>
+                <span style={{ fontSize:11, fontWeight:600, color:'#C5C5C5', flexShrink:0 }}>📏</span>
+                <div style={{ display:'flex', alignItems:'center', gap:0, border:'1.5px solid #EDE8E1', borderRadius:99, overflow:'hidden' }}>
+                  <button
+                    onPointerDown={() => {
+                      const step = () => { setRadius(r => { const next = Math.max(5, r - 5); if(activeCat) doSearch(activeCat, activeSub, budget); return next; }) }
+                      step()
+                      const t = setInterval(step, 400)
+                      window._rTimer = t
+                    }}
+                    onPointerUp={() => clearInterval(window._rTimer)}
+                    onPointerLeave={() => clearInterval(window._rTimer)}
+                    style={{ width:36, height:34, fontSize:18, fontWeight:700, color:'#1B2B4B', background:'#F5F3F0', borderRight:'1.5px solid #EDE8E1', flexShrink:0 }}>
+                    −
+                  </button>
+                  <div style={{ minWidth:72, textAlign:'center', padding:'0 10px' }}>
+                    <span style={{ fontSize:14, fontWeight:700, color:'#1B2B4B' }}>{radius} km</span>
+                  </div>
+                  <button
+                    onPointerDown={() => {
+                      const step = () => { setRadius(r => { const next = Math.min(50, r + 5); if(activeCat) doSearch(activeCat, activeSub, budget); return next; }) }
+                      step()
+                      const t = setInterval(step, 400)
+                      window._rTimer = t
+                    }}
+                    onPointerUp={() => clearInterval(window._rTimer)}
+                    onPointerLeave={() => clearInterval(window._rTimer)}
+                    style={{ width:36, height:34, fontSize:18, fontWeight:700, color:'#1B2B4B', background:'#F5F3F0', borderLeft:'1.5px solid #EDE8E1', flexShrink:0 }}>
+                    +
+                  </button>
+                </div>
+                <span style={{ fontSize:11, color:'#C5C5C5', fontWeight:500 }}>autour de toi</span>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -654,28 +660,29 @@ const [showRadiusPicker, setShowRadiusPicker] = useState(false)
         </div>
 
         {/* ── RESULTS ── */}
-<div id="results-section" style={{ padding:'8px 14px 0' }}>
+        <div id="results-section" style={{ padding:'8px 14px 0' }}>
           {searchError && (
-  <div style={{
-    display: 'flex', alignItems: 'flex-start', gap: '0.6rem',
-    padding: '1rem 1.25rem', margin: '8px 0 4px',
-    background: '#FFF3F0', border: '1px solid #FFCFC4',
-    borderLeft: '4px solid #FF6B4A', borderRadius: 10,
-    fontSize: 13, color: '#B03A2E', lineHeight: 1.5,
-    fontFamily: 'var(--font-body)',
-  }}>
-    <span style={{ flexShrink: 0 }}>⚠️</span>
-    {searchError}
-  </div>
-)}{loading && (
+            <div style={{
+              display: 'flex', alignItems: 'flex-start', gap: '0.6rem',
+              padding: '1rem 1.25rem', margin: '8px 0 4px',
+              background: '#FFF3F0', border: '1px solid #FFCFC4',
+              borderLeft: '4px solid #FF6B4A', borderRadius: 10,
+              fontSize: 13, color: '#B03A2E', lineHeight: 1.5,
+              fontFamily: 'var(--font-body)',
+            }}>
+              <span style={{ flexShrink: 0 }}>⚠️</span>
+              {searchError}
+            </div>
+          )}
+          {loading && (
             <div style={{ textAlign:'center', padding:'44px 0' }}>
-  <div style={{ animation:'spin 1s linear infinite', display:'inline-block' }}>
-    <div style={{ width:52, height:52, borderRadius:14, background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 4px 18px rgba(255,107,74,0.4)' }}>
-      <span style={{ fontWeight:900, fontSize:22, color:'#fff', letterSpacing:'-1px' }}>f<span style={{textTransform:'uppercase'}}>K</span></span>
-    </div>
-  </div>
-  <div style={{ color:'#9AAABB', fontSize:14, fontWeight:600, marginTop:14 }}>Recherche en cours...</div>
-</div>
+              <div style={{ animation:'spin 1s linear infinite', display:'inline-block' }}>
+                <div style={{ width:52, height:52, borderRadius:14, background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 4px 18px rgba(255,107,74,0.4)' }}>
+                  <span style={{ fontWeight:900, fontSize:22, color:'#fff', letterSpacing:'-1px' }}>f<span style={{textTransform:'uppercase'}}>K</span></span>
+                </div>
+              </div>
+              <div style={{ color:'#9AAABB', fontSize:14, fontWeight:600, marginTop:14 }}>Recherche en cours...</div>
+            </div>
           )}
           {!loading && results.length > 0 && (
             <>
@@ -693,9 +700,13 @@ const [showRadiusPicker, setShowRadiusPicker] = useState(false)
         </div>
 
         <div style={{ textAlign:'center', padding:'20px 0 32px', color:'#C5C5C5', fontSize:12, fontFamily:'var(--font-body)' }}>
-          <span style={{ display:'inline-flex', alignItems:'center', justifyContent:'center', width:22, height:22, borderRadius:6, background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', marginRight:7, verticalAlign:'middle' }}><span style={{ fontWeight:900, fontSize:10, color:'#fff', letterSpacing:'-0.5px' }}>f<span style={{textTransform:'uppercase'}}>K</span></span></span>FelioKids · <a href="mailto:contact.feliokids@gmail.com" style={{ color:'#FF6B4A', fontWeight:600 }}>contact.feliokids@gmail.com</a>
+          <span style={{ display:'inline-flex', alignItems:'center', justifyContent:'center', width:22, height:22, borderRadius:6, background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', marginRight:7, verticalAlign:'middle' }}>
+            <span style={{ fontWeight:900, fontSize:10, color:'#fff', letterSpacing:'-0.5px' }}>f<span style={{textTransform:'uppercase'}}>K</span></span>
+          </span>
+          FelioKids · <a href="mailto:contact.feliokids@gmail.com" style={{ color:'#FF6B4A', fontWeight:600 }}>contact.feliokids@gmail.com</a>
         </div>
-     </div>
+
+      </div>
       <NewsletterPopup isOpen={popupOpen} onClose={() => setPopupOpen(false)} />
     </div>
   )
