@@ -390,7 +390,7 @@ const [showRadiusPicker, setShowRadiusPicker] = useState(false)
       const wd = await wr.json()
       const t = Math.round(wd.current.temperature_2m), c = wd.current.weathercode
       const em = c===0||c===1?'☀️':c<=3?'⛅':c>=51&&c<=82?'🌧️':c>=95?'⛈️':'🌤️'
-      setWeather({ icon:em, temp:t })
+      setWeather({ icon:em, temp:t, code:c })
     } catch {}
   }, [])
 
@@ -523,7 +523,45 @@ const [showRadiusPicker, setShowRadiusPicker] = useState(false)
             {/* Label */}
             <p style={{ fontFamily:'var(--font-body)', fontSize:12, fontWeight:600, color:'#9AAABB', marginBottom:10, letterSpacing:'0.2px' }}>
               Vous savez déjà ce que vous cherchez ? 👇
-            </p>
+          {weather && (() => {
+  const { code, temp, icon } = weather
+  const isRain  = code >= 51 && code <= 82
+  const isStorm = code >= 95
+  const isSnow  = code >= 71 && code <= 77
+  const isHot   = temp > 28 && code <= 3
+  const isCold  = temp < 10 && code <= 3
+  const isFine  = temp >= 18 && temp <= 28 && code <= 1
+  const isCloudy= code >= 2 && code <= 45 && !isRain && !isSnow
+
+  let bg, border, textColor, arrow, text, catId, subName
+  if (isStorm)      { bg='#EEF4FF'; border='#C7D9F8'; textColor='#1e3a6e'; text=`⛈️ Orage à ${city} — restez à l'intérieur !`; catId='pluie'; subName=null }
+  else if (isRain)  { bg='#EEF4FF'; border='#C7D9F8'; textColor='#1e3a6e'; text=`🌧️ Il pleut à ${city} — voir nos idées indoor`; catId='pluie'; subName=null }
+  else if (isSnow)  { bg='#EFF6FF'; border='#BAD4F8'; textColor='#1e3a6e'; text=`❄️ Il neige à ${city} — activités hivernales !`; catId='sport'; subName='Ski & glisse' }
+  else if (isHot)   { bg='#FFF3E0'; border='#FFCC80'; textColor='#7c3d00'; text=`🥵 Grosse chaleur à ${city} — plages et lacs près de toi !`; catId='nature'; subName='Lacs & baignade' }
+  else if (isCold)  { bg='#F3F0FF'; border='#D4C9F8'; textColor='#3b2a7e'; text=`🥶 Froid mais beau à ${city} — sortez couverts !`; catId='sport'; subName=null }
+  else if (isFine)  { bg='#FAEEDA'; border='#FAC775'; textColor='#633806'; text=`☀️ Beau temps à ${city} — sorties plein air !`; catId='nature'; subName=null }
+  else if (isCloudy){ bg='#F5F3FF'; border='#DDD6FE'; textColor='#4c3d8f'; text=`⛅ Temps couvert à ${city} — idées culture et découverte`; catId='culture'; subName=null }
+  else return null
+
+  return (
+    <div
+    onClick={() => {
+  setActiveCat(catId)
+  doSearch(catId, subName, budget)
+  setTimeout(() => {
+    document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' })
+  }, 600)
+}}
+      style={{ display:'flex', alignItems:'center', justifyContent:'space-between', background:bg, border:`1px solid ${border}`, borderRadius:12, padding:'10px 14px', marginBottom:12, cursor:'pointer', transition:'opacity .15s' }}
+      onMouseEnter={e => e.currentTarget.style.opacity='0.85'}
+      onMouseLeave={e => e.currentTarget.style.opacity='1'}
+    >
+      <span style={{ fontSize:13, fontWeight:600, color:textColor, lineHeight:1.4 }}>{text}</span>
+      <span style={{ fontSize:15, color:textColor, marginLeft:10, flexShrink:0 }}>→</span>
+    </div>
+  )
+})()}  
+</p>
 
             {/* Keyword search + Trouver */}
             <div style={{ display:'flex', gap:8, marginBottom:14 }}>
@@ -627,7 +665,7 @@ const [showRadiusPicker, setShowRadiusPicker] = useState(false)
         </div>
 
         {/* ── RESULTS ── */}
-        <div style={{ padding:'8px 14px 0' }}>
+<div id="results-section" style={{ padding:'8px 14px 0' }}>
           {searchError && (
   <div style={{
     display: 'flex', alignItems: 'flex-start', gap: '0.6rem',
