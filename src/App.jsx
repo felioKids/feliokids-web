@@ -637,10 +637,7 @@ const [showRadiusPicker, setShowRadiusPicker] = useState(false)
   </div>
   <span style={{ fontSize:11, color:'#C5C5C5', fontWeight:500 }}>autour de toi</span>
 </div>
-             git add src/App.jsx
-git commit -m "feat: usunieto filtr budzetu"
-git push
-            </div>
+                       </div>
           </div>
         </div>
 
