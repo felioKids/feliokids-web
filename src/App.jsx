@@ -637,17 +637,9 @@ const [showRadiusPicker, setShowRadiusPicker] = useState(false)
   </div>
   <span style={{ fontSize:11, color:'#C5C5C5', fontWeight:500 }}>autour de toi</span>
 </div>
-              <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-                <span style={{ fontSize:11, fontWeight:600, color:'#C5C5C5', flexShrink:0 }}>💰</span>
-                <div className="scroll-x" style={{ display:'flex', gap:5 }}>
-                  {BUDGETS.map(b => (
-                    <button key={b} onClick={() => { setBudget(b); if(activeCat) doSearch(activeCat, activeSub, b) }}
-                      style={{ padding:'5px 11px', borderRadius:99, fontSize:12, fontWeight:600, flexShrink:0, transition:'all .15s', background: budget===b ? (b==='Gratuit'?'#3DAA6E':'#FF6B4A') : 'transparent', color: budget===b ? '#fff' : '#9AAABB', border: budget===b ? 'none' : '1px solid #EDE8E1', fontFamily:'var(--font-body)', whiteSpace:'nowrap' }}>
-                      {b}
-                    </button>
-                  ))}
-                </div>
-              </div>
+             git add src/App.jsx
+git commit -m "feat: usunieto filtr budzetu"
+git push
             </div>
           </div>
         </div>
