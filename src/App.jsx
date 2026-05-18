@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { getActivities } from './data/activities.js'
+import { searchActivities } from './api/overpassService.js'
 import NewsletterPopup from './components/NewsletterPopup'
 
 // ─── SLIDES ───────────────────────────────────────────────────────────────────
@@ -363,6 +363,7 @@ export default function App() {
   const [showEmail,   setShowEmail]   = useState(false)
   const [popupOpen,   setPopupOpen]   = useState(false)
   const [hasSearched, setHasSearched] = useState(false)
+  const [searchError, setSearchError] = useState(null)
   const cityTimer = useRef(null)
 
   const handleCityInput = useCallback(async (val) => {
@@ -392,18 +393,52 @@ export default function App() {
     } catch {}
   }, [])
 
-  const doSearch = useCallback((catId, sub, bgt) => {
+  const doSearch = useCallback(async (catId, sub, bgt) => {
     const cat = catId !== undefined ? catId : activeCat
     const s   = sub   !== undefined ? sub   : activeSub
     const b   = bgt   !== undefined ? bgt   : budget
-    if (!cat) return
-    setLoading(true); setHasSearched(true)
-    setTimeout(() => {
-      const bf = b === 'Tous' ? 'Libre' : b
-      setResults(getActivities(cat, s, bf))
+
+    if (!cat || !s) return
+
+    if (!city.trim()) {
+      setSearchError("Entrez d'abord une ville pour lancer la recherche.")
+      return
+    }
+
+    setLoading(true)
+    setSearchError(null)
+    setHasSearched(true)
+
+    try {
+      const activities = await searchActivities({
+        city:     city.trim(),
+        radiusKm: radius,
+        budget:   b,
+        catId:    cat,
+        subName:  s,
+      })
+
+      if (activities.length === 0) {
+        setSearchError(`Aucun résultat pour "${s}" dans un rayon de ${radius} km autour de "${city}". Essayez d'élargir la zone.`)
+        setResults([])
+      } else {
+        setResults(activities)
+        setSearchError(null)
+      }
+    } catch (err) {
+      console.error('[FelioKids]', err)
+      if (err.message.includes('introuvable')) {
+        setSearchError(`Ville "${city}" introuvable. Vérifiez l'orthographe.`)
+      } else if (err.message.includes('Overpass')) {
+        setSearchError('Service de carte temporairement indisponible. Réessayez dans quelques secondes.')
+      } else {
+        setSearchError('Une erreur est survenue. Vérifiez votre connexion.')
+      }
+      setResults([])
+    } finally {
       setLoading(false)
-    }, 500)
-  }, [activeCat, activeSub, budget])
+    }
+  }, [activeCat, activeSub, budget, city, radius])
 
   const clickCat = (id) => {
     if (activeCat === id) { setActiveCat(null); setActiveSub(null); setResults([]); setHasSearched(false) }
@@ -570,7 +605,19 @@ export default function App() {
 
         {/* ── RESULTS ── */}
         <div style={{ padding:'8px 14px 0' }}>
-          {loading && (
+          {searchError && (
+  <div style={{
+    display: 'flex', alignItems: 'flex-start', gap: '0.6rem',
+    padding: '1rem 1.25rem', margin: '8px 0 4px',
+    background: '#FFF3F0', border: '1px solid #FFCFC4',
+    borderLeft: '4px solid #FF6B4A', borderRadius: 10,
+    fontSize: 13, color: '#B03A2E', lineHeight: 1.5,
+    fontFamily: 'var(--font-body)',
+  }}>
+    <span style={{ flexShrink: 0 }}>⚠️</span>
+    {searchError}
+  </div>
+)}{loading && (
             <div style={{ textAlign:'center', padding:'44px 0' }}>
               <div style={{ fontSize:44, display:'inline-block', animation:'spin 1s linear infinite' }}>🎡</div>
               <div style={{ color:'#9AAABB', fontSize:14, fontWeight:600, marginTop:12 }}>Recherche en cours...</div>
