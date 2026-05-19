@@ -134,7 +134,7 @@ function HeroSlideshow() {
 // ─── CAT TILE ─────────────────────────────────────────────────────────────────
 function CatTile({ cat, active, onClick, delay }) {
   return (
-    <button onClick={onClick} className="anim-up" style={{
+    <button id={`cat-tile-${cat.id}`} onClick={onClick} className="anim-up" style={{
       animationDelay:`${delay}s`,
       position:'relative', overflow:'hidden', borderRadius:18, width:'100%', aspectRatio:'1',
       border: active ? `3px solid ${cat.c}` : '3px solid transparent',
@@ -334,32 +334,218 @@ function EmailModal({ onClose }) {
   )
 }
 
-// ─── WEATHER BUTTONS ─────────────────────────────────────────────────────────
-function WeatherButton({ weather, city, setActiveCat, doSearch, budget }) {
-  if (!weather) return null
-  const { code, temp } = weather
-  const isRain  = code >= 51 && code <= 82
-  const isStorm = code >= 95
+// ─── BANER POGODOWY ───────────────────────────────────────────────────────────
+function WeatherBanner({ weather, city, setActiveCat, setActiveSub, doSearch }) {
+  if (!weather || !city) return null
+  const { code, temp, icon } = weather
+
+  const isRain  = (code >= 51 && code <= 82) || code >= 95
   const isSnow  = code >= 71 && code <= 77
   const isHot   = temp > 28 && code <= 3
   const isCold  = temp < 10 && code <= 3
 
-  let bg, text, catId, subName
-  if (isStorm || isRain) { bg='#4A6FA5'; text='🌧️ Idées indoor'; catId='pluie'; subName=null }
-  else if (isSnow)       { bg='#7C9CBF'; text='❄️ Activités hiver'; catId='sport'; subName='Ski & glisse' }
-  else if (isHot)        { bg='#E8734A'; text='🥵 Plages & lacs'; catId='nature'; subName='Lacs & baignade' }
-  else if (isCold)       { bg='#5B7FA6'; text='🥶 Sortez couverts'; catId='sport'; subName=null }
-  else                   { bg='#3DAA6E'; text='☀️ Plein air'; catId='nature'; subName=null }
+  let gradient, emoji, line1, line2, catId, subName
+  if (isRain) {
+    gradient = 'linear-gradient(135deg,#4A6FA5,#3557A0)'
+    emoji = '🌧️'; line1 = `Il pleut à ${city} — voir nos idées indoor`
+    line2 = 'Cinémas · Bowlings · Piscines couvertes →'
+    catId = 'pluie'; subName = 'Cinéma'
+  } else if (isSnow) {
+    gradient = 'linear-gradient(135deg,#7C9CBF,#5B7FA6)'
+    emoji = '❄️'; line1 = `Il neige à ${city} — activités hiver`
+    line2 = 'Ski · Patinoire · Sports de glisse →'
+    catId = 'sport'; subName = 'Ski & glisse'
+  } else if (isHot) {
+    gradient = 'linear-gradient(135deg,#E8734A,#C8502A)'
+    emoji = '🥵'; line1 = `Chaud à ${city} — plages & lacs`
+    line2 = 'Baignade · Nature · Fraîcheur →'
+    catId = 'nature'; subName = 'Lacs & baignade'
+  } else if (isCold) {
+    gradient = 'linear-gradient(135deg,#5B7FA6,#3D5A82)'
+    emoji = '🧥'; line1 = `Froid à ${city} — sorties couvertes`
+    line2 = 'Piscines · Musées · Activités indoor →'
+    catId = 'pluie'; subName = 'Piscines couvertes'
+  } else {
+    gradient = 'linear-gradient(135deg,#3DAA6E,#2A8A55)'
+    emoji = '☀️'; line1 = `Beau temps à ${city} — plein air`
+    line2 = 'Forêts · Randonnées · Nature →'
+    catId = 'nature'; subName = 'Forêts & randonnée'
+  }
+
+  const handleClick = () => {
+    setActiveCat(catId)
+    setActiveSub(subName)
+    doSearch(catId, subName)
+    // D'abord scroll vers le bon tile de catégorie pour ouvrir visuellement le panel
+    setTimeout(() => {
+      const tile = document.getElementById(`cat-tile-${catId}`)
+      if (tile) {
+        tile.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
+    }, 200)
+    // Ensuite scroll vers les résultats quand ils arrivent
+    setTimeout(() => {
+      document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' })
+    }, 900)
+  }
 
   return (
     <button
-      onClick={() => {
-        setActiveCat(catId)
-        doSearch(catId, subName, budget)
-        setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 600)
+      onClick={handleClick}
+      style={{
+        width: '100%',
+        background: gradient,
+        borderRadius: 14,
+        padding: '12px 15px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: 10,
+        border: 'none',
+        cursor: 'pointer',
+        boxShadow: '0 3px 16px rgba(0,0,0,0.15)',
+        transition: 'transform .15s ease, box-shadow .15s ease',
       }}
-      style={{ flex:1, padding:'9px 8px', borderRadius:12, background:bg, color:'#fff', fontSize:11, fontWeight:700, border:'none', cursor:'pointer', fontFamily:'var(--font-body)' }}>
-      {text}
+      onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.015)'; e.currentTarget.style.boxShadow = '0 6px 22px rgba(0,0,0,0.22)' }}
+      onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 3px 16px rgba(0,0,0,0.15)' }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <span style={{ fontSize: 22, lineHeight: 1, flexShrink: 0 }}>{emoji}</span>
+        <div style={{ textAlign: 'left' }}>
+          <div style={{ fontSize: 12, fontWeight: 800, color: '#fff', lineHeight: 1.35, fontFamily: 'var(--font-body)' }}>
+            {line1}
+          </div>
+          <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.72)', fontWeight: 600, marginTop: 3 }}>
+            {icon} {temp}°C · {line2}
+          </div>
+        </div>
+      </div>
+      <div style={{
+        width: 28, height: 28, borderRadius: 8, flexShrink: 0,
+        background: 'rgba(255,255,255,0.2)',
+        border: '1px solid rgba(255,255,255,0.3)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: 15, color: '#fff', fontWeight: 700,
+      }}>›</div>
+    </button>
+  )
+}
+
+// ─── BANER DÉCOUVRIR TOUT ─────────────────────────────────────────────────────
+const DISCOVER_QUERIES = [
+  { catId: 'nature',  subName: 'Forêts & randonnée' },
+  { catId: 'nature',  subName: 'Zoos & parcs animaliers' },
+  { catId: 'pluie',   subName: 'Cinéma' },
+  { catId: 'sport',   subName: 'Piscines' },
+  { catId: 'culture', subName: 'Châteaux & histoire' },
+]
+
+function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasSearched, setSearchError, setActiveCat, setActiveSub }) {
+  const [running, setRunning] = useState(false)
+
+  const handleClick = async () => {
+    if (!city?.trim() || running) return
+    setRunning(true)
+    setLoading(true)
+    setHasSearched(true)
+    setSearchError(null)
+    // Reset kategorii żeby SubsPanel się nie kłócił z wynikami mix
+    setActiveCat(null)
+    setActiveSub(null)
+
+    try {
+      const allResults = await Promise.allSettled(
+        DISCOVER_QUERIES.map(({ catId, subName }) =>
+          searchActivities({ city: city.trim(), radiusKm: radius, budget, catId, subName })
+        )
+      )
+
+      const flat = allResults
+        .filter(r => r.status === 'fulfilled')
+        .flatMap(r => r.value)
+
+      // Deduplifikacja po id
+      const seen = new Set()
+      const unique = flat.filter(a => {
+        if (seen.has(a.id)) return false
+        seen.add(a.id)
+        return true
+      })
+
+      // Sortowanie po odległości (np. "2.3 km" → 2.3)
+      const parseDist = (d) => parseFloat(String(d ?? '999').replace(/[^\d.]/g, '')) || 999
+      unique.sort((a, b) => parseDist(a.distance) - parseDist(b.distance))
+
+      if (unique.length === 0) {
+        setSearchError(`Aucun résultat trouvé près de "${city}". Essayez d'élargir le rayon.`)
+        setResults([])
+      } else {
+        setResults(unique)
+        setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' }), 400)
+      }
+    } catch (err) {
+      console.error('[DecouvrirTout]', err)
+      setSearchError('Erreur lors de la recherche. Vérifiez votre connexion.')
+      setResults([])
+    } finally {
+      setLoading(false)
+      setRunning(false)
+    }
+  }
+
+  if (!city) return null
+
+  return (
+    <button
+      onClick={handleClick}
+      disabled={running}
+      style={{
+        width: '100%',
+        background: 'linear-gradient(135deg,#1B2B4B,#2C3E6A)',
+        borderRadius: 14,
+        padding: '12px 15px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: 10,
+        border: 'none',
+        cursor: running ? 'wait' : 'pointer',
+        boxShadow: '0 3px 16px rgba(27,43,75,0.25)',
+        transition: 'transform .15s ease, box-shadow .15s ease',
+        opacity: running ? 0.9 : 1,
+      }}
+      onMouseEnter={e => { if (!running) { e.currentTarget.style.transform = 'scale(1.015)'; e.currentTarget.style.boxShadow = '0 6px 22px rgba(27,43,75,0.35)' }}}
+      onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 3px 16px rgba(27,43,75,0.25)' }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <span style={{ fontSize: 22, lineHeight: 1, flexShrink: 0 }}>{running ? '⏳' : '🗺️'}</span>
+        <div style={{ textAlign: 'left' }}>
+          <div style={{ fontSize: 12, fontWeight: 800, color: '#fff', lineHeight: 1.35, fontFamily: 'var(--font-body)' }}>
+            {running ? 'Recherche en cours…' : `Découvrir tout à ${city}`}
+          </div>
+          <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.65)', fontWeight: 600, marginTop: 3 }}>
+            {running
+              ? 'Forêts · Zoos · Cinémas · Piscines · Châteaux…'
+              : 'Forêts · Zoos · Cinémas · Piscines · Châteaux →'}
+          </div>
+        </div>
+      </div>
+      {running ? (
+        <div style={{
+          width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
+          border: '2.5px solid rgba(255,255,255,0.25)',
+          borderTopColor: '#fff',
+          animation: 'spin 0.75s linear infinite',
+        }} />
+      ) : (
+        <div style={{
+          width: 28, height: 28, borderRadius: 8, flexShrink: 0,
+          background: 'rgba(255,255,255,0.15)',
+          border: '1px solid rgba(255,255,255,0.25)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: 15, color: '#fff', fontWeight: 700,
+        }}>›</div>
+      )}
     </button>
   )
 }
@@ -467,10 +653,6 @@ export default function App() {
     setActiveSub(next); doSearch(activeCat, next, budget)
   }
 
-  const scrollToResults = () => {
-    setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 600)
-  }
-
   const renderCatGrid = () => {
     const rows = []
     for (let i = 0; i < CATS.length; i += 3) {
@@ -538,28 +720,27 @@ export default function App() {
               )}
             </div>
 
-            {/* 3 przyciski pod miastem */}
+            {/* ── DWA BANERY pod miastem ── */}
             {city && (
-              <div style={{ display:'flex', gap:7, marginBottom:14 }}>
-                <button
-                  onClick={() => {
-                    setActiveCat('nature')
-                    doSearch('nature', 'Forêts & randonnée', budget)
-                    scrollToResults()
-                  }}
-                  style={{ flex:1, padding:'9px 8px', borderRadius:12, background:'#1B2B4B', color:'#fff', fontSize:11, fontWeight:700, border:'none', cursor:'pointer', fontFamily:'var(--font-body)' }}>
-                  🗺️ Découvrir tout
-                </button>
-                <button
-                  onClick={() => {
-                    setActiveCat('pluie')
-                    doSearch('pluie', 'Cinéma', budget)
-                    scrollToResults()
-                  }}
-                  style={{ flex:1, padding:'9px 8px', borderRadius:12, background:'#4A6FA5', color:'#fff', fontSize:11, fontWeight:700, border:'none', cursor:'pointer', fontFamily:'var(--font-body)' }}>
-                  🎬 Cinéma
-                </button>
-                <WeatherButton weather={weather} city={city} setActiveCat={setActiveCat} doSearch={doSearch} budget={budget} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 14 }}>
+                <WeatherBanner
+                  weather={weather}
+                  city={city}
+                  setActiveCat={setActiveCat}
+                  setActiveSub={setActiveSub}
+                  doSearch={doSearch}
+                />
+                <DecouvrirBanner
+                  city={city}
+                  radius={radius}
+                  budget={budget}
+                  setResults={setResults}
+                  setLoading={setLoading}
+                  setHasSearched={setHasSearched}
+                  setSearchError={setSearchError}
+                  setActiveCat={setActiveCat}
+                  setActiveSub={setActiveSub}
+                />
               </div>
             )}
 
