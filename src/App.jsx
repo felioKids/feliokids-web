@@ -1,6 +1,8 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { searchActivities } from './api/overpassService.js'
 import NewsletterPopup from './components/NewsletterPopup'
+import ActivityCard from './components/ActivityCard.jsx'
+import { resetCounters } from './api/requestLogger.js'
 
 // ─── SLIDES ───────────────────────────────────────────────────────────────────
 const SLIDES = [
@@ -185,126 +187,6 @@ function SubsPanel({ cat, activeSub, onSub }) {
   )
 }
 
-// ─── ACTIVITY CARD ────────────────────────────────────────────────────────────
-const TYPE_IMGS = {
-  'parc':           'https://images.unsplash.com/photo-1575783970733-1aaedde1db74?w=600&q=75',
-  'jardin':         'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&q=75',
-  'promenade':      'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=75',
-  'forêt':          'https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&q=75',
-  'plage':          'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=75',
-  'lac':            'https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=600&q=75',
-  'zoo':            'https://images.unsplash.com/photo-1534567153574-2b12153a87f0?w=600&q=75',
-  'ferme':          'https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=600&q=75',
-  'aquarium':       'https://images.unsplash.com/photo-1520694478166-daaaaec95b69?w=600&q=75',
-  'musée':          'https://images.unsplash.com/photo-1564399579883-451a5d44ec08?w=600&q=75',
-  'château':        'https://images.unsplash.com/photo-1549144511-f099e773c147?w=600&q=75',
-  'patrimoine':     'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=600&q=75',
-  'site naturel':   'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=75',
-  'gorges':         'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=75',
-  'piscine':        'https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=600&q=75',
-  'patinoire':      'https://images.unsplash.com/photo-1607532941433-304659e8198a?w=600&q=75',
-  'accrobranche':   'https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=75',
-  'vélo':           'https://images.unsplash.com/photo-1471506480208-91b3a4cc78be?w=600&q=75',
-  'bowling':        'https://images.unsplash.com/photo-1545158535-c3f7168c28b6?w=600&q=75',
-  'escape':         'https://images.unsplash.com/photo-1606167668584-78701c57f13d?w=600&q=75',
-  'laser':          'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=600&q=75',
-  'trampoline':     'https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=600&q=75',
-  'cinéma':         'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&q=75',
-  'ciné':           'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&q=75',
-  'théâtre':        'https://images.unsplash.com/photo-1503095396549-807759245b35?w=600&q=75',
-  'planétarium':    'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=600&q=75',
-  'atelier':        'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600&q=75',
-  'cueillette':     'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=600&q=75',
-  'restaurant':     'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=75',
-  'boulangerie':    'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=75',
-  'glacier':        'https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=600&q=75',
-  'festival':       'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=600&q=75',
-  'marché':         'https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=600&q=75',
-  'bibliothèque':   'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=600&q=75',
-  'sport':          'https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=600&q=75',
-  'default':        'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600&q=75',
-}
-
-function getTypeImg(type) {
-  if (!type) return TYPE_IMGS.default
-  const t = type.toLowerCase()
-  for (const [key, url] of Object.entries(TYPE_IMGS)) {
-    if (t.includes(key)) return url
-  }
-  return TYPE_IMGS.default
-}
-
-function ActivityCard({ a, idx }) {
-  const [restoOpen, setRestoOpen] = useState(false)
-  const addr = encodeURIComponent(a.address)
-  const cardImg = getTypeImg(a.type)
-  return (
-    <div className="anim-up" style={{ animationDelay:`${idx*0.06}s`, background:'#fff', borderRadius:20, overflow:'hidden', boxShadow:'0 2px 16px rgba(27,43,75,0.09)', marginBottom:14, border:'1px solid #F0EBE3' }}>
-      <div style={{ position:'relative', height:155, overflow:'hidden' }}>
-        <img src={cardImg} alt={a.name} style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
-        <div style={{ position:'absolute', inset:0, background:'linear-gradient(to top,rgba(27,43,75,0.72) 0%,rgba(0,0,0,0.1) 60%)' }} />
-        <div style={{ position:'absolute', top:12, left:12 }}>
-          {a.isFree && <span style={{ background:'#3DAA6E', color:'#fff', fontSize:11, fontWeight:700, padding:'4px 11px', borderRadius:99 }}>💚 Gratuit</span>}
-        </div>
-        <div style={{ position:'absolute', top:12, right:12 }}>
-          <span style={{ background:'rgba(255,255,255,0.15)', backdropFilter:'blur(8px)', color:'#fff', fontSize:12, fontWeight:700, padding:'4px 11px', borderRadius:99, border:'1px solid rgba(255,255,255,0.28)' }}>⭐ {a.rating}</span>
-        </div>
-        <div style={{ position:'absolute', bottom:12, left:14, right:14 }}>
-          <div style={{ fontSize:17, fontWeight:800, color:'#fff', textShadow:'0 1px 8px rgba(0,0,0,0.4)', lineHeight:1.2 }}>{a.name}</div>
-          <div style={{ fontSize:12, color:'rgba(255,255,255,0.75)', marginTop:3, fontWeight:500 }}>{a.type} · {a.distance}</div>
-        </div>
-      </div>
-      <div style={{ padding:'12px 15px 0' }}>
-        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:7 }}>
-          <span style={{ fontWeight:700, fontSize:12, color: a.openNow ? '#3DAA6E' : '#DC2626' }}>
-            {a.openNow ? '● Ouvert' : '● Fermé'}{a.hours ? ` · ${a.hours}` : ''}
-          </span>
-          <span style={{ fontSize:14, fontWeight:800, color:'#FF6B4A' }}>{a.price}</span>
-        </div>
-        <p style={{ fontSize:13, color:'#5A6A82', lineHeight:1.6, marginBottom:9 }}>{a.description}</p>
-        {a.tags?.length > 0 && (
-          <div style={{ display:'flex', gap:5, flexWrap:'wrap', marginBottom:9 }}>
-            {a.tags.slice(0,4).map(t => <span key={t} style={{ background:'#FFF0E4', color:'#FF6B4A', fontSize:11, padding:'3px 9px', borderRadius:99, fontWeight:600 }}>{t}</span>)}
-          </div>
-        )}
-      </div>
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', borderTop:'1px solid #F5F1EC' }}>
-        {[
-          { icon:'🗺️', label:'Itinéraire', url:`https://www.google.com/maps/dir/?api=1&destination=${addr}`, col:'#2F80ED' },
-          { icon:'🅿️', label:'Parking',    url:`https://www.google.com/maps/search/parking+près+de+${addr}`, col:'#D97706' },
-          { icon:'🍽️', label: restoOpen ? 'Fermer' : 'Manger', action:() => setRestoOpen(!restoOpen), col:'#E91E8C' },
-        ].map((btn, i) => (
-          <button key={i}
-            onClick={() => btn.url ? window.open(btn.url,'_blank') : btn.action()}
-            style={{ padding:'11px 6px', borderRight: i<2 ? '1px solid #F5F1EC' : 'none', fontSize:12, fontWeight:700, color:'#9AAABB', display:'flex', flexDirection:'column', alignItems:'center', gap:3, transition:'background .12s, color .12s' }}
-            onMouseEnter={e => { e.currentTarget.style.background='#FFF8F1'; e.currentTarget.style.color=btn.col }}
-            onMouseLeave={e => { e.currentTarget.style.background='transparent'; e.currentTarget.style.color='#9AAABB' }}>
-            <span style={{ fontSize:17 }}>{btn.icon}</span>{btn.label}
-          </button>
-        ))}
-      </div>
-      {restoOpen && (
-        <div className="anim-in" style={{ padding:'12px 15px 14px', background:'#FAFAF9', borderTop:'1px solid #F5F1EC' }}>
-          <div style={{ fontSize:12, fontWeight:700, color:'#9AAABB', marginBottom:9 }}>🍽️ Restaurants à proximité</div>
-          {a.restaurants?.length > 0 ? a.restaurants.map((r, i) => (
-            <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', background:'#fff', borderRadius:12, padding:'9px 12px', marginBottom:6, border:'1px solid #F0EBE3' }}>
-              <div>
-                <div style={{ fontSize:13, fontWeight:700, color:'#1B2B4B' }}>{r.name}</div>
-                <div style={{ fontSize:11, color:'#9AAABB', marginTop:2 }}>{r.type} · {r.distance}</div>
-              </div>
-              <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-                <span style={{ fontSize:12, color:'#9AAABB', fontWeight:600 }}>{r.price}</span>
-                <button onClick={() => window.open(`https://www.google.com/maps/search/${encodeURIComponent(r.name)}`,'_blank')}
-                  style={{ background:'#FF6B4A', color:'#fff', fontSize:11, fontWeight:700, padding:'4px 11px', borderRadius:99 }}>Maps</button>
-              </div>
-            </div>
-          )) : <div style={{ color:'#C5C5C5', fontSize:13, textAlign:'center' }}>Aucun restaurant trouvé</div>}
-        </div>
-      )}
-    </div>
-  )
-}
-
 // ─── EMAIL MODAL ──────────────────────────────────────────────────────────────
 function EmailModal({ onClose }) {
   const [email, setEmail] = useState('')
@@ -376,57 +258,27 @@ function WeatherBanner({ weather, city, setActiveCat, setActiveSub, doSearch }) 
     setActiveCat(catId)
     setActiveSub(subName)
     doSearch(catId, subName)
-    // D'abord scroll vers le bon tile de catégorie pour ouvrir visuellement le panel
     setTimeout(() => {
       const tile = document.getElementById(`cat-tile-${catId}`)
-      if (tile) {
-        tile.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      }
+      if (tile) tile.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }, 200)
-    // Ensuite scroll vers les résultats quand ils arrivent
     setTimeout(() => {
       document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' })
     }, 900)
   }
 
   return (
-    <button
-      onClick={handleClick}
-      style={{
-        width: '100%',
-        background: gradient,
-        borderRadius: 14,
-        padding: '12px 15px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: 10,
-        border: 'none',
-        cursor: 'pointer',
-        boxShadow: '0 3px 16px rgba(0,0,0,0.15)',
-        transition: 'transform .15s ease, box-shadow .15s ease',
-      }}
-      onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.015)'; e.currentTarget.style.boxShadow = '0 6px 22px rgba(0,0,0,0.22)' }}
-      onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 3px 16px rgba(0,0,0,0.15)' }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <span style={{ fontSize: 22, lineHeight: 1, flexShrink: 0 }}>{emoji}</span>
-        <div style={{ textAlign: 'left' }}>
-          <div style={{ fontSize: 12, fontWeight: 800, color: '#fff', lineHeight: 1.35, fontFamily: 'var(--font-body)' }}>
-            {line1}
-          </div>
-          <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.72)', fontWeight: 600, marginTop: 3 }}>
-            {icon} {temp}°C · {line2}
-          </div>
+    <button onClick={handleClick} style={{ width:'100%', background:gradient, borderRadius:14, padding:'12px 15px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:10, border:'none', cursor:'pointer', boxShadow:'0 3px 16px rgba(0,0,0,0.15)', transition:'transform .15s ease, box-shadow .15s ease' }}
+      onMouseEnter={e => { e.currentTarget.style.transform='scale(1.015)'; e.currentTarget.style.boxShadow='0 6px 22px rgba(0,0,0,0.22)' }}
+      onMouseLeave={e => { e.currentTarget.style.transform='scale(1)'; e.currentTarget.style.boxShadow='0 3px 16px rgba(0,0,0,0.15)' }}>
+      <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+        <span style={{ fontSize:22, lineHeight:1, flexShrink:0 }}>{emoji}</span>
+        <div style={{ textAlign:'left' }}>
+          <div style={{ fontSize:12, fontWeight:800, color:'#fff', lineHeight:1.35 }}>{line1}</div>
+          <div style={{ fontSize:10, color:'rgba(255,255,255,0.72)', fontWeight:600, marginTop:3 }}>{icon} {temp}°C · {line2}</div>
         </div>
       </div>
-      <div style={{
-        width: 28, height: 28, borderRadius: 8, flexShrink: 0,
-        background: 'rgba(255,255,255,0.2)',
-        border: '1px solid rgba(255,255,255,0.3)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: 15, color: '#fff', fontWeight: 700,
-      }}>›</div>
+      <div style={{ width:28, height:28, borderRadius:8, flexShrink:0, background:'rgba(255,255,255,0.2)', border:'1px solid rgba(255,255,255,0.3)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:15, color:'#fff', fontWeight:700 }}>›</div>
     </button>
   )
 }
@@ -449,7 +301,6 @@ function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasS
     setLoading(true)
     setHasSearched(true)
     setSearchError(null)
-    // Reset kategorii żeby SubsPanel się nie kłócił z wynikami mix
     setActiveCat(null)
     setActiveSub(null)
 
@@ -464,7 +315,6 @@ function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasS
         .filter(r => r.status === 'fulfilled')
         .flatMap(r => r.value)
 
-      // Deduplifikacja po id
       const seen = new Set()
       const unique = flat.filter(a => {
         if (seen.has(a.id)) return false
@@ -472,7 +322,6 @@ function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasS
         return true
       })
 
-      // Sortowanie po odległości (np. "2.3 km" → 2.3)
       const parseDist = (d) => parseFloat(String(d ?? '999').replace(/[^\d.]/g, '')) || 999
       unique.sort((a, b) => parseDist(a.distance) - parseDist(b.distance))
 
@@ -496,55 +345,24 @@ function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasS
   if (!city) return null
 
   return (
-    <button
-      onClick={handleClick}
-      disabled={running}
-      style={{
-        width: '100%',
-        background: 'linear-gradient(135deg,#1B2B4B,#2C3E6A)',
-        borderRadius: 14,
-        padding: '12px 15px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: 10,
-        border: 'none',
-        cursor: running ? 'wait' : 'pointer',
-        boxShadow: '0 3px 16px rgba(27,43,75,0.25)',
-        transition: 'transform .15s ease, box-shadow .15s ease',
-        opacity: running ? 0.9 : 1,
-      }}
-      onMouseEnter={e => { if (!running) { e.currentTarget.style.transform = 'scale(1.015)'; e.currentTarget.style.boxShadow = '0 6px 22px rgba(27,43,75,0.35)' }}}
-      onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 3px 16px rgba(27,43,75,0.25)' }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <span style={{ fontSize: 22, lineHeight: 1, flexShrink: 0 }}>{running ? '⏳' : '🗺️'}</span>
-        <div style={{ textAlign: 'left' }}>
-          <div style={{ fontSize: 12, fontWeight: 800, color: '#fff', lineHeight: 1.35, fontFamily: 'var(--font-body)' }}>
+    <button onClick={handleClick} disabled={running} style={{ width:'100%', background:'linear-gradient(135deg,#1B2B4B,#2C3E6A)', borderRadius:14, padding:'12px 15px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:10, border:'none', cursor: running ? 'wait' : 'pointer', boxShadow:'0 3px 16px rgba(27,43,75,0.25)', transition:'transform .15s ease, box-shadow .15s ease', opacity: running ? 0.9 : 1 }}
+      onMouseEnter={e => { if (!running) { e.currentTarget.style.transform='scale(1.015)'; e.currentTarget.style.boxShadow='0 6px 22px rgba(27,43,75,0.35)' }}}
+      onMouseLeave={e => { e.currentTarget.style.transform='scale(1)'; e.currentTarget.style.boxShadow='0 3px 16px rgba(27,43,75,0.25)' }}>
+      <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+        <span style={{ fontSize:22, lineHeight:1, flexShrink:0 }}>{running ? '⏳' : '🗺️'}</span>
+        <div style={{ textAlign:'left' }}>
+          <div style={{ fontSize:12, fontWeight:800, color:'#fff', lineHeight:1.35 }}>
             {running ? 'Recherche en cours…' : `Découvrir tout à ${city}`}
           </div>
-          <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.65)', fontWeight: 600, marginTop: 3 }}>
-            {running
-              ? 'Forêts · Zoos · Cinémas · Piscines · Châteaux…'
-              : 'Forêts · Zoos · Cinémas · Piscines · Châteaux →'}
+          <div style={{ fontSize:10, color:'rgba(255,255,255,0.65)', fontWeight:600, marginTop:3 }}>
+            {running ? 'Forêts · Zoos · Cinémas · Piscines · Châteaux…' : 'Forêts · Zoos · Cinémas · Piscines · Châteaux →'}
           </div>
         </div>
       </div>
       {running ? (
-        <div style={{
-          width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
-          border: '2.5px solid rgba(255,255,255,0.25)',
-          borderTopColor: '#fff',
-          animation: 'spin 0.75s linear infinite',
-        }} />
+        <div style={{ width:22, height:22, borderRadius:'50%', flexShrink:0, border:'2.5px solid rgba(255,255,255,0.25)', borderTopColor:'#fff', animation:'spin 0.75s linear infinite' }} />
       ) : (
-        <div style={{
-          width: 28, height: 28, borderRadius: 8, flexShrink: 0,
-          background: 'rgba(255,255,255,0.15)',
-          border: '1px solid rgba(255,255,255,0.25)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 15, color: '#fff', fontWeight: 700,
-        }}>›</div>
+        <div style={{ width:28, height:28, borderRadius:8, flexShrink:0, background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.25)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:15, color:'#fff', fontWeight:700 }}>›</div>
       )}
     </button>
   )
@@ -554,7 +372,6 @@ function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasS
 export default function App() {
   const [city,        setCity]        = useState('')
   const [radius,      setRadius]      = useState(10)
-  const [showRadiusPicker, setShowRadiusPicker] = useState(false)
   const [budget,      setBudget]      = useState('Tous')
   const [query,       setQuery]       = useState('')
   const [activeCat,   setActiveCat]   = useState(null)
@@ -586,6 +403,7 @@ export default function App() {
   }, [])
 
   const chooseSugg = useCallback(async (s) => {
+    resetCounters()
     const name = s.display_name.split(',')[0].trim()
     setCity(name); setCitySuggs([]); setShowSugg(false)
     try {
@@ -681,14 +499,11 @@ export default function App() {
 
         {showEmail && <EmailModal onClose={() => setShowEmail(false)} />}
 
-        {/* ── HERO SLIDESHOW ── */}
         <HeroSlideshow />
 
-        {/* ── SEARCH CARD ── */}
         <div style={{ padding:'0 14px', marginTop:-26, position:'relative', zIndex:10 }}>
           <div style={{ background:'#fff', borderRadius:24, padding:'22px 18px', boxShadow:'0 8px 40px rgba(27,43,75,0.13)', border:'1px solid #F0EBE3' }}>
 
-            {/* Ville input */}
             <div style={{ position:'relative', marginBottom:14 }}>
               <div style={{ display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:14, padding:'12px 15px', gap:10, border:'1.5px solid #EDE8E1' }}>
                 <span style={{ fontSize:16, flexShrink:0 }}>📍</span>
@@ -720,36 +535,17 @@ export default function App() {
               )}
             </div>
 
-            {/* ── DWA BANERY pod miastem ── */}
             {city && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 14 }}>
-                <WeatherBanner
-                  weather={weather}
-                  city={city}
-                  setActiveCat={setActiveCat}
-                  setActiveSub={setActiveSub}
-                  doSearch={doSearch}
-                />
-                <DecouvrirBanner
-                  city={city}
-                  radius={radius}
-                  budget={budget}
-                  setResults={setResults}
-                  setLoading={setLoading}
-                  setHasSearched={setHasSearched}
-                  setSearchError={setSearchError}
-                  setActiveCat={setActiveCat}
-                  setActiveSub={setActiveSub}
-                />
+              <div style={{ display:'flex', flexDirection:'column', gap:8, marginBottom:14 }}>
+                <WeatherBanner weather={weather} city={city} setActiveCat={setActiveCat} setActiveSub={setActiveSub} doSearch={doSearch} />
+                <DecouvrirBanner city={city} radius={radius} budget={budget} setResults={setResults} setLoading={setLoading} setHasSearched={setHasSearched} setSearchError={setSearchError} setActiveCat={setActiveCat} setActiveSub={setActiveSub} />
               </div>
             )}
 
-            {/* Label */}
             <p style={{ fontFamily:'var(--font-body)', fontSize:12, fontWeight:600, color:'#9AAABB', marginBottom:10, letterSpacing:'0.2px' }}>
               Vous savez déjà ce que vous cherchez ? 👇
             </p>
 
-            {/* Keyword search + Trouver */}
             <div style={{ display:'flex', gap:8, marginBottom:14 }}>
               <div style={{ flex:1, display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:14, padding:'12px 15px', gap:10, border:'1.5px solid #EDE8E1' }}>
                 <span style={{ fontSize:16, flexShrink:0, color:'#9AAABB' }}>🔍</span>
@@ -783,12 +579,11 @@ export default function App() {
                   setActiveCat(cat.id)
                   doSearch(cat.id, null, budget)
                 }}
-                style={{ background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', color:'#fff', padding:'12px 18px', borderRadius:14, fontSize:14, fontWeight:700, flexShrink:0, boxShadow:'0 4px 14px rgba(255,107,74,0.38)', fontFamily:'var(--font-body)', whiteSpace:'nowrap' }}>
+                style={{ background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', color:'#fff', padding:'12px 18px', borderRadius:14, fontSize:14, fontWeight:700, flexShrink:0, boxShadow:'0 4px 14px rgba(255,107,74,0.38)', whiteSpace:'nowrap' }}>
                 Trouver →
               </button>
             </div>
 
-            {/* Stepper km */}
             <div style={{ borderTop:'1px solid #F5F1EC', paddingTop:12 }}>
               <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:8 }}>
                 <span style={{ fontSize:11, fontWeight:600, color:'#C5C5C5', flexShrink:0 }}>📏</span>
@@ -828,30 +623,20 @@ export default function App() {
           </div>
         </div>
 
-        {/* ── SEPARATOR ── */}
         <div style={{ padding:'24px 18px 16px', display:'flex', alignItems:'center', gap:12 }}>
           <div style={{ flex:1, height:1, background:'#EDE8E1' }} />
-          <span style={{ fontSize:12, fontWeight:600, color:'#C5C5C5', whiteSpace:'nowrap', fontFamily:'var(--font-body)' }}>ou explorez par catégorie</span>
+          <span style={{ fontSize:12, fontWeight:600, color:'#C5C5C5', whiteSpace:'nowrap' }}>ou explorez par catégorie</span>
           <div style={{ flex:1, height:1, background:'#EDE8E1' }} />
         </div>
 
-        {/* ── CATEGORIES ── */}
         <div style={{ padding:'0 14px 0' }}>
           {renderCatGrid()}
         </div>
 
-        {/* ── RESULTS ── */}
         <div id="results-section" style={{ padding:'8px 14px 0' }}>
           {searchError && (
-            <div style={{
-              display: 'flex', alignItems: 'flex-start', gap: '0.6rem',
-              padding: '1rem 1.25rem', margin: '8px 0 4px',
-              background: '#FFF3F0', border: '1px solid #FFCFC4',
-              borderLeft: '4px solid #FF6B4A', borderRadius: 10,
-              fontSize: 13, color: '#B03A2E', lineHeight: 1.5,
-              fontFamily: 'var(--font-body)',
-            }}>
-              <span style={{ flexShrink: 0 }}>⚠️</span>
+            <div style={{ display:'flex', alignItems:'flex-start', gap:'0.6rem', padding:'1rem 1.25rem', margin:'8px 0 4px', background:'#FFF3F0', border:'1px solid #FFCFC4', borderLeft:'4px solid #FF6B4A', borderRadius:10, fontSize:13, color:'#B03A2E', lineHeight:1.5 }}>
+              <span style={{ flexShrink:0 }}>⚠️</span>
               {searchError}
             </div>
           )}
@@ -868,11 +653,22 @@ export default function App() {
           {!loading && results.length > 0 && (
             <>
               <div style={{ marginBottom:16 }}>
-                <div style={{ fontFamily:'var(--font-head)', fontSize:22, fontWeight:800, color:'#1B2B4B' }}>
+                <div style={{ fontSize:22, fontWeight:800, color:'#1B2B4B' }}>
                   {results.length} idées{city ? ` près de ${city}` : ''}
                 </div>
               </div>
-              {results.map((a, i) => <ActivityCard key={a.id} a={a} idx={i} />)}
+              {results.map((activity) => (
+                <ActivityCard
+                  key={activity.place_id || activity.id}
+                  activity={activity}
+                  onSelect={(act) => {
+                    window.open(
+                      `https://www.google.com/maps/place/?q=place_id:${act.place_id}`,
+                      '_blank'
+                    )
+                  }}
+                />
+              ))}
             </>
           )}
           {!loading && !hasSearched && (
@@ -880,7 +676,7 @@ export default function App() {
           )}
         </div>
 
-        <div style={{ textAlign:'center', padding:'20px 0 32px', color:'#C5C5C5', fontSize:12, fontFamily:'var(--font-body)' }}>
+        <div style={{ textAlign:'center', padding:'20px 0 32px', color:'#C5C5C5', fontSize:12 }}>
           <span style={{ display:'inline-flex', alignItems:'center', justifyContent:'center', width:22, height:22, borderRadius:6, background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', marginRight:7, verticalAlign:'middle' }}>
             <span style={{ fontWeight:900, fontSize:10, color:'#fff', letterSpacing:'-0.5px' }}>f<span style={{textTransform:'uppercase'}}>K</span></span>
           </span>

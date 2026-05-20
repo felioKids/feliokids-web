@@ -122,7 +122,13 @@ export async function searchActivities({ city, radiusKm, budget, catId, subName 
  // Google Places
   if (source === 'google') {
     const coords = await geocodeCity(city)
-    return searchActivitiesGoogle({ city, radiusKm, budget, subName, cityCoords: { lat: coords.lat, lng: coords.lng } })
+  return searchActivitiesGoogle({
+  lat: coords.lat,
+  lng: coords.lng,
+  radius: radiusKm * 1000,
+  catId,
+  keyword: subName,
+})
   }
 
   // OSM / Overpass

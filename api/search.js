@@ -1,61 +1,62 @@
-// api/search.js  (Vercel Serverless Function — plik w folderze /api/ w root projektu)
+// api/search.js — proxy Vercel dla Google Places Nearby Search
+// Z field mask → oszczędność kosztów API (~60% taniej)
 
 export default async function handler(req, res) {
-  // CORS
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS')
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
-  if (req.method === 'OPTIONS') return res.status(200).end()
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  const { lat, lng, radius, keyword, type } = req.query
-
-  if (!lat || !lng || !radius || !keyword) {
-    return res.status(400).json({ error: 'Paramètres manquants: lat, lng, radius, keyword' })
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
   }
 
-  const apiKey = process.env.GOOGLE_PLACES_KEY || 'AIzaSyDzHGmtUPPLEp5gXJVZ3Eh_vqg9a3ntAWE'
-  if (!apiKey) {
-    return res.status(500).json({ error: 'Clé API Google manquante (GOOGLE_PLACES_KEY)' })
+  const key = process.env.GOOGLE_PLACES_KEY;
+  if (!key) {
+    return res.status(500).json({ error: 'Brak klucza API' });
   }
 
-  // Construction URL Google Places Nearby Search
-  const params = new URLSearchParams({
-    location: `${lat},${lng}`,
-    radius:   String(radius),
-    keyword:  String(keyword),
-    language: 'fr',
-    key:      apiKey,
-  })
+  const { lat, lng, radius, type, keyword, language = 'fr' } = req.query;
 
-  // Si un type Google Places est fourni, on l'ajoute (améliore la précision)
-  if (type) {
-    params.set('type', String(type))
+  if (!lat || !lng) {
+    return res.status(400).json({ error: 'Brak współrzędnych lat/lng' });
   }
 
-  const googleUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?${params}`
+  // Field mask — pobieramy TYLKO potrzebne pola
+  // Uwaga: photos i place_id są w Basic (tańsze), geometry/name też
+  // rating, user_ratings_total, vicinity = Basic Data
+  // Bez: website, phone, opening_hours (drogie — Contact/Atmosphere)
+  const fields = [
+    'place_id',
+    'name',
+    'vicinity',
+    'geometry',
+    'rating',
+    'user_ratings_total',
+    'photos',
+    'types',
+    'business_status',
+    'icon',
+  ].join(',');
+
+  let url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius || 10000}&language=${language}&fields=${fields}&key=${key}`;
+
+  if (type) url += `&type=${encodeURIComponent(type)}`;
+  if (keyword) url += `&keyword=${encodeURIComponent(keyword)}`;
 
   try {
-    const googleRes = await fetch(googleUrl)
-    if (!googleRes.ok) {
-      return res.status(502).json({ error: `Google API error: ${googleRes.status}` })
-    }
-    const data = await googleRes.json()
+    const response = await fetch(url);
+    const data = await response.json();
 
-    // Statuts d'erreur Google
-    if (data.status === 'REQUEST_DENIED') {
-      return res.status(403).json({ error: 'Clé API invalide ou non autorisée', details: data.error_message })
-    }
-    if (data.status === 'OVER_QUERY_LIMIT') {
-      return res.status(429).json({ error: 'Quota Google dépassé' })
+    if (!response.ok) {
+      return res.status(response.status).json({ error: data.error_message || 'Błąd Google API' });
     }
 
-    // Statuts OK ou ZERO_RESULTS → on retourne les résultats (peut être vide)
-    return res.status(200).json({
-      results: data.results ?? [],
-      status:  data.status,
-    })
+    // Cache odpowiedzi po stronie Vercel CDN — 10 minut
+    res.setHeader('Cache-Control', 's-maxage=600, stale-while-revalidate=120');
+
+    return res.status(200).json(data);
   } catch (err) {
-    console.error('[api/search] Erreur:', err)
-    return res.status(500).json({ error: 'Erreur serveur', details: err.message })
+    console.error('[search proxy] błąd:', err);
+    return res.status(500).json({ error: 'Błąd serwera proxy' });
   }
 }
