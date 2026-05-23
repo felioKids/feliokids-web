@@ -25,45 +25,23 @@ export function getCategoryFallbackPhoto(catId) {
   return CATEGORY_FALLBACK_PHOTOS[catId] || CATEGORY_FALLBACK_PHOTOS.default;
 }
 
-/**
- * Buduje URL zdjęcia przez proxy /api/photo (klucz API ukryty po stronie serwera).
- * URL jest deterministyczny dla danego photo_reference → przeglądarka cache'uje go
- * automatycznie dzięki Cache-Control: public, max-age=86400 z api/photo.js
- */
 export function buildPhotoUrl(photoReference, maxwidth = 600) {
   if (!photoReference) return null;
   return `/api/photo?photo_reference=${encodeURIComponent(photoReference)}&maxwidth=${maxwidth}`;
 }
 
 // ─── Główna funkcja wyszukiwania ──────────────────────────────────────────────
-
-/**
- * Wyszukuje aktywności przez Google Places z pełną ochroną przed duplikatami:
- *
- *   Wywołanie → getCached() → [HIT] zwróć dane
- *                           → [MISS] sprawdź inFlight → [jest] await istniejącego Promise
- *                                                      → [brak] stwórz nowy fetch, zapisz w inFlight
- *                                                               po zakończeniu: setCached + usuń z inFlight
- *
- * @param {{ lat, lng, radius, type, keyword, catId }} params
- * @returns {Promise<Array>}
- */
 export async function searchActivitiesGoogle({ lat, lng, radius, type, keyword, catId }) {
   const cacheKey = makeCacheKey(lat, lng, radius, type, keyword);
 
-  // ── 1. Cache hit (mem lub sessionStorage) ────────────────────────────────
   const cached = getCached(cacheKey);
   if (cached) return cached;
 
-  // ── 2. In-flight deduplication ───────────────────────────────────────────
-  // Jeśli identyczny request jest już w locie (np. React StrictMode double-invoke,
-  // szybkie podwójne kliknięcie), podepnij się pod istniejący Promise.
   if (inFlight.has(cacheKey)) {
     logInflight('search', cacheKey);
     return inFlight.get(cacheKey);
   }
 
-  // ── 3. Nowy request do Google ─────────────────────────────────────────────
   logRequest('search', cacheKey, { lat, lng, radius, type, keyword, catId });
 
   const fetchPromise = _doFetch({ lat, lng, radius, type, keyword, catId })
@@ -72,18 +50,15 @@ export async function searchActivitiesGoogle({ lat, lng, radius, type, keyword, 
       return results;
     })
     .finally(() => {
-      // Zawsze usuń z inFlight po zakończeniu (sukces lub błąd)
       inFlight.delete(cacheKey);
     });
 
-  // Zarejestruj in-flight PRZED pierwszym await
   inFlight.set(cacheKey, fetchPromise);
 
   return fetchPromise;
 }
 
 // ─── Wewnętrzna funkcja fetch ─────────────────────────────────────────────────
-
 async function _doFetch({ lat, lng, radius, type, keyword, catId }) {
   const params = new URLSearchParams({
     lat: lat.toString(),
@@ -109,23 +84,24 @@ async function _doFetch({ lat, lng, radius, type, keyword, catId }) {
 
   const results = data.results || [];
 
-  // Transformuj → ujednolicony format
   const activities = results
     .filter((place) => place.business_status !== 'CLOSED_PERMANENTLY')
     .map((place) => ({
-      id:           place.place_id,
-      place_id:     place.place_id,
-      name:         place.name,
-      address:      place.vicinity || '',
-      rating:       place.rating || null,
-      ratingsTotal: place.user_ratings_total || 0,
-      types:        place.types || [],
-      lat:          place.geometry?.location?.lat,
-      lng:          place.geometry?.location?.lng,
+      id:             place.place_id,
+      place_id:       place.place_id,
+      name:           place.name,
+      address:        place.vicinity || '',
+      rating:         place.rating || null,
+      ratingsTotal:   place.user_ratings_total || 0,
+      types:          place.types || [],
+      lat:            place.geometry?.location?.lat,
+      lng:            place.geometry?.location?.lng,
+      geometry:       place.geometry,           // ← DODANE: potrzebne do przycisków Parking/Manger
+      openNow:        place.opening_hours?.open_now ?? null, // ← DODANE: badge Ouvert/Fermé
       photoReference: place.photos?.[0]?.photo_reference || null,
       fallbackPhoto:  getCategoryFallbackPhoto(catId),
-      source:       'google',
-      catId:        catId || null,
+      source:         'google',
+      catId:          catId || null,
     }));
 
   // Deduplikacja po place_id
@@ -143,7 +119,6 @@ async function _doFetch({ lat, lng, radius, type, keyword, catId }) {
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-
 function haversine(lat1, lng1, lat2, lng2) {
   if (!lat2 || !lng2) return Infinity;
   const R = 6371;
