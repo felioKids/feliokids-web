@@ -88,7 +88,7 @@ function HeroSlideshow() {
       ))}
 
       <div style={{ position:'absolute', top:0, left:0, right:0, padding:'14px 16px', display:'flex', justifyContent:'space-between', alignItems:'center', zIndex:10 }}>
-        <div style={{ display:'flex', alignItems:'center', gap:9 }}>
+        <button onClick={() => window.location.reload()} style={{ display:'flex', alignItems:'center', gap:9, background:'none', border:'none', cursor:'pointer', padding:0 }}>
           <div style={{ width:36, height:36, borderRadius:10, background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 4px 14px rgba(255,107,74,0.45)' }}>
             <span style={{ fontWeight:900, fontSize:14, color:'#fff', letterSpacing:'-0.5px' }}>f<span style={{textTransform:'uppercase'}}>K</span></span>
           </div>
@@ -96,7 +96,7 @@ function HeroSlideshow() {
             <div style={{ fontWeight:800, fontSize:16, color:'#fff', lineHeight:1, textShadow:'0 1px 6px rgba(0,0,0,0.3)', fontFamily:'var(--font-head)' }}>FelioKids</div>
             <div style={{ fontSize:9, color:'rgba(255,255,255,0.65)', fontWeight:600, letterSpacing:'0.8px', fontFamily:'var(--font-body)' }}>FAMILY DISCOVERY</div>
           </div>
-        </div>
+        </button>
         <div style={{ display:'flex', gap:7, alignItems:'center' }}>
           <div style={{ background:'rgba(255,255,255,0.18)', backdropFilter:'blur(8px)', color:'#fff', padding:'6px 12px', borderRadius:99, fontSize:11, fontWeight:700, border:'1px solid rgba(255,255,255,0.28)', display:'flex', alignItems:'center', gap:5 }}>
             ✨ Weekend
