@@ -136,11 +136,22 @@ function MiniList({ items, type, onClose, loading }) {
                 </div>
               )}
             </div>
-            {item.rating && (
-              <span style={{ marginLeft: 'auto', flexShrink: 0, fontSize: '11px', color: '#FF6B4A', fontWeight: 600, fontFamily: 'Outfit, sans-serif' }}>
-                ★ {item.rating}
-              </span>
-            )}
+            <div style={{ marginLeft: 'auto', flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '3px' }}>
+              {item.rating && (
+                <span style={{ fontSize: '11px', color: '#FF6B4A', fontWeight: 600, fontFamily: 'Outfit, sans-serif' }}>
+                  ★ {item.rating}
+                </span>
+              )}
+              {item.opening_hours?.open_now !== undefined && (
+                <span style={{
+                  fontSize: '9px', fontWeight: 700, fontFamily: 'Outfit, sans-serif',
+                  color: item.opening_hours.open_now ? '#22c55e' : '#ef4444',
+                  whiteSpace: 'nowrap',
+                }}>
+                  {item.opening_hours.open_now ? '● Ouvert' : '● Fermé'}
+                </span>
+              )}
+            </div>
           </a>
         );
       })}
