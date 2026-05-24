@@ -2,18 +2,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import LazyImage from './LazyImage.jsx';
 
-// ─── Kategorie BEZ przycisku parkingu ────────────────────────────────────────
-const NO_PARKING_CATS = new Set(['halte']);
-const NO_PARKING_TYPES = new Set([
-  'shopping_mall', 'supermarket', 'department_store',
-  'bowling_alley', 'stadium', 'airport', 'swimming_pool',
-]);
-function showParkingButton(activity) {
-  if (NO_PARKING_CATS.has(activity.catId)) return false;
-  if (activity.types?.some(t => NO_PARKING_TYPES.has(t))) return false;
-  return true;
-}
-
 // ─── Kategorie BEZ przycisku Réserver ────────────────────────────────────────
 const NO_RESERVER_TYPES = new Set([
   'shopping_mall', 'supermarket', 'department_store',
@@ -68,25 +56,38 @@ function getFunbookerUrl(activity) {
 }
 
 // ─── Fetch restaurants kids-friendly ─────────────────────────────────────────
+// Szuka fast food, a jeśli mało wyników → dokłada zwykłe restauracje w pobliżu
 async function fetchKidsRestaurants(lat, lng) {
   const keywords = ['McDonald', 'Burger King', 'KFC', 'Quick', 'Subway', 'pizza', 'crêperie', 'kebab', 'Brioche Dorée'];
   const allResults = [];
   const seen = new Set();
 
+  // 1. Szukaj fast food po keywords
   await Promise.all(keywords.map(async (kw) => {
     try {
-      const params = new URLSearchParams({ lat, lng, radius: 1000, type: 'restaurant', keyword: kw, language: 'fr' });
+      const params = new URLSearchParams({ lat, lng, radius: 2000, type: 'restaurant', keyword: kw, language: 'fr' });
       const res = await fetch(`/api/search?${params}`);
       if (!res.ok) return;
       const data = await res.json();
       (data.results || []).slice(0, 2).forEach(r => {
-        if (!seen.has(r.place_id)) {
-          seen.add(r.place_id);
-          allResults.push(r);
-        }
+        if (!seen.has(r.place_id)) { seen.add(r.place_id); allResults.push(r); }
       });
     } catch { /* ignore */ }
   }));
+
+  // 2. Jeśli mało wyników (mała miejscowość) → dokłada zwykłe restauracje
+  if (allResults.length < 3) {
+    try {
+      const params = new URLSearchParams({ lat, lng, radius: 3000, type: 'restaurant', language: 'fr' });
+      const res = await fetch(`/api/search?${params}`);
+      if (res.ok) {
+        const data = await res.json();
+        (data.results || []).slice(0, 5).forEach(r => {
+          if (!seen.has(r.place_id)) { seen.add(r.place_id); allResults.push(r); }
+        });
+      }
+    } catch { /* ignore */ }
+  }
 
   return allResults.slice(0, 5);
 }
@@ -100,40 +101,23 @@ async function fetchNearby(lat, lng, type) {
 }
 
 // ─── Directions URL dla itemów w MiniList ────────────────────────────────────
-// POPRAWKA: używamy != null zamiast truthy check (chroni przed lat=0)
-// oraz normalizujemy geometry — Google Nearby REST API zwraca lat/lng jako liczby,
-// ale upewniamy się że obsługujemy też starszy format z metodami lat()/lng()
 function getDirectionsUrl(item) {
-  // Wyciągamy lat/lng — obsługa zarówno { lat: number } jak i { lat: fn }
   let lat = item.geometry?.location?.lat;
   let lng = item.geometry?.location?.lng;
-
-  // Jeśli z jakiegoś powodu to funkcja (stary SDK), wywołaj ją
   if (typeof lat === 'function') lat = lat();
   if (typeof lng === 'function') lng = lng();
-
-  // Fallback na top-level lat/lng jeśli geometry brak
   if (lat == null) lat = item.lat;
   if (lng == null) lng = item.lng;
-
   const destinationText = [item.name, item.vicinity].filter(Boolean).join(', ');
-
-  // Najlepsza opcja: place_id + współrzędne
   if (item.place_id && lat != null && lng != null) {
     return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&destination_place_id=${item.place_id}`;
   }
-
-  // Dobra opcja: place_id + nazwa/adres
   if (item.place_id && destinationText) {
     return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destinationText)}&destination_place_id=${item.place_id}`;
   }
-
-  // Fallback: same współrzędne
   if (lat != null && lng != null) {
     return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
   }
-
-  // Ostatni fallback: wyszukiwanie po nazwie
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(destinationText)}`;
 }
 
@@ -158,25 +142,37 @@ function MiniList({ items, type, onClose, loading }) {
       </div>
 
       <style>{`@keyframes fk-spin { to { transform: rotate(360deg); } }`}</style>
+
       {loading ? (
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 0' }}>
           <div style={{ width: '16px', height: '16px', borderRadius: '50%', border: '2px solid #FFE8E1', borderTopColor: '#FF6B4A', animation: 'fk-spin 0.7s linear infinite', flexShrink: 0 }} />
           <span style={{ fontSize: '12px', color: '#aaa', fontFamily: 'Outfit, sans-serif' }}>Recherche en cours...</span>
         </div>
+
+      ) : items.length === 0 && isParking ? (
+        // Parking brak wyników → prawdopodobnie ma własny
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 0' }}>
+          <span style={{ fontSize: '16px' }}>🅿️</span>
+          <span style={{ fontSize: '12px', color: '#555', fontFamily: 'Outfit, sans-serif', fontStyle: 'italic' }}>
+            Parking probablement disponible sur place
+          </span>
+        </div>
+
       ) : items.length === 0 ? (
         <p style={{ fontSize: '12px', color: '#aaa', margin: 0, fontFamily: 'Outfit, sans-serif' }}>
           Aucun résultat trouvé.
         </p>
+
       ) : items.map((item, i) => {
         const mapsUrl = getDirectionsUrl(item);
         return (
           <a key={item.place_id || i} href={mapsUrl} target="_blank" rel="noopener noreferrer"
             onClick={e => e.stopPropagation()}
             style={{
-            display: 'flex', alignItems: 'flex-start', gap: '8px',
-            padding: '7px 0', borderTop: i === 0 ? 'none' : '1px solid #f0e8e0',
-            textDecoration: 'none', color: 'inherit',
-          }}>
+              display: 'flex', alignItems: 'flex-start', gap: '8px',
+              padding: '7px 0', borderTop: i === 0 ? 'none' : '1px solid #f0e8e0',
+              textDecoration: 'none', color: 'inherit',
+            }}>
             <span style={{ fontSize: '14px', flexShrink: 0, marginTop: '1px' }}>{icon}</span>
             <div style={{ minWidth: 0 }}>
               <div style={{ fontSize: '12px', fontWeight: 600, fontFamily: 'Outfit, sans-serif', color: '#1a1a1a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -245,8 +241,7 @@ export default function ActivityCard({ activity, onSelect, distanceKm }) {
 
   const lat = activity.geometry?.location?.lat ?? activity.lat;
   const lng = activity.geometry?.location?.lng ?? activity.lng;
-  const paid    = isPaidActivity(activity);
-  const parking = showParkingButton(activity);
+  const paid = isPaidActivity(activity);
   const openStatus = openNow ?? activity.opening_hours?.open_now ?? null;
 
   useEffect(() => {
@@ -346,9 +341,8 @@ export default function ActivityCard({ activity, onSelect, distanceKm }) {
             {activity.catId === 'anniversaire' && (
               <ActionBtn emoji="📞" label="Appeler" href={getCallUrl(activity)} />
             )}
-            {parking && (
-              <ActionBtn emoji="🅿️" label="Parking" loading={parkingData === 'loading'} active={activePanel === 'parking'} onClick={handleParking} />
-            )}
+            {/* 🅿️ Parking — zawsze widoczny */}
+            <ActionBtn emoji="🅿️" label="Parking" loading={parkingData === 'loading'} active={activePanel === 'parking'} onClick={handleParking} />
             <ActionBtn emoji="🍔" label="Manger" loading={mangerData === 'loading'} active={activePanel === 'manger'} onClick={handleManger} />
             {paid && (
               <ActionBtn emoji="🎟️" label="Réserver" href={getFunbookerUrl(activity)} style={{ background: '#FF6B4A', border: '1.5px solid #FF6B4A' }} />

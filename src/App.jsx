@@ -246,7 +246,6 @@ function getDiscoverQueries(ageFilter) {
     { catId:'anniversaire', subName:'Escape game' },
     { catId:'culture', subName:'Châteaux & histoire' },
   ]
-  // Par défaut (tous ou 7-12)
   return [
     { catId:'nature',  subName:'Forêts & randonnée' },
     { catId:'nature',  subName:'Zoos & parcs animaliers' },
@@ -287,11 +286,11 @@ function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasS
         <div style={{ textAlign:'left' }}>
           <div style={{ fontSize:12, fontWeight:800, color:'#fff', lineHeight:1.35 }}>{running ? 'Recherche en cours…' : `Découvrir tout à ${city}`}</div>
           <div style={{ fontSize:10, color:'rgba(255,255,255,0.65)', fontWeight:600, marginTop:3 }}>
-              {running
-                ? (ageFilter === '0-3' ? 'Parcs · Piscines · Bibliothèques · Fermes…' : 'Forêts · Zoos · Cinémas · Piscines · Châteaux…')
-                : (ageFilter === '0-3' ? 'Parcs · Piscines · Bibliothèques · Fermes →' : 'Forêts · Zoos · Cinémas · Piscines · Châteaux →')
-              }
-            </div>
+            {running
+              ? (ageFilter === '0-3' ? 'Parcs · Piscines · Bibliothèques · Fermes…' : 'Forêts · Zoos · Cinémas · Piscines · Châteaux…')
+              : (ageFilter === '0-3' ? 'Parcs · Piscines · Bibliothèques · Fermes →' : 'Forêts · Zoos · Cinémas · Piscines · Châteaux →')
+            }
+          </div>
         </div>
       </div>
       {running
@@ -362,8 +361,17 @@ export default function App() {
     setLoading(true); setSearchError(null); setHasSearched(true)
     try {
       const activities = await searchActivities({ city: city.trim(), radiusKm: radius, budget: b, catId: cat, subName: s })
-      if (activities.length === 0) { setSearchError(`Aucun résultat pour "${s}" dans un rayon de ${radius} km autour de "${city}". Essayez d'élargir la zone.`); setResults([]) }
-      else { setResults(activities); setSearchError(null) }
+      if (activities.length === 0) {
+        setSearchError(`Aucun résultat pour "${s}" dans un rayon de ${radius} km autour de "${city}". Essayez d'élargir la zone.`)
+        setResults([])
+      } else {
+        setResults(activities)
+        setSearchError(null)
+        // ← NOWE: automatyczny scroll do wyników
+        setTimeout(() => {
+          document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }, 300)
+      }
     } catch (err) {
       console.error('[FelioKids]', err)
       if (err.message.includes('introuvable')) setSearchError(`Ville "${city}" introuvable. Vérifiez l'orthographe.`)
@@ -518,7 +526,6 @@ export default function App() {
                 <span style={{ fontSize:11, color:'#C5C5C5', fontWeight:500 }}>autour de toi</span>
               </div>
 
-              {/* Filtre âge */}
               <div style={{ display:'flex', alignItems:'center', gap:8, marginTop:10 }}>
                 <span style={{ fontSize:11, fontWeight:600, color:'#C5C5C5', flexShrink:0 }}>👶</span>
                 <div style={{ display:'flex', gap:5, flexWrap:'wrap' }}>
