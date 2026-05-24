@@ -3,7 +3,7 @@ import { searchActivities } from './api/overpassService.js'
 import NewsletterPopup from './components/NewsletterPopup'
 import ActivityCard from './components/ActivityCard.jsx'
 import { resetCounters } from './api/requestLogger.js'
-
+import WeekendPanel from './components/WeekendPanel.jsx'
 // ─── SLIDES ───────────────────────────────────────────────────────────────────
 const SLIDES = [
   {
@@ -55,7 +55,7 @@ const CATS = [
 ]
 
 // ─── HERO SLIDESHOW ───────────────────────────────────────────────────────────
-function HeroSlideshow() {
+function HeroSlideshow({ onWeekendClick }) {
   const [cur, setCur] = useState(0)
   const [prevCur, setPrevCur] = useState(null)
   const [popupOpen, setPopupOpen] = useState(false)
@@ -98,9 +98,9 @@ function HeroSlideshow() {
           </div>
         </button>
         <div style={{ display:'flex', gap:7, alignItems:'center' }}>
-          <div style={{ background:'rgba(255,255,255,0.18)', backdropFilter:'blur(8px)', color:'#fff', padding:'6px 12px', borderRadius:99, fontSize:11, fontWeight:700, border:'1px solid rgba(255,255,255,0.28)', display:'flex', alignItems:'center', gap:5 }}>
+         <button onClick={onWeekendClick}style={{ background:'rgba(255,255,255,0.18)', backdropFilter:'blur(8px)', color:'#fff', padding:'6px 12px', borderRadius:99, fontSize:11, fontWeight:700, border:'1px solid rgba(255,255,255,0.28)', display:'flex', alignItems:'center', gap:5, cursor:'pointer' }}>
             ✨ Weekend
-          </div>
+          </button>
           <button onClick={() => setPopupOpen(true)} style={{ background:'rgba(255,255,255,0.18)', backdropFilter:'blur(8px)', color:'#fff', padding:'6px 12px', borderRadius:99, fontSize:11, fontWeight:700, border:'1px solid rgba(255,255,255,0.28)', display:'flex', alignItems:'center', gap:5, cursor:'pointer' }}>
             🔔 Alertes
           </button>
@@ -384,6 +384,8 @@ export default function App() {
   const [showEmail,   setShowEmail]   = useState(false)
   const [popupOpen,   setPopupOpen]   = useState(false)
   const [hasSearched, setHasSearched] = useState(false)
+  const [weekendOpen,  setWeekendOpen]  = useState(false)
+  const [userLocation, setUserLocation] = useState(null)
   const [searchError, setSearchError] = useState(null)
   const cityTimer = useRef(null)
 
@@ -406,6 +408,7 @@ export default function App() {
     resetCounters()
     const name = s.display_name.split(',')[0].trim()
     setCity(name); setCitySuggs([]); setShowSugg(false)
+setUserLocation({ lat: parseFloat(s.lat), lng: parseFloat(s.lon) })
     try {
       const wr = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${s.lat}&longitude=${s.lon}&current=temperature_2m,weathercode&timezone=auto`)
       const wd = await wr.json()
@@ -499,7 +502,7 @@ export default function App() {
 
         {showEmail && <EmailModal onClose={() => setShowEmail(false)} />}
 
-        <HeroSlideshow />
+        <HeroSlideshow onWeekendClick={() => setWeekendOpen(true)} />
 
         <div style={{ padding:'0 14px', marginTop:-26, position:'relative', zIndex:10 }}>
           <div style={{ background:'#fff', borderRadius:24, padding:'22px 18px', boxShadow:'0 8px 40px rgba(27,43,75,0.13)', border:'1px solid #F0EBE3' }}>
@@ -685,6 +688,12 @@ export default function App() {
 
       </div>
       <NewsletterPopup isOpen={popupOpen} onClose={() => setPopupOpen(false)} />
+<WeekendPanel
+  lat={userLocation?.lat}
+  lng={userLocation?.lng}
+  isOpen={weekendOpen}
+  onClose={() => setWeekendOpen(false)}
+/>
     </div>
   )
 }
