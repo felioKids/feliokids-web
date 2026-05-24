@@ -6,7 +6,7 @@ import LazyImage from './LazyImage.jsx';
 const NO_PARKING_CATS = new Set(['halte']);
 const NO_PARKING_TYPES = new Set([
   'shopping_mall', 'supermarket', 'department_store',
-  'bowling_alley', 'stadium', 'airport',
+  'bowling_alley', 'stadium', 'airport', 'swimming_pool',
 ]);
 function showParkingButton(activity) {
   if (NO_PARKING_CATS.has(activity.catId)) return false;
@@ -45,29 +45,29 @@ function isPaidActivity(activity) {
 
 // ─── Linki ────────────────────────────────────────────────────────────────────
 function getCallUrl(activity) {
-  // Otwiera Google Maps na stronie miejsca — tam jest numer telefonu
   if (activity.place_id) {
-    return `https://www.google.com/maps/place/?q=place_id:${activity.place_id}`
+    return `https://www.google.com/maps/place/?q=place_id:${activity.place_id}`;
   }
-  const dest = encodeURIComponent(`${activity.name}, ${activity.address || ''}`)
-  return `https://www.google.com/maps/search/${dest}`
+  const dest = encodeURIComponent(`${activity.name}, ${activity.address || ''}`);
+  return `https://www.google.com/maps/search/${dest}`;
 }
+
 function getMapsUrl(activity) {
-  const lat = activity.geometry?.location?.lat ?? activity.lat
-  const lng = activity.geometry?.location?.lng ?? activity.lng
-  if (lat && lng) {
-    return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`
+  const lat = activity.geometry?.location?.lat ?? activity.lat;
+  const lng = activity.geometry?.location?.lng ?? activity.lng;
+  if (lat != null && lng != null) {
+    return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
   }
-  const dest = encodeURIComponent(`${activity.name}, ${activity.address || ''}`)
-  return `https://www.google.com/maps/dir/?api=1&destination=${dest}`
+  const dest = encodeURIComponent(`${activity.name}, ${activity.address || ''}`);
+  return `https://www.google.com/maps/dir/?api=1&destination=${dest}`;
 }
+
 function getFunbookerUrl(activity) {
   const q = encodeURIComponent(activity.name || '');
   return `https://www.funbooker.com/fr/recherche?q=${q}&ref=feliokids`;
 }
 
 // ─── Fetch restaurants kids-friendly ─────────────────────────────────────────
-// Szuka po kolei: McDo → Burger King → Pizza → Crêperie → ogólnie fast food
 async function fetchKidsRestaurants(lat, lng) {
   const keywords = ['McDonald', 'Burger King', 'KFC', 'Quick', 'Subway', 'pizza', 'crêperie', 'kebab', 'Brioche Dorée'];
   const allResults = [];
@@ -88,16 +88,53 @@ async function fetchKidsRestaurants(lat, lng) {
     } catch { /* ignore */ }
   }));
 
-  // Sortuj po odległości (Google już to robi, ale mieszamy wyniki)
   return allResults.slice(0, 5);
 }
 
 async function fetchNearby(lat, lng, type) {
-  const params = new URLSearchParams({ lat, lng, radius: 500, type, language: 'fr' });
+  const params = new URLSearchParams({ lat, lng, radius: 1000, type, language: 'fr' });
   const res = await fetch(`/api/search?${params}`);
   if (!res.ok) throw new Error('fetch failed');
   const data = await res.json();
   return (data.results || []).slice(0, 4);
+}
+
+// ─── Directions URL dla itemów w MiniList ────────────────────────────────────
+// POPRAWKA: używamy != null zamiast truthy check (chroni przed lat=0)
+// oraz normalizujemy geometry — Google Nearby REST API zwraca lat/lng jako liczby,
+// ale upewniamy się że obsługujemy też starszy format z metodami lat()/lng()
+function getDirectionsUrl(item) {
+  // Wyciągamy lat/lng — obsługa zarówno { lat: number } jak i { lat: fn }
+  let lat = item.geometry?.location?.lat;
+  let lng = item.geometry?.location?.lng;
+
+  // Jeśli z jakiegoś powodu to funkcja (stary SDK), wywołaj ją
+  if (typeof lat === 'function') lat = lat();
+  if (typeof lng === 'function') lng = lng();
+
+  // Fallback na top-level lat/lng jeśli geometry brak
+  if (lat == null) lat = item.lat;
+  if (lng == null) lng = item.lng;
+
+  const destinationText = [item.name, item.vicinity].filter(Boolean).join(', ');
+
+  // Najlepsza opcja: place_id + współrzędne
+  if (item.place_id && lat != null && lng != null) {
+    return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&destination_place_id=${item.place_id}`;
+  }
+
+  // Dobra opcja: place_id + nazwa/adres
+  if (item.place_id && destinationText) {
+    return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destinationText)}&destination_place_id=${item.place_id}`;
+  }
+
+  // Fallback: same współrzędne
+  if (lat != null && lng != null) {
+    return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+  }
+
+  // Ostatni fallback: wyszukiwanie po nazwie
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(destinationText)}`;
 }
 
 // ─── Mini-lista wyników ───────────────────────────────────────────────────────
@@ -131,19 +168,11 @@ function MiniList({ items, type, onClose, loading }) {
           Aucun résultat trouvé.
         </p>
       ) : items.map((item, i) => {
-        const itemLat = item.geometry?.location?.lat
-        const itemLng = item.geometry?.location?.lng
-        const itemPlaceId = item.place_id
-        let mapsUrl
-        if (itemPlaceId) {
-          mapsUrl = `https://www.google.com/maps/dir/?api=1&destination_place_id=${itemPlaceId}&destination=${encodeURIComponent(item.name + ', ' + (item.vicinity || ''))}`
-        } else if (itemLat && itemLng) {
-          mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${itemLat},${itemLng}`
-        } else {
-          mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(item.name + ', ' + (item.vicinity || ''))}`
-        };
+        const mapsUrl = getDirectionsUrl(item);
         return (
-          <a key={i} href={mapsUrl} target="_blank" rel="noopener noreferrer" style={{
+          <a key={item.place_id || i} href={mapsUrl} target="_blank" rel="noopener noreferrer"
+            onClick={e => e.stopPropagation()}
+            style={{
             display: 'flex', alignItems: 'flex-start', gap: '8px',
             padding: '7px 0', borderTop: i === 0 ? 'none' : '1px solid #f0e8e0',
             textDecoration: 'none', color: 'inherit',
