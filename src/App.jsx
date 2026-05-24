@@ -352,15 +352,16 @@ export default function App() {
     } catch {}
   }, [])
 
-  const doSearch = useCallback(async (catId, sub, bgt) => {
+const doSearch = useCallback(async (catId, sub, bgt, rad) => {
     const cat = catId !== undefined ? catId : activeCat
     const s   = sub   !== undefined ? sub   : activeSub
     const b   = bgt   !== undefined ? bgt   : budget
+    const r   = rad   !== undefined ? rad   : radius
     if (!cat || !s) return
     if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); return }
     setLoading(true); setSearchError(null); setHasSearched(true)
     try {
-      const activities = await searchActivities({ city: city.trim(), radiusKm: radius, budget: b, catId: cat, subName: s })
+      const activities = await searchActivities({ city: city.trim(), radiusKm: r, budget: b, catId: cat, subName: s })
       if (activities.length === 0) {
         setSearchError(`Aucun résultat pour "${s}" dans un rayon de ${radius} km autour de "${city}". Essayez d'élargir la zone.`)
         setResults([])
@@ -512,14 +513,14 @@ export default function App() {
                 <span style={{ fontSize:11, fontWeight:600, color:'#C5C5C5', flexShrink:0 }}>📏</span>
                 <div style={{ display:'flex', alignItems:'center', gap:0, border:'1.5px solid #EDE8E1', borderRadius:99, overflow:'hidden' }}>
                   <button
-                    onPointerDown={() => { const step = () => { setRadius(r => { const next = Math.max(5, r-5); if(activeCat) doSearch(activeCat, activeSub, budget); return next }) }; step(); const t = setInterval(step, 400); window._rTimer = t }}
+                    onPointerDown={() => { const step = () => { setRadius(r => { const next = Math.max(5, r-5); if(activeCat) doSearch(activeCat, activeSub, budget, next); return next }) }; step(); const t = setInterval(step, 400); window._rTimer = t }}
                     onPointerUp={() => clearInterval(window._rTimer)} onPointerLeave={() => clearInterval(window._rTimer)}
                     style={{ width:36, height:34, fontSize:18, fontWeight:700, color:'#1B2B4B', background:'#F5F3F0', borderRight:'1.5px solid #EDE8E1', flexShrink:0 }}>−</button>
                   <div style={{ minWidth:72, textAlign:'center', padding:'0 10px' }}>
                     <span style={{ fontSize:14, fontWeight:700, color:'#1B2B4B' }}>{radius} km</span>
                   </div>
                   <button
-                    onPointerDown={() => { const step = () => { setRadius(r => { const next = Math.min(50, r+5); if(activeCat) doSearch(activeCat, activeSub, budget); return next }) }; step(); const t = setInterval(step, 400); window._rTimer = t }}
+                    onPointerDown={() => { const step = () => { setRadius(r => { const next = Math.min(50, r+5); if(activeCat) doSearch(activeCat, activeSub, budget, next); return next }) }; step(); const t = setInterval(step, 400); window._rTimer = t }}
                     onPointerUp={() => clearInterval(window._rTimer)} onPointerLeave={() => clearInterval(window._rTimer)}
                     style={{ width:36, height:34, fontSize:18, fontWeight:700, color:'#1B2B4B', background:'#F5F3F0', borderLeft:'1.5px solid #EDE8E1', flexShrink:0 }}>+</button>
                 </div>
