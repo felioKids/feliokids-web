@@ -55,6 +55,19 @@ function getFunbookerUrl(activity) {
   return `https://www.funbooker.com/fr/recherche?q=${q}&ref=feliokids`;
 }
 
+async function shareActivity(activity) {
+  const text = `J'ai trouvé une super activité pour les enfants : ${activity.name}`;
+  const url = `https://www.feliokids.com`;
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: activity.name, text, url });
+    } catch {}
+  } else {
+    await navigator.clipboard.writeText(`${text} — ${url}`);
+    alert('Lien copié !');
+  }
+}
+
 // ─── Fetch restaurants kids-friendly ─────────────────────────────────────────
 // Szuka fast food, a jeśli mało wyników → dokłada zwykłe restauracje w pobliżu
 async function fetchKidsRestaurants(lat, lng) {
@@ -343,7 +356,8 @@ export default function ActivityCard({ activity, onSelect, distanceKm }) {
             )}
             {/* 🅿️ Parking — zawsze widoczny */}
             <ActionBtn emoji="🅿️" label="Parking" loading={parkingData === 'loading'} active={activePanel === 'parking'} onClick={handleParking} />
-            <ActionBtn emoji="🍔" label="Manger" loading={mangerData === 'loading'} active={activePanel === 'manger'} onClick={handleManger} />
+          <ActionBtn emoji="🍔" label="Manger" loading={mangerData === 'loading'} active={activePanel === 'manger'} onClick={handleManger} />
+<ActionBtn emoji="📤" label="Partager" onClick={() => shareActivity(activity)} />
             {paid && (
               <ActionBtn emoji="🎟️" label="Réserver" href={getFunbookerUrl(activity)} style={{ background: '#FF6B4A', border: '1.5px solid #FF6B4A' }} />
             )}
