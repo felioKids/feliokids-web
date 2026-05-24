@@ -120,15 +120,19 @@ export async function searchActivities({ city, radiusKm, budget, catId, subName 
   const source = getSourceForSub(catId, subName)
 
  // Google Places
-  if (source === 'google') {
+ if (source === 'google') {
     const coords = await geocodeCity(city)
-  return searchActivitiesGoogle({
-  lat: coords.lat,
-  lng: coords.lng,
-  radius: radiusKm * 1000,
-  catId,
-  keyword: subName,
-})
+    const filters = getFiltersForSub(catId, subName)
+    const googleType = filters.find(f => f.type)?.type || null
+    const googleKeyword = filters.find(f => f.keyword)?.keyword || subName
+    return searchActivitiesGoogle({
+      lat: coords.lat,
+      lng: coords.lng,
+      radius: radiusKm * 1000,
+      catId,
+      type: googleType,
+      keyword: googleKeyword,
+    })
   }
 
   // OSM / Overpass

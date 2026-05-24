@@ -5,7 +5,8 @@ export const CATEGORY_CONFIG = {
 
   // ── GRATUIT ──────────────────────────────────────────────────────────────────
   gratuit: {
-    'Parcs & jardins':        { source:'google', filters:[] },
+   'Parcs & jardins':        { source:'google', filters:[] },
+   'Aires de jeux':          { source:'google', filters:[{type:'playground'}] },
     'Forêts & balades':       { source:'google', filters:[] },
     'Plages & lacs':          { source:'google', filters:[] },
     'Musées gratuits':        { source:'google', filters:[] },
@@ -53,6 +54,7 @@ export const CATEGORY_CONFIG = {
 
   nature: {
     'Forêts & randonnée':       { source:'google', filters:[] },
+ 'Aires de jeux':            { source:'google', filters:[{type:'playground'}] },
     'Lacs & baignade':          { source:'google', filters:[] },
     'Plages':                   { source:'google', filters:[] },
     'Zoos & parcs animaliers':  { source:'google', filters:[] },

@@ -36,7 +36,7 @@ const SLIDES = [
 // ─── CATEGORIES ───────────────────────────────────────────────────────────────
 const CATS = [
   { id:'gratuit',      l:'Gratuit',              sub:'Tout gratuit près de toi',    c:'#3DAA6E', img:'https://images.unsplash.com/photo-1519331379826-f10be5486c6f?w=400&q=80',
-    subs:['Parcs & jardins','Forêts & balades','Plages & lacs','Musées gratuits','Événements gratuits','Pistes cyclables','Bibliothèques','Zoos gratuits',"Fontaines & jets d'eau"] },
+subs:['Parcs & jardins','Forêts & balades','Plages & lacs','Musées gratuits','Événements gratuits','Pistes cyclables','Bibliothèques','Zoos gratuits',"Fontaines & jets d'eau"] },
   { id:'anniversaire', l:'Anniversaires',         sub:"L'anniversaire parfait",      c:'#FF4081', img:'https://images.unsplash.com/photo-1464349153735-7db50ed83c84?w=400&q=80',
     subs:['Bowling & laser game','Accrobranche','Restaurants fête','Ateliers créatifs','Escape game','Cinéma privatisé','Karting enfants','Parcs aquatiques'] },
   { id:'pluie',        l:'Pluie & Intérieur',     sub:'Quand il pleut dehors',       c:'#4A6FA5', img:'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&q=80',
@@ -44,7 +44,7 @@ const CATS = [
   { id:'culture',      l:'Culture & Découverte',  sub:"Apprendre en s'amusant",      c:'#7C3AED', img:'https://images.unsplash.com/photo-1549144511-f099e773c147?w=400&q=80',
     subs:["Châteaux & histoire","Musées d'art",'Théâtre enfants','Planétarium','Sciences & découverte','Patrimoine UNESCO','Visites guidées famille','Cirque'] },
   { id:'nature',       l:'Nature & Animaux',      sub:'Plein air & rencontres',      c:'#059669', img:'https://images.unsplash.com/photo-1534567153574-2b12153a87f0?w=400&q=80',
-    subs:['Forêts & randonnée','Lacs & baignade','Plages','Zoos & parcs animaliers','Fermes pédagogiques','Cascades','Pêche en famille','Barbecue légal','Cueillette fruits','Camping & picnic','Observation oiseaux'] },
+subs:['Forêts & randonnée','Lacs & baignade','Plages','Zoos & parcs animaliers','Fermes pédagogiques','Cascades','Pêche en famille','Barbecue légal','Cueillette fruits','Camping & picnic','Observation oiseaux'] },
   { id:'sport',        l:'Sport & Activités',     sub:'Bougez en famille',           c:'#2F80ED', img:'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&q=80',
     subs:['Vélo & VTT','Football & terrains','Piscines','Ski & glisse','Tennis & padel','Accrobranche','Skateparks','Patinoire','Escalade','Ping-pong','Sports nautiques'] },
   { id:'events',       l:'Weekend & Événements',  sub:'Ce weekend près de toi',      c:'#1B2B4B', img:'https://images.unsplash.com/photo-1498931299472-f7a63a5a1cfa?w=400&q=80',
