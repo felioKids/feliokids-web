@@ -59,8 +59,8 @@ const CATS = [
 function FelioLogo({ size = 36, fontSize = 14 }) {
   return (
     <div style={{ width:size, height:size, borderRadius: Math.round(size * 0.27), background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 4px 14px rgba(255,107,74,0.45)', position:'relative', flexShrink:0 }}>
-      <span style={{ fontWeight:900, fontSize, color:'#fff', letterSpacing:'-0.5px' }}>f<span style={{textTransform:'uppercase'}}>K</span></span>
-      <div style={{ position:'absolute', top: Math.round(size*0.13), right: Math.round(size*0.13), width: Math.round(size*0.16), height: Math.round(size*0.16), borderRadius:'50%', background:'rgba(255,255,255,0.7)' }} />
+      <span style={{ fontWeight:900, fontSize, color:'#fff', letterSpacing:'-0.5px', fontFamily:'Georgia, serif' }}>f<span style={{textTransform:'uppercase'}}>K</span></span>
+      <div style={{ position:'absolute', top: Math.round(size*0.11), right: Math.round(size*0.11), width: Math.round(size*0.10), height: Math.round(size*0.10), borderRadius:'50%', background:'rgba(255,255,255,0.75)' }} />
     </div>
   )
 }
@@ -328,6 +328,7 @@ export default function App() {
   const [weekendOpen,  setWeekendOpen]  = useState(false)
   const [userLocation, setUserLocation] = useState(null)
   const [ageFilter,    setAgeFilter]    = useState(null)
+const [openNowFilter, setOpenNowFilter] = useState(false)
   const cityTimer = useRef(null)
 
   const handleCityInput = useCallback(async (val) => {
@@ -395,6 +396,7 @@ export default function App() {
   const clickSub = (sub) => { const next = activeSub === sub ? null : sub; setActiveSub(next); doSearch(activeCat, next, budget) }
 
   const filterByAge = (activity) => {
+    if (openNowFilter && activity.openNow !== true) return false
     if (!ageFilter) return true
     const cat = activity.catId
     const types = activity.types || []
@@ -550,13 +552,19 @@ export default function App() {
                       border: ageFilter === a.id ? 'none' : '1.5px solid #EDE8E1',
                       cursor:'pointer', transition:'all .15s',
                     }}>{a.label}</button>
-                  ))}
+                 ))}
+                  <button onClick={() => setOpenNowFilter(f => !f)} style={{
+                    padding:'4px 10px', borderRadius:99, fontSize:11, fontWeight:700,
+                    background: openNowFilter ? '#FF6B4A' : '#F5F3F0',
+                    color: openNowFilter ? '#fff' : '#5A6A82',
+                    border: openNowFilter ? 'none' : '1.5px solid #EDE8E1',
+                    cursor:'pointer', transition:'all .15s',
+                 }}>🟢 Open now</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
         <div style={{ padding:'24px 18px 16px', display:'flex', alignItems:'center', gap:12 }}>
           <div style={{ flex:1, height:1, background:'#EDE8E1' }} />
           <span style={{ fontSize:12, fontWeight:600, color:'#C5C5C5', whiteSpace:'nowrap' }}>ou explorez par catégorie</span>
