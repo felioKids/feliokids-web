@@ -133,9 +133,15 @@ function MiniList({ items, type, onClose, loading }) {
       ) : items.map((item, i) => {
         const itemLat = item.geometry?.location?.lat
         const itemLng = item.geometry?.location?.lng
-        const mapsUrl = (itemLat && itemLng)
-          ? `https://www.google.com/maps/dir/?api=1&destination=${itemLat},${itemLng}`
-          : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(item.name + ', ' + (item.vicinity || ''))}`;
+        const itemPlaceId = item.place_id
+        let mapsUrl
+        if (itemPlaceId) {
+          mapsUrl = `https://www.google.com/maps/dir/?api=1&destination_place_id=${itemPlaceId}&destination=${encodeURIComponent(item.name + ', ' + (item.vicinity || ''))}`
+        } else if (itemLat && itemLng) {
+          mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${itemLat},${itemLng}`
+        } else {
+          mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(item.name + ', ' + (item.vicinity || ''))}`
+        };
         return (
           <a key={i} href={mapsUrl} target="_blank" rel="noopener noreferrer" style={{
             display: 'flex', alignItems: 'flex-start', gap: '8px',
