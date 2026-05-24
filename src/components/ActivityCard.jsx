@@ -44,6 +44,14 @@ function isPaidActivity(activity) {
 }
 
 // ─── Linki ────────────────────────────────────────────────────────────────────
+function getCallUrl(activity) {
+  // Otwiera Google Maps na stronie miejsca — tam jest numer telefonu
+  if (activity.place_id) {
+    return `https://www.google.com/maps/place/?q=place_id:${activity.place_id}`
+  }
+  const dest = encodeURIComponent(`${activity.name}, ${activity.address || ''}`)
+  return `https://www.google.com/maps/search/${dest}`
+}
 function getMapsUrl(activity) {
   const dest = encodeURIComponent(`${activity.name}, ${activity.address || ''}`);
   return `https://www.google.com/maps/dir/?api=1&destination=${dest}`;
@@ -291,6 +299,9 @@ export default function ActivityCard({ activity, onSelect, distanceKm }) {
 
           <div style={{ display: 'flex', gap: '6px' }}>
             <ActionBtn emoji="🗺️" label="Itinéraire" href={getMapsUrl(activity)} />
+            {activity.catId === 'anniversaire' && (
+              <ActionBtn emoji="📞" label="Appeler" href={getCallUrl(activity)} />
+            )}
             {parking && (
               <ActionBtn emoji="🅿️" label="Parking" loading={parkingData === 'loading'} active={activePanel === 'parking'} onClick={handleParking} />
             )}

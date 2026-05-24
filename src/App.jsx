@@ -224,22 +224,46 @@ function WeatherBanner({ weather, city, setActiveCat, setActiveSub, doSearch }) 
 }
 
 // ─── BANER DÉCOUVRIR TOUT ─────────────────────────────────────────────────────
-const DISCOVER_QUERIES = [
-  { catId:'nature',  subName:'Forêts & randonnée' },
-  { catId:'nature',  subName:'Zoos & parcs animaliers' },
-  { catId:'pluie',   subName:'Cinéma' },
-  { catId:'sport',   subName:'Piscines' },
-  { catId:'culture', subName:'Châteaux & histoire' },
-]
+function getDiscoverQueries(ageFilter) {
+  if (ageFilter === '0-3') return [
+    { catId:'gratuit', subName:'Parcs & jardins' },
+    { catId:'pluie',   subName:'Piscines couvertes' },
+    { catId:'pluie',   subName:'Bibliothèques & médiathèques' },
+    { catId:'nature',  subName:'Fermes pédagogiques' },
+    { catId:'ateliers',subName:'Ateliers créatifs' },
+  ]
+  if (ageFilter === '4-6') return [
+    { catId:'nature',  subName:'Zoos & parcs animaliers' },
+    { catId:'gratuit', subName:'Parcs & jardins' },
+    { catId:'pluie',   subName:'Aquarium' },
+    { catId:'sport',   subName:'Piscines' },
+    { catId:'ateliers',subName:'Ateliers peinture' },
+  ]
+  if (ageFilter === '13+') return [
+    { catId:'sport',   subName:'Escalade' },
+    { catId:'sport',   subName:'Skateparks' },
+    { catId:'pluie',   subName:'Laser game' },
+    { catId:'anniversaire', subName:'Escape game' },
+    { catId:'culture', subName:'Châteaux & histoire' },
+  ]
+  // Par défaut (tous ou 7-12)
+  return [
+    { catId:'nature',  subName:'Forêts & randonnée' },
+    { catId:'nature',  subName:'Zoos & parcs animaliers' },
+    { catId:'pluie',   subName:'Cinéma' },
+    { catId:'sport',   subName:'Piscines' },
+    { catId:'culture', subName:'Châteaux & histoire' },
+  ]
+}
 
-function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasSearched, setSearchError, setActiveCat, setActiveSub }) {
+function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasSearched, setSearchError, setActiveCat, setActiveSub, ageFilter }) {
   const [running, setRunning] = useState(false)
 
   const handleClick = async () => {
     if (!city?.trim() || running) return
     setRunning(true); setLoading(true); setHasSearched(true); setSearchError(null); setActiveCat(null); setActiveSub(null)
     try {
-      const allResults = await Promise.allSettled(DISCOVER_QUERIES.map(({ catId, subName }) => searchActivities({ city: city.trim(), radiusKm: radius, budget, catId, subName })))
+      const allResults = await Promise.allSettled(getDiscoverQueries(ageFilter).map(({ catId, subName }) => searchActivities({ city: city.trim(), radiusKm: radius, budget, catId, subName })))
       const flat = allResults.filter(r => r.status === 'fulfilled').flatMap(r => r.value)
       const seen = new Set()
       const unique = flat.filter(a => { if (seen.has(a.id)) return false; seen.add(a.id); return true })
@@ -262,7 +286,12 @@ function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasS
         <span style={{ fontSize:22, lineHeight:1, flexShrink:0 }}>{running ? '⏳' : '🗺️'}</span>
         <div style={{ textAlign:'left' }}>
           <div style={{ fontSize:12, fontWeight:800, color:'#fff', lineHeight:1.35 }}>{running ? 'Recherche en cours…' : `Découvrir tout à ${city}`}</div>
-          <div style={{ fontSize:10, color:'rgba(255,255,255,0.65)', fontWeight:600, marginTop:3 }}>{running ? 'Forêts · Zoos · Cinémas · Piscines · Châteaux…' : 'Forêts · Zoos · Cinémas · Piscines · Châteaux →'}</div>
+          <div style={{ fontSize:10, color:'rgba(255,255,255,0.65)', fontWeight:600, marginTop:3 }}>
+              {running
+                ? (ageFilter === '0-3' ? 'Parcs · Piscines · Bibliothèques · Fermes…' : 'Forêts · Zoos · Cinémas · Piscines · Châteaux…')
+                : (ageFilter === '0-3' ? 'Parcs · Piscines · Bibliothèques · Fermes →' : 'Forêts · Zoos · Cinémas · Piscines · Châteaux →')
+              }
+            </div>
         </div>
       </div>
       {running
@@ -430,7 +459,7 @@ export default function App() {
             {city && (
               <div style={{ display:'flex', flexDirection:'column', gap:8, marginBottom:14 }}>
                 <WeatherBanner weather={weather} city={city} setActiveCat={setActiveCat} setActiveSub={setActiveSub} doSearch={doSearch} />
-                <DecouvrirBanner city={city} radius={radius} budget={budget} setResults={setResults} setLoading={setLoading} setHasSearched={setHasSearched} setSearchError={setSearchError} setActiveCat={setActiveCat} setActiveSub={setActiveSub} />
+                <DecouvrirBanner city={city} radius={radius} budget={budget} setResults={setResults} setLoading={setLoading} setHasSearched={setHasSearched} setSearchError={setSearchError} setActiveCat={setActiveCat} setActiveSub={setActiveSub} ageFilter={ageFilter} />
               </div>
             )}
 
