@@ -36,7 +36,7 @@ const SLIDES = [
 // ─── CATEGORIES ───────────────────────────────────────────────────────────────
 const CATS = [
   { id:'gratuit',      l:'Gratuit',              sub:'Tout gratuit près de toi',    c:'#3DAA6E', img:'https://images.unsplash.com/photo-1519331379826-f10be5486c6f?w=400&q=80',
-subs:['Parcs & jardins','Forêts & balades','Plages & lacs','Musées gratuits','Événements gratuits','Pistes cyclables','Bibliothèques','Zoos gratuits',"Fontaines & jets d'eau"] },
+    subs:['Parcs & jardins','Forêts & balades','Plages & lacs','Musées gratuits','Événements gratuits','Pistes cyclables','Bibliothèques','Zoos gratuits',"Fontaines & jets d'eau"] },
   { id:'anniversaire', l:'Anniversaires',         sub:"L'anniversaire parfait",      c:'#FF4081', img:'https://images.unsplash.com/photo-1464349153735-7db50ed83c84?w=400&q=80',
     subs:['Bowling & laser game','Accrobranche','Restaurants fête','Ateliers créatifs','Escape game','Cinéma privatisé','Karting enfants','Parcs aquatiques'] },
   { id:'pluie',        l:'Pluie & Intérieur',     sub:'Quand il pleut dehors',       c:'#4A6FA5', img:'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&q=80',
@@ -44,7 +44,7 @@ subs:['Parcs & jardins','Forêts & balades','Plages & lacs','Musées gratuits','
   { id:'culture',      l:'Culture & Découverte',  sub:"Apprendre en s'amusant",      c:'#7C3AED', img:'https://images.unsplash.com/photo-1549144511-f099e773c147?w=400&q=80',
     subs:["Châteaux & histoire","Musées d'art",'Théâtre enfants','Planétarium','Sciences & découverte','Patrimoine UNESCO','Visites guidées famille','Cirque'] },
   { id:'nature',       l:'Nature & Animaux',      sub:'Plein air & rencontres',      c:'#059669', img:'https://images.unsplash.com/photo-1534567153574-2b12153a87f0?w=400&q=80',
-subs:['Forêts & randonnée','Lacs & baignade','Plages','Zoos & parcs animaliers','Fermes pédagogiques','Cascades','Pêche en famille','Barbecue légal','Cueillette fruits','Camping & picnic','Observation oiseaux'] },
+    subs:['Forêts & randonnée','Lacs & baignade','Plages','Zoos & parcs animaliers','Fermes pédagogiques','Cascades','Pêche en famille','Barbecue légal','Cueillette fruits','Camping & picnic','Observation oiseaux'] },
   { id:'sport',        l:'Sport & Activités',     sub:'Bougez en famille',           c:'#2F80ED', img:'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&q=80',
     subs:['Vélo & VTT','Football & terrains','Piscines','Ski & glisse','Tennis & padel','Accrobranche','Skateparks','Patinoire','Escalade','Ping-pong','Sports nautiques'] },
   { id:'events',       l:'Weekend & Événements',  sub:'Ce weekend près de toi',      c:'#1B2B4B', img:'https://images.unsplash.com/photo-1498931299472-f7a63a5a1cfa?w=400&q=80',
@@ -55,20 +55,29 @@ subs:['Forêts & randonnée','Lacs & baignade','Plages','Zoos & parcs animaliers
     subs:['Ateliers peinture','Poterie enfants','Cuisine créative','Ateliers musique','Bibliothèques & médiathèques','Ateliers science','Couture & DIY','Théâtre enfants','Ateliers numériques'] },
 ]
 
+// ─── LOGO FELIOKIDS — używane wszędzie ───────────────────────────────────────
+function FelioLogo({ size = 36, fontSize = 14 }) {
+  return (
+    <div style={{ width:size, height:size, borderRadius: Math.round(size * 0.27), background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 4px 14px rgba(255,107,74,0.45)', position:'relative', flexShrink:0 }}>
+      <span style={{ fontWeight:900, fontSize, color:'#fff', letterSpacing:'-0.5px' }}>f<span style={{textTransform:'uppercase'}}>K</span></span>
+      <div style={{ position:'absolute', top: Math.round(size*0.13), right: Math.round(size*0.13), width: Math.round(size*0.16), height: Math.round(size*0.16), borderRadius:'50%', background:'rgba(255,255,255,0.7)' }} />
+    </div>
+  )
+}
+
 // ─── HERO SLIDESHOW ───────────────────────────────────────────────────────────
 function HeroSlideshow({ onWeekendClick }) {
   const [cur, setCur] = useState(0)
-  const [prevCur, setPrevCur] = useState(null)
   const [popupOpen, setPopupOpen] = useState(false)
 
   useEffect(() => {
     const t = setInterval(() => {
-      setCur(c => { setPrevCur(c); return (c + 1) % SLIDES.length })
+      setCur(c => (c + 1) % SLIDES.length)
     }, 4500)
     return () => clearInterval(t)
   }, [])
 
-  const goTo = (n) => { setPrevCur(cur); setCur(n) }
+  const goTo = (n) => setCur(n)
 
   return (
     <div style={{ position:'relative', width:'100%', height:'300px', overflow:'hidden', flexShrink:0 }}>
@@ -81,9 +90,7 @@ function HeroSlideshow({ onWeekendClick }) {
 
       <div style={{ position:'absolute', top:0, left:0, right:0, padding:'14px 16px', display:'flex', justifyContent:'space-between', alignItems:'center', zIndex:10 }}>
         <button onClick={() => window.location.reload()} style={{ display:'flex', alignItems:'center', gap:9, background:'none', border:'none', cursor:'pointer', padding:0 }}>
-          <div style={{ width:36, height:36, borderRadius:10, background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 4px 14px rgba(255,107,74,0.45)' }}>
-            <span style={{ fontWeight:900, fontSize:14, color:'#fff', letterSpacing:'-0.5px' }}>f<span style={{textTransform:'uppercase'}}>K</span></span>
-          </div>
+          <FelioLogo size={36} fontSize={14} />
           <div>
             <div style={{ fontWeight:800, fontSize:16, color:'#fff', lineHeight:1, textShadow:'0 1px 6px rgba(0,0,0,0.3)', fontFamily:'var(--font-head)' }}>FelioKids</div>
             <div style={{ fontSize:9, color:'rgba(255,255,255,0.65)', fontWeight:600, letterSpacing:'0.8px', fontFamily:'var(--font-body)' }}>FAMILY DISCOVERY</div>
@@ -352,7 +359,7 @@ export default function App() {
     } catch {}
   }, [])
 
-const doSearch = useCallback(async (catId, sub, bgt, rad) => {
+  const doSearch = useCallback(async (catId, sub, bgt, rad) => {
     const cat = catId !== undefined ? catId : activeCat
     const s   = sub   !== undefined ? sub   : activeSub
     const b   = bgt   !== undefined ? bgt   : budget
@@ -363,12 +370,11 @@ const doSearch = useCallback(async (catId, sub, bgt, rad) => {
     try {
       const activities = await searchActivities({ city: city.trim(), radiusKm: r, budget: b, catId: cat, subName: s })
       if (activities.length === 0) {
-        setSearchError(`Aucun résultat pour "${s}" dans un rayon de ${radius} km autour de "${city}". Essayez d'élargir la zone.`)
+        setSearchError(`Aucun résultat pour "${s}" dans un rayon de ${r} km autour de "${city}". Essayez d'élargir la zone.`)
         setResults([])
       } else {
         setResults(activities)
         setSearchError(null)
-        // ← NOWE: automatyczny scroll do wyników
         setTimeout(() => {
           document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
         }, 300)
@@ -570,9 +576,7 @@ const doSearch = useCallback(async (catId, sub, bgt, rad) => {
           {loading && (
             <div style={{ textAlign:'center', padding:'44px 0' }}>
               <div style={{ animation:'spin 1s linear infinite', display:'inline-block' }}>
-                <div style={{ width:52, height:52, borderRadius:14, background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 4px 18px rgba(255,107,74,0.4)' }}>
-                  <span style={{ fontWeight:900, fontSize:22, color:'#fff', letterSpacing:'-1px' }}>f<span style={{textTransform:'uppercase'}}>K</span></span>
-                </div>
+                <FelioLogo size={52} fontSize={22} />
               </div>
               <div style={{ color:'#9AAABB', fontSize:14, fontWeight:600, marginTop:14 }}>Recherche en cours...</div>
             </div>
@@ -597,10 +601,9 @@ const doSearch = useCallback(async (catId, sub, bgt, rad) => {
           {!loading && !hasSearched && <div style={{ padding:'20px 0' }} />}
         </div>
 
-        <div style={{ textAlign:'center', padding:'20px 0 32px', color:'#C5C5C5', fontSize:12 }}>
-          <span style={{ display:'inline-flex', alignItems:'center', justifyContent:'center', width:22, height:22, borderRadius:6, background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', marginRight:7, verticalAlign:'middle' }}>
-            <span style={{ fontWeight:900, fontSize:10, color:'#fff', letterSpacing:'-0.5px' }}>f<span style={{textTransform:'uppercase'}}>K</span></span>
-          </span>
+        {/* Footer */}
+        <div style={{ textAlign:'center', padding:'20px 0 32px', color:'#C5C5C5', fontSize:12, display:'flex', alignItems:'center', justifyContent:'center', gap:7 }}>
+          <FelioLogo size={22} fontSize={10} />
           FelioKids · <a href="mailto:contact.feliokids@gmail.com" style={{ color:'#FF6B4A', fontWeight:600 }}>contact.feliokids@gmail.com</a>
         </div>
 
