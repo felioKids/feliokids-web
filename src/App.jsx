@@ -251,30 +251,62 @@ function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasS
   )
 }
 
+// Ikona GPS — dyskretny celownik SVG
+function GpsIcon({ loading, active }) {
+  if (loading) return (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ animation:'spin 0.9s linear infinite', flexShrink:0 }}>
+      <circle cx="9" cy="9" r="7" stroke={active ? '#FF6B4A' : '#C5C5C5'} strokeWidth="2" strokeDasharray="28 16" strokeLinecap="round"/>
+    </svg>
+  )
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ flexShrink:0 }}>
+      <circle cx="9" cy="9" r="6.5" stroke={active ? '#FF6B4A' : '#C5C5C5'} strokeWidth="1.6"/>
+      <circle cx="9" cy="9" r="2.2" fill={active ? '#FF6B4A' : '#C5C5C5'}/>
+      <line x1="9" y1="1" x2="9" y2="4"   stroke={active ? '#FF6B4A' : '#C5C5C5'} strokeWidth="1.6" strokeLinecap="round"/>
+      <line x1="9" y1="14" x2="9" y2="17" stroke={active ? '#FF6B4A' : '#C5C5C5'} strokeWidth="1.6" strokeLinecap="round"/>
+      <line x1="1" y1="9" x2="4"   y2="9" stroke={active ? '#FF6B4A' : '#C5C5C5'} strokeWidth="1.6" strokeLinecap="round"/>
+      <line x1="14" y1="9" x2="17" y2="9" stroke={active ? '#FF6B4A' : '#C5C5C5'} strokeWidth="1.6" strokeLinecap="round"/>
+    </svg>
+  )
+}
+
 export default function App() {
-  const [city,         setCity]         = useState('')
-  const [radius,       setRadius]       = useState(10)
-  const [budget,       setBudget]       = useState('Tous')
-  const [query,        setQuery]        = useState('')
-  const [activeCat,    setActiveCat]    = useState(null)
-  const [activeSub,    setActiveSub]    = useState(null)
-  const [weather,      setWeather]      = useState(null)
-  const [results,      setResults]      = useState([])
-  const [loading,      setLoading]      = useState(false)
-  const [citySuggs,    setCitySuggs]    = useState([])
-  const [showSugg,     setShowSugg]     = useState(false)
-  const [showEmail,    setShowEmail]    = useState(false)
-  const [popupOpen,    setPopupOpen]    = useState(false)
-  const [hasSearched,  setHasSearched]  = useState(false)
-  const [searchError,  setSearchError]  = useState(null)
-  const [weekendOpen,  setWeekendOpen]  = useState(false)
-  const [userLocation, setUserLocation] = useState(null)
-  const [ageFilter,    setAgeFilter]    = useState(null)
-  const [openNowFilter,setOpenNowFilter]= useState(false)
+  const [city,          setCity]          = useState('')
+  const [radius,        setRadius]        = useState(10)
+  const [budget,        setBudget]        = useState('Tous')
+  const [query,         setQuery]         = useState('')
+  const [activeCat,     setActiveCat]     = useState(null)
+  const [activeSub,     setActiveSub]     = useState(null)
+  const [weather,       setWeather]       = useState(null)
+  const [results,       setResults]       = useState([])
+  const [loading,       setLoading]       = useState(false)
+  const [citySuggs,     setCitySuggs]     = useState([])
+  const [showSugg,      setShowSugg]      = useState(false)
+  const [showEmail,     setShowEmail]     = useState(false)
+  const [popupOpen,     setPopupOpen]     = useState(false)
+  const [hasSearched,   setHasSearched]   = useState(false)
+  const [searchError,   setSearchError]   = useState(null)
+  const [weekendOpen,   setWeekendOpen]   = useState(false)
+  const [userLocation,  setUserLocation]  = useState(null)
+  const [ageFilter,     setAgeFilter]     = useState(null)
+  const [openNowFilter, setOpenNowFilter] = useState(false)
+  const [gpsLoading,    setGpsLoading]    = useState(false)
+  const [gpsActive,     setGpsActive]     = useState(false) // GPS było użyte
   const cityTimer = useRef(null)
+
+  const fetchWeather = async (lat, lng) => {
+    try {
+      const wr = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,weathercode&timezone=auto`)
+      const wd = await wr.json()
+      const t = Math.round(wd.current.temperature_2m), c = wd.current.weathercode
+      const em = c===0||c===1?'☀️':c<=3?'⛅':c>=51&&c<=82?'🌧️':c>=95?'⛈️':'🌤️'
+      setWeather({ icon:em, temp:t, code:c })
+    } catch {}
+  }
 
   const handleCityInput = useCallback(async (val) => {
     setCity(val)
+    setGpsActive(false)
     if (val.length < 2) { setCitySuggs([]); setShowSugg(false); return }
     clearTimeout(cityTimer.current)
     cityTimer.current = setTimeout(async () => {
@@ -293,14 +325,44 @@ export default function App() {
     const name = s.display_name.split(',')[0].trim()
     setCity(name); setCitySuggs([]); setShowSugg(false)
     setUserLocation({ lat:parseFloat(s.lat), lng:parseFloat(s.lon) })
-    try {
-      const wr = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${s.lat}&longitude=${s.lon}&current=temperature_2m,weathercode&timezone=auto`)
-      const wd = await wr.json()
-      const t = Math.round(wd.current.temperature_2m), c = wd.current.weathercode
-      const em = c===0||c===1?'☀️':c<=3?'⛅':c>=51&&c<=82?'🌧️':c>=95?'⛈️':'🌤️'
-      setWeather({ icon:em, temp:t, code:c })
-    } catch {}
+    await fetchWeather(s.lat, s.lon)
   }, [])
+
+  // GPS — dyskretny, jeden klik
+  const handleGps = useCallback(() => {
+    if (!navigator.geolocation || gpsLoading) return
+    setGpsLoading(true)
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const { latitude: lat, longitude: lng } = pos.coords
+        try {
+          const r = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&addressdetails=1`,
+            { headers: { 'Accept-Language': 'fr' } }
+          )
+          const d = await r.json()
+          const name =
+            d.address?.city ||
+            d.address?.town ||
+            d.address?.village ||
+            d.address?.municipality ||
+            d.display_name.split(',')[0].trim()
+          setCity(name)
+          setUserLocation({ lat, lng })
+          setGpsActive(true)
+          setCitySuggs([])
+          setShowSugg(false)
+          await fetchWeather(lat, lng)
+        } catch {
+          // cichy błąd — pole zostaje puste, użytkownik wpisze ręcznie
+        } finally {
+          setGpsLoading(false)
+        }
+      },
+      () => { setGpsLoading(false) }, // odmowa — nic nie robimy, brak komunikatu
+      { timeout: 8000, maximumAge: 60000 }
+    )
+  }, [gpsLoading])
 
   const doSearch = useCallback(async (catId, sub, bgt, rad) => {
     const cat = catId !== undefined ? catId : activeCat
@@ -371,18 +433,40 @@ export default function App() {
         <div style={{ padding:'0 14px', marginTop:-26, position:'relative', zIndex:10 }}>
           <div style={{ background:'#fff', borderRadius:24, padding:'22px 18px', boxShadow:'0 8px 40px rgba(27,43,75,0.13)', border:'1px solid #F0EBE3' }}>
 
-            {/* 1. Ville */}
+            {/* 1. Ville — pole z dyskretną ikonką GPS po prawej */}
             <div style={{ position:'relative', marginBottom:14 }}>
-              <div style={{ display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:14, padding:'12px 15px', gap:10, border:'1.5px solid #EDE8E1' }}>
+             <div
+  className="city-field"
+  style={{ display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:14, padding:'12px 15px', gap:10, border:`1.5px solid ${gpsActive ? '#FFCFC4' : '#EDE8E1'}`, transition:'border-color .2s' }}>
                 <span style={{ fontSize:16, flexShrink:0 }}>📍</span>
-                <input style={{ flex:1, fontSize:15, fontWeight:600, color:'#1B2B4B', fontFamily:'var(--font-body)' }} placeholder="Ville ou commune..." value={city}
+                <input
+                  style={{ flex:1, fontSize:15, fontWeight:600, color:'#1B2B4B', fontFamily:'var(--font-body)' }}
+                  placeholder="Ville ou commune..."
+                  value={city}
                   onChange={e => handleCityInput(e.target.value)}
                   onKeyDown={e => { if(e.key==='Enter'&&citySuggs[0]) chooseSugg(citySuggs[0]) }}
                   onFocus={() => { if(citySuggs.length) setShowSugg(true) }}
-                  onBlur={() => setTimeout(() => setShowSugg(false), 180)} />
+                  onBlur={() => setTimeout(() => setShowSugg(false), 180)}
+                />
                 {weather && <span style={{ fontSize:12, color:'#9AAABB', fontWeight:600, flexShrink:0 }}>{weather.icon} {weather.temp}°C</span>}
-                {city && !weather && <button onClick={() => { setCity(''); setWeather(null) }} style={{ color:'#C5C5C5', fontSize:14 }}>✕</button>}
+                {city && !weather && !gpsLoading && (
+                  <button onClick={() => { setCity(''); setWeather(null); setGpsActive(false) }} style={{ color:'#C5C5C5', fontSize:14, flexShrink:0 }}>✕</button>
+                )}
+                {/* Ikonka GPS — dyskretna, zawsze widoczna po prawej */}
+        <button
+  onClick={handleGps}
+  className="gps-btn"
+  title="Utiliser ma position GPS"
+  style={{ background:'none', border:'none', cursor: gpsLoading ? 'wait' : 'pointer', padding:2, display:'flex', alignItems:'center', gap:5, flexShrink:0, opacity: gpsLoading ? 0.6 : 1, transition:'opacity .2s' }}
+>
+  <GpsIcon loading={gpsLoading} active={gpsActive} />
+  <span style={{ fontSize:11, fontWeight:700, color: gpsActive ? '#FF6B4A' : '#C5C5C5', whiteSpace:'nowrap' }}>
+    {gpsLoading ? 'Localisation...' : 'Ma position'}
+  </span>
+</button>
               </div>
+
+              {/* Suggestions ville */}
               {showSugg && citySuggs.length > 0 && (
                 <div className="anim-down" style={{ position:'absolute', top:'110%', left:0, right:0, background:'#fff', borderRadius:15, boxShadow:'0 8px 32px rgba(27,43,75,0.13)', zIndex:50, overflow:'hidden', border:'1px solid #F0EBE3' }}>
                   {citySuggs.map((s,i) => (
@@ -395,7 +479,7 @@ export default function App() {
               )}
             </div>
 
-            {/* 2. Km + Open now w jednej linii */}
+            {/* 2. Km + Open now */}
             <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:14, flexWrap:'wrap' }}>
               <span style={{ fontSize:11, fontWeight:600, color:'#C5C5C5', flexShrink:0 }}>📏</span>
               <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #EDE8E1', borderRadius:99, overflow:'hidden' }}>
@@ -412,7 +496,6 @@ export default function App() {
                   style={{ width:36, height:34, fontSize:18, fontWeight:700, color:'#1B2B4B', background:'#F5F3F0', borderLeft:'1.5px solid #EDE8E1', flexShrink:0 }}>+</button>
               </div>
               <span style={{ fontSize:11, color:'#C5C5C5', fontWeight:500 }}>autour de toi</span>
-              {/* Open now obok km */}
               <button onClick={() => setOpenNowFilter(f => !f)} style={{
                 padding:'4px 12px', borderRadius:99, fontSize:11, fontWeight:700,
                 background: openNowFilter ? '#FF6B4A' : '#F5F3F0',

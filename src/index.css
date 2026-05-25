@@ -283,3 +283,9 @@ section {
   }
 }
 
+.city-field .gps-btn span { transition: color .15s; }
+.city-field:hover .gps-btn span { color: #FF6B4A !important; }
+.city-field:hover .gps-btn svg circle { stroke: #FF6B4A !important; }
+.city-field:hover .gps-btn svg line { stroke: #FF6B4A !important; }
+.city-field:hover .gps-btn svg circle:last-of-type { fill: #FF6B4A !important; }
+
