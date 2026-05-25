@@ -84,9 +84,19 @@ async function _doFetch({ lat, lng, radius, type, keyword, catId }) {
 
   const results = data.results || [];
 
-  const activities = results
-    .filter((place) => place.business_status !== 'CLOSED_PERMANENTLY')
-    .map((place) => ({
+  const BLOCKED_TYPES = new Set([
+  'supermarket', 'grocery_or_supermarket', 'store', 'home_goods_store',
+  'hardware_store', 'furniture_store', 'clothing_store', 'shoe_store',
+  'shopping_mall', 'department_store', 'florist', 'pet_store',
+  'car_dealer', 'car_repair', 'gas_station', 'bank', 'atm',
+  'pharmacy', 'doctor', 'dentist', 'hospital', 'real_estate_agency',
+  'insurance_agency', 'lawyer', 'accounting', 'electrician', 'plumber',
+]);
+
+const activities = results
+  .filter((place) => place.business_status !== 'CLOSED_PERMANENTLY')
+  .filter((place) => !place.types?.some(t => BLOCKED_TYPES.has(t)))
+  .map((place) => ({
       id:             place.place_id,
       place_id:       place.place_id,
       name:           place.name,

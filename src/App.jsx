@@ -360,7 +360,7 @@ export default function App() {
         }
       },
       () => { setGpsLoading(false) }, // odmowa — nic nie robimy, brak komunikatu
-      { timeout: 8000, maximumAge: 60000 }
+      { timeout: 10000, maximumAge: 0, enableHighAccuracy: false }
     )
   }, [gpsLoading])
 
