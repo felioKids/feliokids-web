@@ -102,6 +102,8 @@ const BLOCKED_NAME_KEYWORDS = [
   'médecin', 'medecin', 'cabinet médical', 'infirmier', 'infirmière',
 ];
 
+const results = data.results || [];
+
 const activities = results
   .filter((place) => place.business_status !== 'CLOSED_PERMANENTLY')
   .filter((place) => !place.types?.some(t => BLOCKED_TYPES.has(t)))
