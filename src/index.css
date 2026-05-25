@@ -289,3 +289,9 @@ section {
 .city-field:hover .gps-btn svg line { stroke: #FF6B4A !important; }
 .city-field:hover .gps-btn svg circle:last-of-type { fill: #FF6B4A !important; }
 
+.felio-logo-text {
+  text-transform: none !important;
+  font-variant: normal !important;
+  font-variant-caps: normal !important;
+}
+

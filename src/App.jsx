@@ -58,7 +58,7 @@ function HeroSlideshow({ onWeekendClick }) {
         <button onClick={() => window.location.reload()} style={{ display:'flex', alignItems:'center', gap:9, background:'none', border:'none', cursor:'pointer', padding:0 }}>
           <FelioLogo size={36} fontSize={14} />
           <div>
-            <div style={{ fontWeight:800, fontSize:16, color:'#fff', lineHeight:1, textShadow:'0 1px 6px rgba(0,0,0,0.3)', fontFamily:'var(--font-head)' }}>FelioKids</div>
+            <div style={{ fontWeight:800, fontSize:16, color:'#fff', lineHeight:1, textShadow:'0 1px 6px rgba(0,0,0,0.3)', display:'flex', alignItems:'center' }}><span style={{ fontFamily:'Georgia, serif', fontWeight:800, fontSize:16, color:'#fff' }}>f</span><span style={{ fontFamily:'Outfit, sans-serif', fontWeight:800, fontSize:16, color:'#fff' }}>elioKids</span></div>
             <div style={{ fontSize:9, color:'rgba(255,255,255,0.65)', fontWeight:600, letterSpacing:'0.8px' }}>FAMILY DISCOVERY</div>
           </div>
         </button>
@@ -435,9 +435,7 @@ export default function App() {
 
             {/* 1. Ville — pole z dyskretną ikonką GPS po prawej */}
             <div style={{ position:'relative', marginBottom:14 }}>
-             <div
-  className="city-field"
-  style={{ display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:14, padding:'12px 15px', gap:10, border:`1.5px solid ${gpsActive ? '#FFCFC4' : '#EDE8E1'}`, transition:'border-color .2s' }}>
+              <div style={{ display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:14, padding:'12px 15px', gap:10, border:`1.5px solid ${gpsActive ? '#FFCFC4' : '#EDE8E1'}`, transition:'border-color .2s' }}>
                 <span style={{ fontSize:16, flexShrink:0 }}>📍</span>
                 <input
                   style={{ flex:1, fontSize:15, fontWeight:600, color:'#1B2B4B', fontFamily:'var(--font-body)' }}
@@ -453,17 +451,13 @@ export default function App() {
                   <button onClick={() => { setCity(''); setWeather(null); setGpsActive(false) }} style={{ color:'#C5C5C5', fontSize:14, flexShrink:0 }}>✕</button>
                 )}
                 {/* Ikonka GPS — dyskretna, zawsze widoczna po prawej */}
-        <button
-  onClick={handleGps}
-  className="gps-btn"
-  title="Utiliser ma position GPS"
-  style={{ background:'none', border:'none', cursor: gpsLoading ? 'wait' : 'pointer', padding:2, display:'flex', alignItems:'center', gap:5, flexShrink:0, opacity: gpsLoading ? 0.6 : 1, transition:'opacity .2s' }}
->
-  <GpsIcon loading={gpsLoading} active={gpsActive} />
-  <span style={{ fontSize:11, fontWeight:700, color: gpsActive ? '#FF6B4A' : '#C5C5C5', whiteSpace:'nowrap' }}>
-    {gpsLoading ? 'Localisation...' : 'Ma position'}
-  </span>
-</button>
+                <button
+                  onClick={handleGps}
+                  title="Utiliser ma position GPS"
+                  style={{ background:'none', border:'none', cursor: gpsLoading ? 'wait' : 'pointer', padding:2, display:'flex', alignItems:'center', flexShrink:0, opacity: gpsLoading ? 0.6 : 1, transition:'opacity .2s' }}
+                >
+                  <GpsIcon loading={gpsLoading} active={gpsActive} />
+                </button>
               </div>
 
               {/* Suggestions ville */}
