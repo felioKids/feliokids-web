@@ -82,20 +82,30 @@ async function _doFetch({ lat, lng, radius, type, keyword, catId }) {
     throw new Error(`Google Places: ${data.status} — ${data.error_message || ''}`);
   }
 
-  const results = data.results || [];
-
-  const BLOCKED_TYPES = new Set([
+ const BLOCKED_TYPES = new Set([
   'supermarket', 'grocery_or_supermarket', 'store', 'home_goods_store',
   'hardware_store', 'furniture_store', 'clothing_store', 'shoe_store',
   'shopping_mall', 'department_store', 'florist', 'pet_store',
   'car_dealer', 'car_repair', 'gas_station', 'bank', 'atm',
   'pharmacy', 'doctor', 'dentist', 'hospital', 'real_estate_agency',
   'insurance_agency', 'lawyer', 'accounting', 'electrician', 'plumber',
+  'general_contractor', 'roofing_contractor', 'painter',
+  'moving_company', 'storage', 'locksmith', 'travel_agency',
 ]);
+
+const BLOCKED_NAME_KEYWORDS = [
+  'travaux', 'couvreur', 'plombier', 'électricien', 'maçon',
+  'peintre', 'menuisier', 'charpentier', 'isolation', 'toiture',
+  'assurance', 'avocat', 'notaire', 'comptable', 'agence immobilière',
+  'thérapeute', 'therapeute', 'psychologue', 'ostéopathe', 'osteopathe',
+  'kinésithérapeute', 'kinesitherapeute', 'sophrologue', 'naturopathe',
+  'médecin', 'medecin', 'cabinet médical', 'infirmier', 'infirmière',
+];
 
 const activities = results
   .filter((place) => place.business_status !== 'CLOSED_PERMANENTLY')
   .filter((place) => !place.types?.some(t => BLOCKED_TYPES.has(t)))
+  .filter((place) => !BLOCKED_NAME_KEYWORDS.some(k => place.name?.toLowerCase().includes(k)))
   .map((place) => ({
       id:             place.place_id,
       place_id:       place.place_id,
