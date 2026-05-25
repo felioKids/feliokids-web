@@ -233,7 +233,7 @@ function ActionBtn({ emoji, label, onClick, href, loading, active, style = {} })
   };
   const inner = (
     <>
-      <span style={{ fontSize: '16px', lineHeight: 1 }}>{loading ? '⏳' : emoji}</span>
+      <span style={{ fontSize: '16px', lineHeight: 1, display:'flex', alignItems:'center', justifyContent:'center', color:'#555' }}>{loading ? '⏳' : emoji}</span>
       <span style={{ fontSize: '9.5px', fontFamily: 'Outfit, sans-serif', fontWeight: 600, color: active ? '#FF6B4A' : '#555', whiteSpace: 'nowrap', letterSpacing: '0.01em' }}>
         {label}
       </span>
@@ -357,7 +357,17 @@ export default function ActivityCard({ activity, onSelect, distanceKm }) {
             {/* 🅿️ Parking — zawsze widoczny */}
             <ActionBtn emoji="🅿️" label="Parking" loading={parkingData === 'loading'} active={activePanel === 'parking'} onClick={handleParking} />
           <ActionBtn emoji="🍔" label="Manger" loading={mangerData === 'loading'} active={activePanel === 'manger'} onClick={handleManger} />
-<ActionBtn emoji="📤" label="Partager" onClick={() => shareActivity(activity)} />
+<ActionBtn
+  emoji={
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+      <polyline points="16 6 12 2 8 6"/>
+      <line x1="12" y1="2" x2="12" y2="15"/>
+    </svg>
+  }
+  label="Partager"
+  onClick={() => shareActivity(activity)}
+/>
             {paid && (
               <ActionBtn emoji="🎟️" label="Réserver" href={getFunbookerUrl(activity)} style={{ background: '#FF6B4A', border: '1.5px solid #FF6B4A' }} />
             )}
