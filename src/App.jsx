@@ -435,7 +435,7 @@ export default function App() {
 
             {/* 1. Ville — pole z dyskretną ikonką GPS po prawej */}
             <div style={{ position:'relative', marginBottom:14 }}>
-              <div style={{ display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:14, padding:'12px 15px', gap:10, border:`1.5px solid ${gpsActive ? '#FFCFC4' : '#EDE8E1'}`, transition:'border-color .2s' }}>
+              <div className="city-field" style={{ display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:14, padding:'12px 15px', gap:10, border:`1.5px solid ${gpsActive ? '#FFCFC4' : '#EDE8E1'}`, transition:'border-color .2s' }}>
                 <span style={{ fontSize:16, flexShrink:0 }}>📍</span>
                 <input
                   style={{ flex:1, fontSize:15, fontWeight:600, color:'#1B2B4B', fontFamily:'var(--font-body)' }}
@@ -452,9 +452,11 @@ export default function App() {
                 )}
                 {/* Ikonka GPS — dyskretna, zawsze widoczna po prawej */}
                 <button
-                  onClick={handleGps}
-                  title="Utiliser ma position GPS"
-                  style={{ background:'none', border:'none', cursor: gpsLoading ? 'wait' : 'pointer', padding:2, display:'flex', alignItems:'center', flexShrink:0, opacity: gpsLoading ? 0.6 : 1, transition:'opacity .2s' }}
+  onClick={handleGps}
+  className="gps-btn"
+  title="Utiliser ma position GPS"
+  style={{ background:'none', border:'none', cursor: gpsLoading ? 'wait' : 'pointer', padding:2, display:'flex', alignItems:'center', gap:5, flexShrink:0, opacity: gpsLoading ? 0.6 : 1, transition:'opacity .2s' }}
+>
                 >
                   <GpsIcon loading={gpsLoading} active={gpsActive} />
                 </button>
