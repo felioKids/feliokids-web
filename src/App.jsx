@@ -462,7 +462,7 @@ export default function App() {
       const activeInRow = row.find(c => c.id===activeCat)
       rows.push(
         <div key={i}>
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:9, marginBottom:activeInRow?0:9 }}>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:9, marginBottom:activeInRow?0:9 }}>
             {row.map((cat,j) => <CatTile key={cat.id} cat={cat} active={activeCat===cat.id} delay={(i+j)*0.04} onClick={() => clickCat(cat.id)} />)}
             {row.length < 3 && Array(3-row.length).fill(0).map((_,k) => <div key={`e${k}`} />)}
           </div>
