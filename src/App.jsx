@@ -14,24 +14,46 @@ const SLIDES = [
 
 const CATS = [
   { id:'gratuit',      l:'Gratuit',              sub:'Tout gratuit près de toi',    c:'#3DAA6E', img:'https://images.unsplash.com/photo-1519331379826-f10be5486c6f?w=400&q=80',
-    subs:['Parcs & jardins','Forêts & balades','Plages & lacs','Musées gratuits','Pistes cyclables','Bibliothèques',"Fontaines & jets d'eau"] },
+    subs:['Parcs & jardins','Forêts & balades','Plages & lacs','Musées gratuits','Pistes cyclables','Bibliothèques',"Fontaines & jets d'eau"],
+    tout:'parc gratuit famille' },
   { id:'anniversaire', l:'Anniversaires',         sub:"L'anniversaire parfait",      c:'#FF4081', img:'https://images.unsplash.com/photo-1464349153735-7db50ed83c84?w=400&q=80',
-    subs:['Bowling & laser game','Accrobranche','Ateliers créatifs','Escape game','Karting enfants','Parcs aquatiques'] },
+    subs:['Bowling & laser game','Accrobranche','Ateliers créatifs','Escape game','Karting enfants','Parcs aquatiques'],
+    tout:'anniversaire enfant activité' },
   { id:'pluie',        l:'Pluie & Intérieur',     sub:'Quand il pleut dehors',       c:'#4A6FA5', img:'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&q=80',
-    subs:['Cinéma','Bowling','Aquarium','Trampoline','Laser game','Musées interactifs','Piscines couvertes','Bibliothèques & médiathèques','Ateliers créatifs'] },
+    subs:['Cinéma','Bowling','Aquarium','Trampoline','Laser game','Musées interactifs','Piscines couvertes','Bibliothèques & médiathèques','Ateliers créatifs'],
+    tout:'activité intérieur enfant' },
   { id:'culture',      l:'Culture & Découverte',  sub:"Apprendre en s'amusant",      c:'#7C3AED', img:'https://images.unsplash.com/photo-1549144511-f099e773c147?w=400&q=80',
-    subs:["Châteaux & histoire","Musées d'art",'Théâtre enfants','Planétarium','Patrimoine UNESCO','Cirque'] },
+    subs:["Châteaux & histoire","Musées d'art",'Théâtre enfants','Planétarium','Patrimoine UNESCO','Cirque'],
+    tout:'musée château culture famille' },
   { id:'nature',       l:'Nature & Animaux',      sub:'Plein air & rencontres',      c:'#059669', img:'https://images.unsplash.com/photo-1534567153574-2b12153a87f0?w=400&q=80',
-    subs:['Forêts & randonnée','Lacs & baignade','Plages','Zoos & parcs animaliers','Fermes pédagogiques','Cascades','Pêche en famille','Barbecue légal','Cueillette','Camping & picnic','Observation oiseaux'] },
+    subs:['Forêts & randonnée','Lacs & baignade','Plages','Zoos & parcs animaliers','Fermes pédagogiques','Cascades','Pêche en famille','Barbecue légal','Cueillette','Camping & picnic','Observation oiseaux'],
+    tout:'nature animaux plein air famille' },
   { id:'sport',        l:'Sport & Activités',     sub:'Bougez en famille',           c:'#2F80ED', img:'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&q=80',
-    subs:['Vélo & VTT','Football & terrains','Piscines','Ski & glisse','Tennis & padel','Accrobranche','Skateparks','Patinoire','Escalade','Ping-pong','Sports nautiques'] },
+    subs:['Vélo & VTT','Football & terrains','Piscines','Ski & glisse','Tennis & padel','Accrobranche','Skateparks','Patinoire','Escalade','Ping-pong','Sports nautiques'],
+    tout:'sport activité enfant famille' },
   { id:'events',       l:'Weekend & Événements',  sub:'Bientôt disponible',          c:'#1B2B4B', img:'https://images.unsplash.com/photo-1498931299472-f7a63a5a1cfa?w=400&q=80',
-    subs:['Festivals famille','Fêtes & marchés','Brocante','Spectacles','Expos temporaires','Concerts gratuits',"Feux d'artifice",'Événements saisonniers','Compétitions sportives'] },
+    subs:['Festivals famille','Fêtes & marchés','Brocante','Spectacles','Expos temporaires','Concerts gratuits',"Feux d'artifice",'Événements saisonniers','Compétitions sportives'],
+    tout:'événement famille weekend' },
   { id:'resto',        l:'Restaurants famille',   sub:'Bien manger après',           c:'#E8734A', img:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=80',
-    subs:['Pizzerias','Crêperies','Burgers & grill','Sushi & japonais','Glaciers & glaces','Cuisine locale'] },
+    subs:['Pizzerias','Crêperies','Burgers & grill','Sushi & japonais','Glaciers & glaces','Cuisine locale'],
+    tout:'restaurant famille enfant' },
   { id:'ateliers',     l:'Ateliers Créatifs',     sub:"Créer & s'exprimer",          c:'#D97706', img:'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400&q=80',
-    subs:['Ateliers peinture','Poterie enfants','Ateliers musique','Bibliothèques & médiathèques','Ateliers science','Couture & DIY','Théâtre enfants'] },
+    subs:['Ateliers peinture','Poterie enfants','Ateliers musique','Bibliothèques & médiathèques','Ateliers science','Couture & DIY','Théâtre enfants'],
+    tout:'atelier créatif enfant' },
 ]
+
+// Keyword "tout" pour chaque catégorie dans categoryConfig
+const TOUT_CONFIG = {
+  gratuit:      { type:'park',       keyword:'parc gratuit famille' },
+  anniversaire: { type:'',           keyword:'anniversaire enfant activité' },
+  pluie:        { type:'',           keyword:'activité intérieur enfant' },
+  culture:      { type:'',           keyword:'musée château culture famille' },
+  nature:       { type:'',           keyword:'nature animaux plein air famille' },
+  sport:        { type:'',           keyword:'sport activité enfant' },
+  events:       { type:'',           keyword:'événement famille weekend' },
+  resto:        { type:'restaurant', keyword:'restaurant famille enfant' },
+  ateliers:     { type:'',           keyword:'atelier créatif enfant' },
+}
 
 function FelioLogo({ size = 36, fontSize = 14 }) {
   return (
@@ -98,12 +120,12 @@ function CatTile({ cat, active, onClick, delay }) {
         <div style={{ fontSize:13, fontWeight:800, color:'#fff', lineHeight:1.15, textShadow:'0 1px 5px rgba(0,0,0,0.5)' }}>{cat.l}</div>
         <div style={{ fontSize:9, color:'rgba(255,255,255,0.75)', fontWeight:500, marginTop:3, lineHeight:1.3 }}>{cat.sub}</div>
       </div>
-      <div style={{ position:'absolute', right:8, bottom:13, width:20, height:20, borderRadius:6, background:'rgba(255,255,255,0.22)', backdropFilter:'blur(6px)', border:'1px solid rgba(255,255,255,0.28)', display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontSize:13, fontWeight:700 }}>›</div>
+    <div style={{ position:'absolute', right:8, bottom:13, width:20, height:20, borderRadius:6, background:'rgba(255,255,255,0.22)', backdropFilter:'blur(6px)', border:'1px solid rgba(255,255,255,0.28)', display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontSize:13, fontWeight:700 }}>›</div>
     </button>
   )
 }
 
-function SubsPanel({ cat, activeSub, onSub }) {
+function SubsPanel({ cat, activeSub, onSub, onTout }) {
   return (
     <div className="anim-down" style={{ background:'#fff', borderRadius:16, padding:'12px 14px 14px', marginTop:8, marginBottom:2, boxShadow:`0 4px 20px rgba(0,0,0,0.09),inset 0 0 0 1.5px ${cat.c}25` }}>
       <div style={{ display:'flex', alignItems:'center', gap:7, marginBottom:10 }}>
@@ -111,6 +133,14 @@ function SubsPanel({ cat, activeSub, onSub }) {
         <span style={{ fontSize:11, color:'#9AAABB' }}>— Que cherches-tu ?</span>
       </div>
       <div className="scroll-x" style={{ display:'flex', gap:7, paddingBottom:2 }}>
+        {/* 🆕 Bouton Tout — premier dans la liste */}
+        <button onClick={onTout} style={{
+          padding:'8px 15px', borderRadius:99, fontSize:12, fontWeight:700, flexShrink:0, transition:'all .18s',
+          background: activeSub===null ? cat.c : '#F5F3F0',
+          color: activeSub===null ? '#fff' : '#5A6A82',
+          border: activeSub===null ? 'none' : '1.5px solid #EDE8E1',
+          boxShadow: activeSub===null ? `0 3px 10px ${cat.c}44` : 'none',
+        }}>Tout</button>
         {cat.subs.map(s => (
           <button key={s} onClick={() => onSub(s)} style={{
             padding:'8px 15px', borderRadius:99, fontSize:12, fontWeight:700, flexShrink:0, transition:'all .18s',
@@ -385,9 +415,27 @@ export default function App() {
     } finally { setLoading(false) }
   }, [activeCat, activeSub, budget, city, radius])
 
+  // 🆕 Recherche "Tout" — toute la catégorie sans filtre sous-catégorie
+  const doSearchTout = useCallback(async (catId) => {
+    if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); return }
+    const config = TOUT_CONFIG[catId]
+    if (!config) return
+    setActiveSub(null)
+    setLoading(true); setSearchError(null); setHasSearched(true)
+    try {
+      const activities = await searchActivities({ city:city.trim(), radiusKm:radius, budget, catId, subName:config.keyword })
+      if (activities.length===0) { setSearchError(`Aucun résultat dans un rayon de ${radius} km autour de "${city}". Essayez d'élargir la zone.`); setResults([]) }
+      else { setResults(activities); setSearchError(null); setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth', block:'start' }), 300) }
+    } catch (err) {
+      console.error('[FelioKids]',err)
+      setSearchError('Une erreur est survenue. Vérifiez votre connexion.')
+      setResults([])
+    } finally { setLoading(false) }
+  }, [city, radius, budget])
+
   const clickCat = (id) => {
     if (activeCat===id) { setActiveCat(null); setActiveSub(null); setResults([]); setHasSearched(false) }
-    else { setActiveCat(id); setActiveSub(null); doSearch(id, null, budget) }
+    else { setActiveCat(id); setActiveSub(null) }
   }
   const clickSub = (sub) => { const next = activeSub===sub?null:sub; setActiveSub(next); doSearch(activeCat, next, budget) }
 
@@ -417,7 +465,14 @@ export default function App() {
             {row.map((cat,j) => <CatTile key={cat.id} cat={cat} active={activeCat===cat.id} delay={(i+j)*0.04} onClick={() => clickCat(cat.id)} />)}
             {row.length < 3 && Array(3-row.length).fill(0).map((_,k) => <div key={`e${k}`} />)}
           </div>
-          {activeInRow && <SubsPanel cat={activeInRow} activeSub={activeSub} onSub={clickSub} />}
+          {activeInRow && (
+            <SubsPanel
+              cat={activeInRow}
+              activeSub={activeSub}
+              onSub={clickSub}
+              onTout={() => doSearchTout(activeInRow.id)}
+            />
+          )}
         </div>
       )
     }
