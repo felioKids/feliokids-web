@@ -616,7 +616,7 @@ export default function App() {
           <div style={{ flex:1, height:1, background:'#EDE8E1' }} />
         </div>
 
-        <div style={{ padding:'0 14px 0' }}>{renderCatGrid()}</div>
+        <div style={{ padding:'0 8px 0' }}>{renderCatGrid()}</div>
 
         <div id="results-section" style={{ padding:'8px 14px 0' }}>
           {searchError && (
