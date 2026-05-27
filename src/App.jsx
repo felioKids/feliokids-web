@@ -69,7 +69,7 @@ function HeroSlideshow({ onWeekendClick }) {
   const [popupOpen, setPopupOpen] = useState(false)
   useEffect(() => { const t = setInterval(() => setCur(c => (c+1)%SLIDES.length), 4500); return () => clearInterval(t) }, [])
   return (
-    <div style={{ position:'relative', width:'100%', height:'300px', overflow:'hidden', flexShrink:0 }}>
+    <div style={{ position:'relative', width:'100%', height:'180px', overflow:'hidden', flexShrink:0 }}>
       {SLIDES.map((s,i) => (
         <div key={i} style={{ position:'absolute', inset:0, opacity:i===cur?1:0, transition:'opacity 1.2s ease', zIndex:i===cur?1:0 }}>
           <img src={s.img} alt="" style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'center 25%' }} />
@@ -434,9 +434,10 @@ export default function App() {
   }, [city, radius, budget])
 
   const clickCat = (id) => {
-    if (activeCat===id) { setActiveCat(null); setActiveSub(null); setResults([]); setHasSearched(false) }
-    else { setActiveCat(id); setActiveSub(null) }
-  }
+ if (id === 'events') { setSearchError("✨ Weekend & Événements — Bientôt disponible !"); setTimeout(() => setSearchError(null), 3000); return }
+  if (activeCat===id) { setActiveCat(null); setActiveSub(null); setResults([]); setHasSearched(false) }
+  else { setActiveCat(id); setActiveSub(null) }
+}
   const clickSub = (sub) => { const next = activeSub===sub?null:sub; setActiveSub(next); doSearch(activeCat, next, budget) }
 
   const filterByAge = (activity) => {
