@@ -31,7 +31,7 @@ export function buildPhotoUrl(photoReference, maxwidth = 600) {
 }
 
 // ─── Główna funkcja wyszukiwania ──────────────────────────────────────────────
-export async function searchActivitiesGoogle({ lat, lng, radius, type, keyword, catId }) {
+export async function searchActivitiesGoogle({ lat, lng, radius, type, keyword, catId, textsearch }) {
   const cacheKey = makeCacheKey(lat, lng, radius, type, keyword);
 
   const cached = getCached(cacheKey);
@@ -44,7 +44,7 @@ export async function searchActivitiesGoogle({ lat, lng, radius, type, keyword, 
 
   logRequest('search', cacheKey, { lat, lng, radius, type, keyword, catId });
 
-  const fetchPromise = _doFetch({ lat, lng, radius, type, keyword, catId })
+  const fetchPromise = _doFetch({ lat, lng, radius, type, keyword, catId, textsearch })
     .then((results) => {
       setCached(cacheKey, results);
       return results;
@@ -59,7 +59,7 @@ export async function searchActivitiesGoogle({ lat, lng, radius, type, keyword, 
 }
 
 // ─── Wewnętrzna funkcja fetch ─────────────────────────────────────────────────
-async function _doFetch({ lat, lng, radius, type, keyword, catId }) {
+async function _doFetch({ lat, lng, radius, type, keyword, catId, textsearch }) {
   const params = new URLSearchParams({
     lat: lat.toString(),
     lng: lng.toString(),
@@ -67,7 +67,8 @@ async function _doFetch({ lat, lng, radius, type, keyword, catId }) {
     language: 'fr',
   });
   if (type) params.set('type', type);
-  if (keyword) params.set('keyword', keyword);
+if (keyword) params.set('keyword', keyword);
+if (textsearch) params.set('textsearch', 'true');
 
   const response = await fetch(`/api/search?${params.toString()}`);
 
@@ -94,14 +95,26 @@ async function _doFetch({ lat, lng, radius, type, keyword, catId }) {
 ]);
 
 const BLOCKED_NAME_KEYWORDS = [
+  // Remonty / budowlanka
   'travaux', 'couvreur', 'plombier', 'électricien', 'maçon',
   'peintre', 'menuisier', 'charpentier', 'isolation', 'toiture',
   'assurance', 'avocat', 'notaire', 'comptable', 'agence immobilière',
+  // Zdrowie / terapia
   'thérapeute', 'therapeute', 'psychologue', 'ostéopathe', 'osteopathe',
   'kinésithérapeute', 'kinesitherapeute', 'sophrologue', 'naturopathe',
   'médecin', 'medecin', 'cabinet médical', 'infirmier', 'infirmière',
+  // Mistyka / afrykańskie
+  'medium', 'marabout', 'voyant', 'voyante', 'guérisseur', 'guerisseur',
+  'sorcier', 'envoûtement', 'envouter', 'retour affectif', 'charlatan',
+  // Restauracje / bary / tabac
+  'tabac', 'chicha', 'kebab', 'brasserie', 'bistro', 'bistrot',
+  'cantine', 'turkish food', 'seoul bbq', 'snack', 'boucherie',
+  // Samochody / przejazdy
+  'auto', 'conduite', 'driving', 'automobile', 'garage', 'carrosserie',
+  'concessionnaire', 'location voiture', 'taxi', 'transport',
+  // Inne
+  'conception et installation', 'conseil pour votre', 'diaconesses',
 ];
-
 const results = data.results || [];
 
 const activities = results
@@ -134,10 +147,14 @@ const activities = results
     return true;
   });
 
-  // Sortowanie po dystansie od centrum
-  unique.sort((a, b) => haversine(lat, lng, a.lat, a.lng) - haversine(lat, lng, b.lat, b.lng));
+  // Filtrowanie po rzeczywistym dystansie — Google czasem zwraca wyniki poza promieniem
+const radiusKm = radius / 1000;
+const filtered = unique.filter(a => haversine(lat, lng, a.lat, a.lng) <= radiusKm);
 
-  return unique;
+// Sortowanie po dystansie od centrum
+filtered.sort((a, b) => haversine(lat, lng, a.lat, a.lng) - haversine(lat, lng, b.lat, b.lng));
+
+return filtered;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────

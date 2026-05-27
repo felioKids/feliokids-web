@@ -14,23 +14,23 @@ const SLIDES = [
 
 const CATS = [
   { id:'gratuit',      l:'Gratuit',              sub:'Tout gratuit près de toi',    c:'#3DAA6E', img:'https://images.unsplash.com/photo-1519331379826-f10be5486c6f?w=400&q=80',
-    subs:['Parcs & jardins','Forêts & balades','Plages & lacs','Musées gratuits','Événements gratuits','Pistes cyclables','Bibliothèques','Zoos gratuits',"Fontaines & jets d'eau"] },
+    subs:['Parcs & jardins','Forêts & balades','Plages & lacs','Musées gratuits','Pistes cyclables','Bibliothèques',"Fontaines & jets d'eau"] },
   { id:'anniversaire', l:'Anniversaires',         sub:"L'anniversaire parfait",      c:'#FF4081', img:'https://images.unsplash.com/photo-1464349153735-7db50ed83c84?w=400&q=80',
-    subs:['Bowling & laser game','Accrobranche','Restaurants fête','Ateliers créatifs','Escape game','Cinéma privatisé','Karting enfants','Parcs aquatiques'] },
+    subs:['Bowling & laser game','Accrobranche','Ateliers créatifs','Escape game','Karting enfants','Parcs aquatiques'] },
   { id:'pluie',        l:'Pluie & Intérieur',     sub:'Quand il pleut dehors',       c:'#4A6FA5', img:'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&q=80',
-    subs:['Cinéma','Bowling','Aquarium','Trampoline','Laser game','Musées interactifs','Piscines couvertes','Bibliothèques & médiathèques','Cafés jeux','Ateliers créatifs'] },
+    subs:['Cinéma','Bowling','Aquarium','Trampoline','Laser game','Musées interactifs','Piscines couvertes','Bibliothèques & médiathèques','Ateliers créatifs'] },
   { id:'culture',      l:'Culture & Découverte',  sub:"Apprendre en s'amusant",      c:'#7C3AED', img:'https://images.unsplash.com/photo-1549144511-f099e773c147?w=400&q=80',
-    subs:["Châteaux & histoire","Musées d'art",'Théâtre enfants','Planétarium','Sciences & découverte','Patrimoine UNESCO','Visites guidées famille','Cirque'] },
+    subs:["Châteaux & histoire","Musées d'art",'Théâtre enfants','Planétarium','Patrimoine UNESCO','Cirque'] },
   { id:'nature',       l:'Nature & Animaux',      sub:'Plein air & rencontres',      c:'#059669', img:'https://images.unsplash.com/photo-1534567153574-2b12153a87f0?w=400&q=80',
-    subs:['Forêts & randonnée','Lacs & baignade','Plages','Zoos & parcs animaliers','Fermes pédagogiques','Cascades','Pêche en famille','Barbecue légal','Cueillette fruits','Camping & picnic','Observation oiseaux'] },
+    subs:['Forêts & randonnée','Lacs & baignade','Plages','Zoos & parcs animaliers','Fermes pédagogiques','Cascades','Pêche en famille','Barbecue légal','Cueillette','Camping & picnic','Observation oiseaux'] },
   { id:'sport',        l:'Sport & Activités',     sub:'Bougez en famille',           c:'#2F80ED', img:'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&q=80',
     subs:['Vélo & VTT','Football & terrains','Piscines','Ski & glisse','Tennis & padel','Accrobranche','Skateparks','Patinoire','Escalade','Ping-pong','Sports nautiques'] },
-  { id:'events',       l:'Weekend & Événements',  sub:'Ce weekend près de toi',      c:'#1B2B4B', img:'https://images.unsplash.com/photo-1498931299472-f7a63a5a1cfa?w=400&q=80',
+  { id:'events',       l:'Weekend & Événements',  sub:'Bientôt disponible',          c:'#1B2B4B', img:'https://images.unsplash.com/photo-1498931299472-f7a63a5a1cfa?w=400&q=80',
     subs:['Festivals famille','Fêtes & marchés','Brocante','Spectacles','Expos temporaires','Concerts gratuits',"Feux d'artifice",'Événements saisonniers','Compétitions sportives'] },
-  { id:'halte',        l:'Halte Garderie',        sub:'1h pour vous ressourcer',     c:'#8B5CF6', img:'https://images.unsplash.com/photo-1526634332515-d56c5fd16991?w=400&q=80',
-    subs:['Sport avec garderie','IKEA Småland','Centres de loisirs','Ateliers sans parents','Espaces kids galeries','Piscines avec garderie','Associations locales'] },
+  { id:'resto',        l:'Restaurants famille',   sub:'Bien manger après',           c:'#E8734A', img:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=80',
+    subs:['Pizzerias','Crêperies','Burgers & grill','Sushi & japonais','Glaciers & glaces','Cuisine locale'] },
   { id:'ateliers',     l:'Ateliers Créatifs',     sub:"Créer & s'exprimer",          c:'#D97706', img:'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400&q=80',
-    subs:['Ateliers peinture','Poterie enfants','Cuisine créative','Ateliers musique','Bibliothèques & médiathèques','Ateliers science','Couture & DIY','Théâtre enfants','Ateliers numériques'] },
+    subs:['Ateliers peinture','Poterie enfants','Ateliers musique','Bibliothèques & médiathèques','Ateliers science','Couture & DIY','Théâtre enfants'] },
 ]
 
 function FelioLogo({ size = 36, fontSize = 14 }) {
@@ -58,7 +58,10 @@ function HeroSlideshow({ onWeekendClick }) {
         <button onClick={() => window.location.reload()} style={{ display:'flex', alignItems:'center', gap:9, background:'none', border:'none', cursor:'pointer', padding:0 }}>
           <FelioLogo size={36} fontSize={14} />
           <div>
-            <div style={{ fontWeight:800, fontSize:16, color:'#fff', lineHeight:1, textShadow:'0 1px 6px rgba(0,0,0,0.3)', display:'flex', alignItems:'center' }}><span style={{ fontFamily:'Georgia, serif', fontWeight:800, fontSize:16, color:'#fff' }}>f</span><span style={{ fontFamily:'Outfit, sans-serif', fontWeight:800, fontSize:16, color:'#fff' }}>elioKids</span></div>
+            <div style={{ fontWeight:800, fontSize:16, color:'#fff', lineHeight:1, textShadow:'0 1px 6px rgba(0,0,0,0.3)', display:'flex', alignItems:'center' }}>
+              <span style={{ fontFamily:'Georgia, serif', fontWeight:800, fontSize:16, color:'#fff' }}>f</span>
+              <span style={{ fontFamily:'Outfit, sans-serif', fontWeight:800, fontSize:16, color:'#fff' }}>elioKids</span>
+            </div>
             <div style={{ fontSize:9, color:'rgba(255,255,255,0.65)', fontWeight:600, letterSpacing:'0.8px' }}>FAMILY DISCOVERY</div>
           </div>
         </button>
@@ -188,7 +191,7 @@ function getDiscoverQueries(ageFilter) {
     { catId:'pluie',   subName:'Piscines couvertes' },
     { catId:'pluie',   subName:'Bibliothèques & médiathèques' },
     { catId:'nature',  subName:'Fermes pédagogiques' },
-    { catId:'ateliers',subName:'Ateliers créatifs' },
+    { catId:'ateliers',subName:'Ateliers peinture' },
   ]
   if (ageFilter === '4-6') return [
     { catId:'nature',  subName:'Zoos & parcs animaliers' },
@@ -251,7 +254,6 @@ function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasS
   )
 }
 
-// Ikona GPS — dyskretny celownik SVG
 function GpsIcon({ loading, active }) {
   if (loading) return (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ animation:'spin 0.9s linear infinite', flexShrink:0 }}>
@@ -291,7 +293,7 @@ export default function App() {
   const [ageFilter,     setAgeFilter]     = useState(null)
   const [openNowFilter, setOpenNowFilter] = useState(false)
   const [gpsLoading,    setGpsLoading]    = useState(false)
-  const [gpsActive,     setGpsActive]     = useState(false) // GPS było użyte
+  const [gpsActive,     setGpsActive]     = useState(false)
   const cityTimer = useRef(null)
 
   const fetchWeather = async (lat, lng) => {
@@ -328,7 +330,6 @@ export default function App() {
     await fetchWeather(s.lat, s.lon)
   }, [])
 
-  // GPS — dyskretny, jeden klik
   const handleGps = useCallback(() => {
     if (!navigator.geolocation || gpsLoading) return
     setGpsLoading(true)
@@ -354,12 +355,11 @@ export default function App() {
           setShowSugg(false)
           await fetchWeather(lat, lng)
         } catch {
-          // cichy błąd — pole zostaje puste, użytkownik wpisze ręcznie
         } finally {
           setGpsLoading(false)
         }
       },
-      () => { setGpsLoading(false) }, // odmowa — nic nie robimy, brak komunikatu
+      () => { setGpsLoading(false) },
       { timeout: 10000, maximumAge: 0, enableHighAccuracy: false }
     )
   }, [gpsLoading])
@@ -398,7 +398,7 @@ export default function App() {
     const types = activity.types || []
     const name = (activity.name||'').toLowerCase()
     if (ageFilter==='0-3') {
-      const ok = ['gratuit','nature','ateliers','halte'].includes(cat)
+      const ok = ['gratuit','nature','ateliers','resto'].includes(cat)
       const block = types.some(t => ['bowling_alley','amusement_park','movie_theater'].includes(t)) || ['karting','accrobranche','escalade','laser','trampoline','escape','patinoire'].some(k => name.includes(k))
       return ok && !block
     }
@@ -433,7 +433,7 @@ export default function App() {
         <div style={{ padding:'0 14px', marginTop:-26, position:'relative', zIndex:10 }}>
           <div style={{ background:'#fff', borderRadius:24, padding:'22px 18px', boxShadow:'0 8px 40px rgba(27,43,75,0.13)', border:'1px solid #F0EBE3' }}>
 
-            {/* 1. Ville — pole z dyskretną ikonką GPS po prawej */}
+            {/* 1. Ville */}
             <div style={{ position:'relative', marginBottom:14 }}>
               <div className="city-field" style={{ display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:14, padding:'12px 15px', gap:10, border:`1.5px solid ${gpsActive ? '#FFCFC4' : '#EDE8E1'}`, transition:'border-color .2s' }}>
                 <span style={{ fontSize:16, flexShrink:0 }}>📍</span>
@@ -450,19 +450,18 @@ export default function App() {
                 {city && !weather && !gpsLoading && (
                   <button onClick={() => { setCity(''); setWeather(null); setGpsActive(false) }} style={{ color:'#C5C5C5', fontSize:14, flexShrink:0 }}>✕</button>
                 )}
-                {/* Ikonka GPS — dyskretna, zawsze widoczna po prawej */}
                 <button
-  onClick={handleGps}
-  className="gps-btn"
-  title="Utiliser ma position GPS"
-  style={{ background:'none', border:'none', cursor: gpsLoading ? 'wait' : 'pointer', padding:2, display:'flex', alignItems:'center', gap:5, flexShrink:0, opacity: gpsLoading ? 0.6 : 1, transition:'opacity .2s' }}
->
+                  onClick={handleGps}
+                  className="gps-btn"
+                  title="Utiliser ma position GPS"
+                  style={{ background:'none', border:'none', cursor: gpsLoading ? 'wait' : 'pointer', padding:2, display:'flex', alignItems:'center', gap:5, flexShrink:0, opacity: gpsLoading ? 0.6 : 1, transition:'opacity .2s' }}
                 >
                   <GpsIcon loading={gpsLoading} active={gpsActive} />
+                  <span style={{ fontSize:11, fontWeight:700, color: gpsActive ? '#FF6B4A' : '#C5C5C5', whiteSpace:'nowrap' }}>
+                    {gpsLoading ? 'Localisation...' : 'Ma position'}
+                  </span>
                 </button>
               </div>
-
-              {/* Suggestions ville */}
               {showSugg && citySuggs.length > 0 && (
                 <div className="anim-down" style={{ position:'absolute', top:'110%', left:0, right:0, background:'#fff', borderRadius:15, boxShadow:'0 8px 32px rgba(27,43,75,0.13)', zIndex:50, overflow:'hidden', border:'1px solid #F0EBE3' }}>
                   {citySuggs.map((s,i) => (

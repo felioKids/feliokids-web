@@ -2,15 +2,12 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import LazyImage from './LazyImage.jsx';
 
-// ─── Kategorie BEZ przycisku Réserver ────────────────────────────────────────
 const NO_RESERVER_TYPES = new Set([
   'shopping_mall', 'supermarket', 'department_store',
   'park', 'library', 'school', 'church', 'cemetery',
   'locality', 'neighborhood', 'route',
 ]);
 const NO_RESERVER_CATS = new Set(['gratuit', 'nature', 'halte']);
-
-// Kategorie płatne → przycisk Réserver
 const PAID_CATS = new Set(['anniversaire']);
 const PAID_TYPES = new Set([
   'amusement_park', 'bowling_alley', 'movie_theater', 'aquarium', 'zoo',
@@ -31,11 +28,12 @@ function isPaidActivity(activity) {
   return false;
 }
 
-// ─── Linki ────────────────────────────────────────────────────────────────────
+function isRestaurant(activity) {
+  return activity.catId === 'resto';
+}
+
 function getCallUrl(activity) {
-  if (activity.place_id) {
-    return `https://www.google.com/maps/place/?q=place_id:${activity.place_id}`;
-  }
+  if (activity.place_id) return `https://www.google.com/maps/place/?q=place_id:${activity.place_id}`;
   const dest = encodeURIComponent(`${activity.name}, ${activity.address || ''}`);
   return `https://www.google.com/maps/search/${dest}`;
 }
@@ -43,9 +41,7 @@ function getCallUrl(activity) {
 function getMapsUrl(activity) {
   const lat = activity.geometry?.location?.lat ?? activity.lat;
   const lng = activity.geometry?.location?.lng ?? activity.lng;
-  if (lat != null && lng != null) {
-    return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-  }
+  if (lat != null && lng != null) return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
   const dest = encodeURIComponent(`${activity.name}, ${activity.address || ''}`);
   return `https://www.google.com/maps/dir/?api=1&destination=${dest}`;
 }
@@ -55,27 +51,26 @@ function getFunbookerUrl(activity) {
   return `https://www.funbooker.com/fr/recherche?q=${q}&ref=feliokids`;
 }
 
+function getTheForkUrl(activity) {
+  const q = encodeURIComponent(activity.name || '');
+  return `https://www.thefork.fr/recherche?q=${q}&utm_source=feliokids`;
+}
+
 async function shareActivity(activity) {
   const text = `J'ai trouvé une super activité pour les enfants : ${activity.name}`;
   const url = `https://www.feliokids.com`;
   if (navigator.share) {
-    try {
-      await navigator.share({ title: activity.name, text, url });
-    } catch {}
+    try { await navigator.share({ title: activity.name, text, url }); } catch {}
   } else {
     await navigator.clipboard.writeText(`${text} — ${url}`);
     alert('Lien copié !');
   }
 }
 
-// ─── Fetch restaurants kids-friendly ─────────────────────────────────────────
-// Szuka fast food, a jeśli mało wyników → dokłada zwykłe restauracje w pobliżu
 async function fetchKidsRestaurants(lat, lng) {
   const keywords = ['McDonald', 'Burger King', 'KFC', 'Quick', 'Subway', 'pizza', 'crêperie', 'kebab', 'Brioche Dorée'];
   const allResults = [];
   const seen = new Set();
-
-  // 1. Szukaj fast food po keywords
   await Promise.all(keywords.map(async (kw) => {
     try {
       const params = new URLSearchParams({ lat, lng, radius: 2000, type: 'restaurant', keyword: kw, language: 'fr' });
@@ -85,10 +80,8 @@ async function fetchKidsRestaurants(lat, lng) {
       (data.results || []).slice(0, 2).forEach(r => {
         if (!seen.has(r.place_id)) { seen.add(r.place_id); allResults.push(r); }
       });
-    } catch { /* ignore */ }
+    } catch {}
   }));
-
-  // 2. Jeśli mało wyników (mała miejscowość) → dokłada zwykłe restauracje
   if (allResults.length < 3) {
     try {
       const params = new URLSearchParams({ lat, lng, radius: 3000, type: 'restaurant', language: 'fr' });
@@ -99,9 +92,8 @@ async function fetchKidsRestaurants(lat, lng) {
           if (!seen.has(r.place_id)) { seen.add(r.place_id); allResults.push(r); }
         });
       }
-    } catch { /* ignore */ }
+    } catch {}
   }
-
   return allResults.slice(0, 5);
 }
 
@@ -113,7 +105,6 @@ async function fetchNearby(lat, lng, type) {
   return (data.results || []).slice(0, 4);
 }
 
-// ─── Directions URL dla itemów w MiniList ────────────────────────────────────
 function getDirectionsUrl(item) {
   let lat = item.geometry?.location?.lat;
   let lng = item.geometry?.location?.lng;
@@ -122,131 +113,82 @@ function getDirectionsUrl(item) {
   if (lat == null) lat = item.lat;
   if (lng == null) lng = item.lng;
   const destinationText = [item.name, item.vicinity].filter(Boolean).join(', ');
-  if (item.place_id && lat != null && lng != null) {
+  if (item.place_id && lat != null && lng != null)
     return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&destination_place_id=${item.place_id}`;
-  }
-  if (item.place_id && destinationText) {
+  if (item.place_id && destinationText)
     return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destinationText)}&destination_place_id=${item.place_id}`;
-  }
-  if (lat != null && lng != null) {
+  if (lat != null && lng != null)
     return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-  }
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(destinationText)}`;
 }
 
-// ─── Mini-lista wyników ───────────────────────────────────────────────────────
 function MiniList({ items, type, onClose, loading }) {
   const isParking = type === 'parking';
   const icon  = isParking ? '🅿️' : '🍔';
   const title = isParking ? 'Parkings à proximité' : 'Manger à proximité';
-
   return (
-    <div style={{
-      position: 'absolute', bottom: 'calc(100% + 8px)', left: 0, right: 0,
-      background: '#fff', borderRadius: '12px',
-      boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
-      zIndex: 100, padding: '12px', maxHeight: '220px', overflowY: 'auto',
-    }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-        <span style={{ fontSize: '12px', fontWeight: 700, fontFamily: 'Bricolage Grotesque, sans-serif', color: '#1a1a1a' }}>
-          {title}
-        </span>
-        <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px', color: '#aaa', padding: '0 2px' }}>✕</button>
+    <div style={{ position:'absolute', bottom:'calc(100% + 8px)', left:0, right:0, background:'#fff', borderRadius:'12px', boxShadow:'0 8px 32px rgba(0,0,0,0.18)', zIndex:100, padding:'12px', maxHeight:'220px', overflowY:'auto' }}>
+      <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'8px' }}>
+        <span style={{ fontSize:'12px', fontWeight:700, fontFamily:'Bricolage Grotesque, sans-serif', color:'#1a1a1a' }}>{title}</span>
+        <button onClick={onClose} style={{ background:'none', border:'none', cursor:'pointer', fontSize:'14px', color:'#aaa', padding:'0 2px' }}>✕</button>
       </div>
-
       <style>{`@keyframes fk-spin { to { transform: rotate(360deg); } }`}</style>
-
       {loading ? (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 0' }}>
-          <div style={{ width: '16px', height: '16px', borderRadius: '50%', border: '2px solid #FFE8E1', borderTopColor: '#FF6B4A', animation: 'fk-spin 0.7s linear infinite', flexShrink: 0 }} />
-          <span style={{ fontSize: '12px', color: '#aaa', fontFamily: 'Outfit, sans-serif' }}>Recherche en cours...</span>
+        <div style={{ display:'flex', alignItems:'center', gap:'8px', padding:'6px 0' }}>
+          <div style={{ width:'16px', height:'16px', borderRadius:'50%', border:'2px solid #FFE8E1', borderTopColor:'#FF6B4A', animation:'fk-spin 0.7s linear infinite', flexShrink:0 }} />
+          <span style={{ fontSize:'12px', color:'#aaa', fontFamily:'Outfit, sans-serif' }}>Recherche en cours...</span>
         </div>
-
       ) : items.length === 0 && isParking ? (
-        // Parking brak wyników → prawdopodobnie ma własny
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 0' }}>
-          <span style={{ fontSize: '16px' }}>🅿️</span>
-          <span style={{ fontSize: '12px', color: '#555', fontFamily: 'Outfit, sans-serif', fontStyle: 'italic' }}>
-            Parking probablement disponible sur place
-          </span>
+        <div style={{ display:'flex', alignItems:'center', gap:'8px', padding:'6px 0' }}>
+          <span style={{ fontSize:'16px' }}>🅿️</span>
+          <span style={{ fontSize:'12px', color:'#555', fontFamily:'Outfit, sans-serif', fontStyle:'italic' }}>Parking probablement disponible sur place</span>
         </div>
-
       ) : items.length === 0 ? (
-        <p style={{ fontSize: '12px', color: '#aaa', margin: 0, fontFamily: 'Outfit, sans-serif' }}>
-          Aucun résultat trouvé.
-        </p>
-
-      ) : items.map((item, i) => {
-        const mapsUrl = getDirectionsUrl(item);
-        return (
-          <a key={item.place_id || i} href={mapsUrl} target="_blank" rel="noopener noreferrer"
-            onClick={e => e.stopPropagation()}
-            style={{
-              display: 'flex', alignItems: 'flex-start', gap: '8px',
-              padding: '7px 0', borderTop: i === 0 ? 'none' : '1px solid #f0e8e0',
-              textDecoration: 'none', color: 'inherit',
-            }}>
-            <span style={{ fontSize: '14px', flexShrink: 0, marginTop: '1px' }}>{icon}</span>
-            <div style={{ minWidth: 0 }}>
-              <div style={{ fontSize: '12px', fontWeight: 600, fontFamily: 'Outfit, sans-serif', color: '#1a1a1a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                {item.name}
-              </div>
-              {item.vicinity && (
-                <div style={{ fontSize: '11px', color: '#aaa', fontFamily: 'Outfit, sans-serif', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                  {item.vicinity}
-                </div>
-              )}
-            </div>
-            <div style={{ marginLeft: 'auto', flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '3px' }}>
-              {item.rating && (
-                <span style={{ fontSize: '11px', color: '#FF6B4A', fontWeight: 600, fontFamily: 'Outfit, sans-serif' }}>
-                  ★ {item.rating}
-                </span>
-              )}
-              {item.opening_hours?.open_now !== undefined && (
-                <span style={{
-                  fontSize: '9px', fontWeight: 700, fontFamily: 'Outfit, sans-serif',
-                  color: item.opening_hours.open_now ? '#22c55e' : '#ef4444',
-                  whiteSpace: 'nowrap',
-                }}>
-                  {item.opening_hours.open_now ? '● Ouvert' : '● Fermé'}
-                </span>
-              )}
-            </div>
-          </a>
-        );
-      })}
+        <p style={{ fontSize:'12px', color:'#aaa', margin:0, fontFamily:'Outfit, sans-serif' }}>Aucun résultat trouvé.</p>
+      ) : items.map((item, i) => (
+        <a key={item.place_id || i} href={getDirectionsUrl(item)} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()}
+          style={{ display:'flex', alignItems:'flex-start', gap:'8px', padding:'7px 0', borderTop:i===0?'none':'1px solid #f0e8e0', textDecoration:'none', color:'inherit' }}>
+          <span style={{ fontSize:'14px', flexShrink:0, marginTop:'1px' }}>{icon}</span>
+          <div style={{ minWidth:0 }}>
+            <div style={{ fontSize:'12px', fontWeight:600, fontFamily:'Outfit, sans-serif', color:'#1a1a1a', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{item.name}</div>
+            {item.vicinity && <div style={{ fontSize:'11px', color:'#aaa', fontFamily:'Outfit, sans-serif', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{item.vicinity}</div>}
+          </div>
+          <div style={{ marginLeft:'auto', flexShrink:0, display:'flex', flexDirection:'column', alignItems:'flex-end', gap:'3px' }}>
+            {item.rating && <span style={{ fontSize:'11px', color:'#FF6B4A', fontWeight:600, fontFamily:'Outfit, sans-serif' }}>★ {item.rating}</span>}
+            {item.opening_hours?.open_now !== undefined && (
+              <span style={{ fontSize:'9px', fontWeight:700, fontFamily:'Outfit, sans-serif', color:item.opening_hours.open_now?'#22c55e':'#ef4444', whiteSpace:'nowrap' }}>
+                {item.opening_hours.open_now ? '● Ouvert' : '● Fermé'}
+              </span>
+            )}
+          </div>
+        </a>
+      ))}
     </div>
   );
 }
 
-// ─── Przycisk akcji ───────────────────────────────────────────────────────────
 function ActionBtn({ emoji, label, onClick, href, loading, active, style = {} }) {
   const base = {
-    display: 'flex', flexDirection: 'column', alignItems: 'center',
-    gap: '2px', padding: '6px 4px',
+    display:'flex', flexDirection:'column', alignItems:'center',
+    gap:'2px', padding:'6px 4px',
     background: active ? '#FFE8E1' : '#f5f0ea',
     border: active ? '1.5px solid #FF6B4A' : '1.5px solid transparent',
-    borderRadius: '10px', cursor: 'pointer', flex: 1,
-    transition: 'background 0.15s, border-color 0.15s',
-    textDecoration: 'none', ...style,
+    borderRadius:'10px', cursor:'pointer', flex:1,
+    transition:'background 0.15s, border-color 0.15s',
+    textDecoration:'none', ...style,
   };
   const inner = (
     <>
-      <span style={{ fontSize: '16px', lineHeight: 1, display:'flex', alignItems:'center', justifyContent:'center', color:'#555' }}>{loading ? '⏳' : emoji}</span>
-      <span style={{ fontSize: '9.5px', fontFamily: 'Outfit, sans-serif', fontWeight: 600, color: active ? '#FF6B4A' : '#555', whiteSpace: 'nowrap', letterSpacing: '0.01em' }}>
-        {label}
-      </span>
+      <span style={{ fontSize:'16px', lineHeight:1, display:'flex', alignItems:'center', justifyContent:'center', color:'#555' }}>{loading ? '⏳' : emoji}</span>
+      <span style={{ fontSize:'9.5px', fontFamily:'Outfit, sans-serif', fontWeight:600, color:active?'#FF6B4A':'#555', whiteSpace:'nowrap', letterSpacing:'0.01em' }}>{label}</span>
     </>
   );
   if (href) return <a href={href} target="_blank" rel="noopener noreferrer" style={base} onClick={e => e.stopPropagation()}>{inner}</a>;
   return <button style={base} onClick={e => { e.stopPropagation(); onClick?.(); }}>{inner}</button>;
 }
 
-// ─── Główny komponent ─────────────────────────────────────────────────────────
 export default function ActivityCard({ activity, onSelect, distanceKm }) {
   const { name, address, rating, ratingsTotal, photoReference, fallbackPhoto, openNow } = activity;
-
   const [parkingData, setParkingData] = useState(null);
   const [mangerData,  setMangerData]  = useState(null);
   const [activePanel, setActivePanel] = useState(null);
@@ -255,6 +197,7 @@ export default function ActivityCard({ activity, onSelect, distanceKm }) {
   const lat = activity.geometry?.location?.lat ?? activity.lat;
   const lng = activity.geometry?.location?.lng ?? activity.lng;
   const paid = isPaidActivity(activity);
+  const resto = isRestaurant(activity);
   const openStatus = openNow ?? activity.opening_hours?.open_now ?? null;
 
   useEffect(() => {
@@ -291,57 +234,44 @@ export default function ActivityCard({ activity, onSelect, distanceKm }) {
   const dist = formatDistance(distanceKm);
 
   return (
-    <article
-      ref={cardRef}
-      className="activity-card"
-      onClick={() => onSelect?.(activity)}
-      style={{
-        borderRadius: '16px', overflow: 'visible', background: '#FFF8F1',
-        boxShadow: '0 2px 12px rgba(0,0,0,0.08)', cursor: 'pointer',
-        transition: 'transform 0.2s ease, box-shadow 0.2s ease', position: 'relative',
-      }}
-      onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(0,0,0,0.12)'; }}
-      onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.08)'; }}
+    <article ref={cardRef} className="activity-card" onClick={() => onSelect?.(activity)}
+      style={{ borderRadius:'16px', overflow:'visible', background:'#FFF8F1', boxShadow:'0 2px 12px rgba(0,0,0,0.08)', cursor:'pointer', transition:'transform 0.2s ease, box-shadow 0.2s ease', position:'relative', marginBottom:'16px' }}
+      onMouseEnter={e => { e.currentTarget.style.transform='translateY(-3px)'; e.currentTarget.style.boxShadow='0 6px 20px rgba(0,0,0,0.12)'; }}
+      onMouseLeave={e => { e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 2px 12px rgba(0,0,0,0.08)'; }}
     >
-      <div style={{ borderRadius: '16px 16px 0 0', overflow: 'hidden', position: 'relative' }}>
-        <LazyImage photoReference={photoReference} fallbackSrc={fallbackPhoto} alt={name} style={{ height: '180px', width: '100%' }} />
+      <div style={{ borderRadius:'16px 16px 0 0', overflow:'hidden', position:'relative' }}>
+        <LazyImage photoReference={photoReference} fallbackSrc={fallbackPhoto} alt={name} style={{ height:'180px', width:'100%' }} />
         {openStatus !== null && (
-          <span style={{
-            position: 'absolute', top: '10px', right: '10px',
-            background: openStatus ? 'rgba(34,197,94,0.92)' : 'rgba(239,68,68,0.88)',
-            color: '#fff', fontSize: '10px', fontWeight: 700,
-            fontFamily: 'Outfit, sans-serif', padding: '3px 8px',
-            borderRadius: '20px', letterSpacing: '0.03em', backdropFilter: 'blur(4px)',
-          }}>
+          <span style={{ position:'absolute', top:'10px', right:'10px', background:openStatus?'rgba(34,197,94,0.92)':'rgba(239,68,68,0.88)', color:'#fff', fontSize:'10px', fontWeight:700, fontFamily:'Outfit, sans-serif', padding:'3px 8px', borderRadius:'20px', letterSpacing:'0.03em', backdropFilter:'blur(4px)' }}>
             {openStatus ? '● Ouvert' : '● Fermé'}
           </span>
         )}
       </div>
 
-      <div style={{ padding: '14px 16px 12px' }}>
-        <h3 style={{ margin: '0 0 4px', fontSize: '15px', fontFamily: 'Bricolage Grotesque, sans-serif', fontWeight: 700, color: '#1a1a1a', lineHeight: 1.3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+      <div style={{ padding:'14px 16px 12px' }}>
+        <h3 style={{ margin:'0 0 4px', fontSize:'15px', fontFamily:'Bricolage Grotesque, sans-serif', fontWeight:700, color:'#1a1a1a', lineHeight:1.3, display:'-webkit-box', WebkitLineClamp:2, WebkitBoxOrient:'vertical', overflow:'hidden' }}>
           {name}
         </h3>
         {address && (
-          <p style={{ margin: '0 0 8px', fontSize: '12px', color: '#888', fontFamily: 'Outfit, sans-serif', display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+          <p style={{ margin:'0 0 8px', fontSize:'12px', color:'#888', fontFamily:'Outfit, sans-serif', display:'-webkit-box', WebkitLineClamp:1, WebkitBoxOrient:'vertical', overflow:'hidden' }}>
             📍 {address}
           </p>
         )}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', flexWrap: 'wrap', marginBottom: '12px' }}>
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:'8px', flexWrap:'wrap', marginBottom:'12px' }}>
           {rating && (
-            <span style={{ fontSize: '12px', color: '#FF6B4A', fontFamily: 'Outfit, sans-serif', fontWeight: 600 }} title={`${ratingsTotal} avis`}>
+            <span style={{ fontSize:'12px', color:'#FF6B4A', fontFamily:'Outfit, sans-serif', fontWeight:600 }} title={`${ratingsTotal} avis`}>
               ★ {rating.toFixed(1)}
-              <span style={{ color: '#aaa', fontWeight: 400, marginLeft: '3px' }}>({ratingsTotal > 999 ? '999+' : ratingsTotal})</span>
+              <span style={{ color:'#aaa', fontWeight:400, marginLeft:'3px' }}>({ratingsTotal > 999 ? '999+' : ratingsTotal})</span>
             </span>
           )}
           {dist && (
-            <span style={{ fontSize: '11px', background: '#FFE8E1', color: '#FF6B4A', padding: '2px 8px', borderRadius: '20px', fontFamily: 'Outfit, sans-serif', fontWeight: 600, whiteSpace: 'nowrap' }}>
+            <span style={{ fontSize:'11px', background:'#FFE8E1', color:'#FF6B4A', padding:'2px 8px', borderRadius:'20px', fontFamily:'Outfit, sans-serif', fontWeight:600, whiteSpace:'nowrap' }}>
               {dist}
             </span>
           )}
         </div>
 
-        <div style={{ position: 'relative' }}>
+        <div style={{ position:'relative' }}>
           {activePanel === 'parking' && (
             <MiniList items={parkingData || []} type="parking" loading={parkingData === 'loading'} onClose={() => setActivePanel(null)} />
           )}
@@ -349,27 +279,36 @@ export default function ActivityCard({ activity, onSelect, distanceKm }) {
             <MiniList items={mangerData || []} type="manger" loading={mangerData === 'loading'} onClose={() => setActivePanel(null)} />
           )}
 
-          <div style={{ display: 'flex', gap: '6px' }}>
+          <div style={{ display:'flex', gap:'6px' }}>
             <ActionBtn emoji="🗺️" label="Itinéraire" href={getMapsUrl(activity)} />
             {activity.catId === 'anniversaire' && (
               <ActionBtn emoji="📞" label="Appeler" href={getCallUrl(activity)} />
             )}
-            {/* 🅿️ Parking — zawsze widoczny */}
             <ActionBtn emoji="🅿️" label="Parking" loading={parkingData === 'loading'} active={activePanel === 'parking'} onClick={handleParking} />
-          <ActionBtn emoji="🍔" label="Manger" loading={mangerData === 'loading'} active={activePanel === 'manger'} onClick={handleManger} />
-<ActionBtn
-  emoji={
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
-      <polyline points="16 6 12 2 8 6"/>
-      <line x1="12" y1="2" x2="12" y2="15"/>
-    </svg>
-  }
-  label="Partager"
-  onClick={() => shareActivity(activity)}
-/>
-            {paid && (
-              <ActionBtn emoji="🎟️" label="Réserver" href={getFunbookerUrl(activity)} style={{ background: '#FF6B4A', border: '1.5px solid #FF6B4A' }} />
+            {/* Pour les restaurants → pas de Manger mais TheFork */}
+            {resto ? (
+              <ActionBtn
+                emoji="🍴"
+                label="Réserver"
+                href={getTheForkUrl(activity)}
+                style={{ background:'#E8734A', border:'1.5px solid #E8734A' }}
+              />
+            ) : (
+              <ActionBtn emoji="🍔" label="Manger" loading={mangerData === 'loading'} active={activePanel === 'manger'} onClick={handleManger} />
+            )}
+            <ActionBtn
+              emoji={
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                  <polyline points="16 6 12 2 8 6"/>
+                  <line x1="12" y1="2" x2="12" y2="15"/>
+                </svg>
+              }
+              label="Partager"
+              onClick={() => shareActivity(activity)}
+            />
+            {paid && !resto && (
+              <ActionBtn emoji="🎟️" label="Réserver" href={getFunbookerUrl(activity)} style={{ background:'#FF6B4A', border:'1.5px solid #FF6B4A' }} />
             )}
           </div>
         </div>
