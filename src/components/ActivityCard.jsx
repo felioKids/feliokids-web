@@ -32,12 +32,6 @@ function isRestaurant(activity) {
   return activity.catId === 'resto';
 }
 
-function getCallUrl(activity) {
-  if (activity.place_id) return `https://www.google.com/maps/place/?q=place_id:${activity.place_id}`;
-  const dest = encodeURIComponent(`${activity.name}, ${activity.address || ''}`);
-  return `https://www.google.com/maps/search/${dest}`;
-}
-
 function getMapsUrl(activity) {
   const lat = activity.geometry?.location?.lat ?? activity.lat;
   const lng = activity.geometry?.location?.lng ?? activity.lng;
@@ -64,6 +58,24 @@ async function shareActivity(activity) {
   } else {
     await navigator.clipboard.writeText(`${text} — ${url}`);
     alert('Lien copié !');
+  }
+}
+
+// ── Pobiera telefon z naszego proxy /api/details ─────────────────────────────
+async function fetchPlaceDetails(placeId) {
+  const cacheKey = `fk_phone_${placeId}`;
+  const cached = sessionStorage.getItem(cacheKey);
+  if (cached !== null) {
+    return JSON.parse(cached);
+  }
+  try {
+    const res = await fetch(`/api/details?place_id=${encodeURIComponent(placeId)}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    sessionStorage.setItem(cacheKey, JSON.stringify(data));
+    return data;
+  } catch {
+    return null;
   }
 }
 
@@ -192,13 +204,26 @@ export default function ActivityCard({ activity, onSelect, distanceKm }) {
   const [parkingData, setParkingData] = useState(null);
   const [mangerData,  setMangerData]  = useState(null);
   const [activePanel, setActivePanel] = useState(null);
+
+  // ── Telefon dla kategorii anniversaire ────────────────────────────────────
+  const [phone, setPhone] = useState(null); // null = jeszcze nie pobrano, '' = brak telefonu
+
   const cardRef = useRef(null);
 
   const lat = activity.geometry?.location?.lat ?? activity.lat;
   const lng = activity.geometry?.location?.lng ?? activity.lng;
   const paid = isPaidActivity(activity);
   const resto = isRestaurant(activity);
+  const isAnniversaire = activity.catId === 'anniversaire';
   const openStatus = openNow ?? activity.opening_hours?.open_now ?? null;
+
+  // Pobierz telefon automatycznie gdy to karta anniversaire
+  useEffect(() => {
+    if (!isAnniversaire || !activity.place_id || phone !== null) return;
+    fetchPlaceDetails(activity.place_id).then(details => {
+      setPhone(details?.phone || '');
+    });
+  }, [isAnniversaire, activity.place_id, phone]);
 
   useEffect(() => {
     if (!activePanel) return;
@@ -233,6 +258,36 @@ export default function ActivityCard({ activity, onSelect, distanceKm }) {
   }
   const dist = formatDistance(distanceKm);
 
+  // ── Przycisk Appeler — logika ─────────────────────────────────────────────
+  // Stan:  null = ładowanie  |  '' = brak numeru  |  '+33...' = jest numer
+  function renderAppelerBtn() {
+    if (!isAnniversaire) return null;
+
+    if (phone === null) {
+      // Ładowanie — spinner w przycisku
+      return <ActionBtn emoji="📞" label="Appeler" loading={true} onClick={() => {}} />;
+    }
+    if (phone) {
+      // Jest numer → tel: link, kliknie i zadzwoni
+      return (
+        <ActionBtn
+          emoji="📞"
+          label="Appeler"
+          href={`tel:${phone.replace(/\s/g, '')}`}
+          style={{ background:'#e8f5e9', border:'1.5px solid #22c55e' }}
+        />
+      );
+    }
+    // Brak numeru → otwiera Google Maps jako fallback
+    return (
+      <ActionBtn
+        emoji="📞"
+        label="Appeler"
+        href={`https://www.google.com/maps/place/?q=place_id:${activity.place_id}`}
+      />
+    );
+  }
+
   return (
     <article ref={cardRef} className="activity-card" onClick={() => onSelect?.(activity)}
       style={{ borderRadius:'16px', overflow:'visible', background:'#FFF8F1', boxShadow:'0 2px 12px rgba(0,0,0,0.08)', cursor:'pointer', transition:'transform 0.2s ease, box-shadow 0.2s ease', position:'relative', marginBottom:'16px' }}
@@ -241,9 +296,18 @@ export default function ActivityCard({ activity, onSelect, distanceKm }) {
     >
       <div style={{ borderRadius:'16px 16px 0 0', overflow:'hidden', position:'relative' }}>
         <LazyImage photoReference={photoReference} fallbackSrc={fallbackPhoto} alt={name} style={{ height:'180px', width:'100%' }} />
+
+        {/* Badge Ouvert/Fermé */}
         {openStatus !== null && (
           <span style={{ position:'absolute', top:'10px', right:'10px', background:openStatus?'rgba(34,197,94,0.92)':'rgba(239,68,68,0.88)', color:'#fff', fontSize:'10px', fontWeight:700, fontFamily:'Outfit, sans-serif', padding:'3px 8px', borderRadius:'20px', letterSpacing:'0.03em', backdropFilter:'blur(4px)' }}>
             {openStatus ? '● Ouvert' : '● Fermé'}
+          </span>
+        )}
+
+        {/* Badge 🎂 Anniversaires pour les cartes anniversaire */}
+        {isAnniversaire && (
+          <span style={{ position:'absolute', top:'10px', left:'10px', background:'rgba(255,107,74,0.92)', color:'#fff', fontSize:'10px', fontWeight:700, fontFamily:'Outfit, sans-serif', padding:'3px 8px', borderRadius:'20px', letterSpacing:'0.03em', backdropFilter:'blur(4px)' }}>
+            🎂 Anniversaires
           </span>
         )}
       </div>
@@ -257,6 +321,18 @@ export default function ActivityCard({ activity, onSelect, distanceKm }) {
             📍 {address}
           </p>
         )}
+
+        {/* Numer telefonu widoczny pod adresem jeśli jest */}
+        {isAnniversaire && phone && (
+          <a
+            href={`tel:${phone.replace(/\s/g, '')}`}
+            onClick={e => e.stopPropagation()}
+            style={{ display:'inline-flex', alignItems:'center', gap:'5px', margin:'0 0 8px', fontSize:'13px', color:'#22c55e', fontFamily:'Outfit, sans-serif', fontWeight:600, textDecoration:'none' }}
+          >
+            📞 {phone}
+          </a>
+        )}
+
         <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:'8px', flexWrap:'wrap', marginBottom:'12px' }}>
           {rating && (
             <span style={{ fontSize:'12px', color:'#FF6B4A', fontFamily:'Outfit, sans-serif', fontWeight:600 }} title={`${ratingsTotal} avis`}>
@@ -281,11 +357,8 @@ export default function ActivityCard({ activity, onSelect, distanceKm }) {
 
           <div style={{ display:'flex', gap:'6px' }}>
             <ActionBtn emoji="🗺️" label="Itinéraire" href={getMapsUrl(activity)} />
-            {activity.catId === 'anniversaire' && (
-              <ActionBtn emoji="📞" label="Appeler" href={getCallUrl(activity)} />
-            )}
+            {renderAppelerBtn()}
             <ActionBtn emoji="🅿️" label="Parking" loading={parkingData === 'loading'} active={activePanel === 'parking'} onClick={handleParking} />
-            {/* Pour les restaurants → pas de Manger mais TheFork */}
             {resto ? (
               <ActionBtn
                 emoji="🍴"

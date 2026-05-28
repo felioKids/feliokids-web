@@ -13,13 +13,78 @@ export const CATEGORY_CONFIG = {
     "Fontaines & jets d'eau": { source:'google', filters:[{keyword:'fontaine jet eau'}] },
   },
 
+  // ── ANNIVERSAIRE ─────────────────────────────────────────────────────────────
+  // Każda podkategoria ma precyzyjne słowa kluczowe
+  // + requirePhone: true → ActivityCard pobierze telefon i pokaże przycisk Appeler
   anniversaire: {
-    'Bowling & laser game': { source:'google', filters:[{keyword:'bowling laser game'}] },
-    'Accrobranche':         { source:'google', filters:[{keyword:'accrobranche'}] },
-    'Ateliers créatifs':    { source:'google', filters:[{keyword:'atelier créatif anniversaire enfant'}] },
-    'Escape game':          { source:'google', filters:[{keyword:'escape game'}] },
-    'Karting enfants':      { source:'google', filters:[{keyword:'karting enfant'}] },
-    'Parcs aquatiques':     { source:'google', filters:[{keyword:'parc aquatique'}] },
+    'Bowling & laser game': {
+      source: 'google',
+      requirePhone: true,
+      filters: [
+        { keyword: 'bowling anniversaire enfant' },
+        { keyword: 'laser game enfant' },
+        { keyword: 'laser quest' },
+      ],
+    },
+    'Accrobranche': {
+      source: 'google',
+      requirePhone: true,
+      filters: [
+        { keyword: 'accrobranche anniversaire enfant' },
+        { keyword: 'parc aventure accrobranche' },
+      ],
+    },
+    'Ateliers créatifs': {
+      source: 'google',
+      requirePhone: true,
+      filters: [
+        { keyword: 'atelier anniversaire enfant créatif' },
+        { keyword: 'atelier peinture anniversaire enfant' },
+        { keyword: 'salle fête enfant atelier' },
+      ],
+    },
+    'Escape game': {
+      source: 'google',
+      requirePhone: true,
+      filters: [
+        { keyword: 'escape game enfant' },
+        { keyword: 'escape room famille enfant' },
+      ],
+    },
+    'Karting enfants': {
+      source: 'google',
+      requirePhone: true,
+      filters: [
+        { keyword: 'karting enfant anniversaire' },
+        { keyword: 'karting indoor enfant' },
+      ],
+    },
+    'Trampoline': {
+      source: 'google',
+      requirePhone: true,
+      filters: [
+        { keyword: 'parc trampoline anniversaire enfant' },
+        { keyword: 'trampoline park enfant' },
+        { keyword: 'saut trampoline enfant' },
+      ],
+    },
+    'Piscine privée': {
+      source: 'google',
+      requirePhone: true,
+      filters: [
+        { keyword: 'piscine anniversaire enfant' },
+        { keyword: 'parc aquatique anniversaire enfant' },
+      ],
+    },
+    'Salle de fête': {
+      source: 'google',
+      requirePhone: true,
+      filters: [
+        { keyword: 'salle anniversaire enfant location' },
+        { keyword: 'salle fête enfant' },
+        { keyword: 'espace anniversaire enfant' },
+      ],
+    },
   },
 
   pluie: {

@@ -77,13 +77,13 @@ export default async function handler(req, res) {
     if (textsearch === 'true' && keyword) {
       // Multi-query dla restauracji — Text Search + Nearby
       const queries = [
-        // Text Search z keyword
-        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(keyword)}&location=${lat},${lng}&radius=${radiusNum}&language=${language}&key=${key}${type ? `&type=${encodeURIComponent(type)}` : ''}`,
-        // Nearby Search z keyword
-        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radiusNum}&language=${language}&key=${key}${type ? `&type=${encodeURIComponent(type)}` : ''}&keyword=${encodeURIComponent(keyword)}`,
-        // Nearby Search bez keyword — wszystkie restauracje
-        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radiusNum}&language=${language}&key=${key}&type=restaurant`,
-      ];
+  // Text Search z keyword
+  `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(keyword)}&location=${lat},${lng}&radius=${radiusNum}&language=${language}&key=${key}${type ? `&type=${encodeURIComponent(type)}` : ''}`,
+  // Nearby Search z keyword
+  `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radiusNum}&language=${language}&key=${key}${type ? `&type=${encodeURIComponent(type)}` : ''}&keyword=${encodeURIComponent(keyword)}`,
+  // Trzecia linia tylko dla restauracji — nie dla wyszukiwarki tekstowej
+  ...(type === 'restaurant' ? [`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radiusNum}&language=${language}&key=${key}&type=restaurant`] : []),
+];
 
       const responses = await Promise.allSettled(queries.map(q => fetchPage(q)));
       responses.forEach(r => {

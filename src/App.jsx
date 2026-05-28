@@ -4,6 +4,7 @@ import NewsletterPopup from './components/NewsletterPopup'
 import ActivityCard from './components/ActivityCard.jsx'
 import { resetCounters } from './api/requestLogger.js'
 import WeekendPanel from './components/WeekendPanel.jsx'
+import { searchActivitiesGoogle } from './api/googlePlacesService.js'
 
 const SLIDES = [
   { img:'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=800&q=85', label:'FRANCE · SORTIES FAMILLE', title:"Que faire avec les enfants aujourd'hui ?", sub:'Trouvez des idées proches, gratuites ou petit budget, avec parking et où manger.' },
@@ -42,7 +43,6 @@ const CATS = [
     tout:'atelier créatif enfant' },
 ]
 
-// Keyword "tout" pour chaque catégorie dans categoryConfig
 const TOUT_CONFIG = {
   gratuit:      { type:'park',       keyword:'parc gratuit famille' },
   anniversaire: { type:'',           keyword:'anniversaire enfant activité' },
@@ -120,7 +120,7 @@ function CatTile({ cat, active, onClick, delay }) {
         <div style={{ fontSize:13, fontWeight:800, color:'#fff', lineHeight:1.15, textShadow:'0 1px 5px rgba(0,0,0,0.5)' }}>{cat.l}</div>
         <div style={{ fontSize:9, color:'rgba(255,255,255,0.75)', fontWeight:500, marginTop:3, lineHeight:1.3 }}>{cat.sub}</div>
       </div>
-    <div style={{ position:'absolute', right:8, bottom:13, width:20, height:20, borderRadius:6, background:'rgba(255,255,255,0.22)', backdropFilter:'blur(6px)', border:'1px solid rgba(255,255,255,0.28)', display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontSize:13, fontWeight:700 }}>›</div>
+      <div style={{ position:'absolute', right:8, bottom:13, width:20, height:20, borderRadius:6, background:'rgba(255,255,255,0.22)', backdropFilter:'blur(6px)', border:'1px solid rgba(255,255,255,0.28)', display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontSize:13, fontWeight:700 }}>›</div>
     </button>
   )
 }
@@ -133,7 +133,6 @@ function SubsPanel({ cat, activeSub, onSub, onTout }) {
         <span style={{ fontSize:11, color:'#9AAABB' }}>— Que cherches-tu ?</span>
       </div>
       <div className="scroll-x" style={{ display:'flex', gap:7, paddingBottom:2 }}>
-        {/* 🆕 Bouton Tout — premier dans la liste */}
         <button onClick={onTout} style={{
           padding:'8px 15px', borderRadius:99, fontSize:12, fontWeight:700, flexShrink:0, transition:'all .18s',
           background: activeSub===null ? cat.c : '#F5F3F0',
@@ -394,6 +393,40 @@ export default function App() {
     )
   }, [gpsLoading])
 
+  const handleTextSearch = useCallback(async () => {
+    if (!query.trim()) return
+    if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); return }
+    if (!userLocation) { setSearchError("Sélectionnez une ville dans la liste pour activer la recherche."); return }
+    setLoading(true)
+    setSearchError(null)
+    setHasSearched(true)
+    setActiveCat(null)
+    setActiveSub(null)
+    try {
+      const res = await searchActivitiesGoogle({
+        lat: userLocation.lat,
+        lng: userLocation.lng,
+        radius: radius * 1000,
+        keyword: query.trim() + ' enfants famille',
+catId: 'search',
+textsearch: true,
+      })
+      if (res.length === 0) {
+        setSearchError(`Aucun résultat pour "${query}" près de "${city}". Essayez un autre mot.`)
+        setResults([])
+      } else {
+        setResults(res)
+        setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 300)
+      }
+    } catch (err) {
+      console.error('[TextSearch]', err)
+      setSearchError('Une erreur est survenue. Vérifiez votre connexion.')
+      setResults([])
+    } finally {
+      setLoading(false)
+    }
+  }, [query, city, userLocation, radius])
+
   const doSearch = useCallback(async (catId, sub, bgt, rad) => {
     const cat = catId !== undefined ? catId : activeCat
     const s   = sub   !== undefined ? sub   : activeSub
@@ -415,7 +448,6 @@ export default function App() {
     } finally { setLoading(false) }
   }, [activeCat, activeSub, budget, city, radius])
 
-  // 🆕 Recherche "Tout" — toute la catégorie sans filtre sous-catégorie
   const doSearchTout = useCallback(async (catId) => {
     if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); return }
     const config = TOUT_CONFIG[catId]
@@ -434,10 +466,11 @@ export default function App() {
   }, [city, radius, budget])
 
   const clickCat = (id) => {
- if (id === 'events') { setSearchError("✨ Weekend & Événements — Bientôt disponible !"); setTimeout(() => setSearchError(null), 3000); return }
-  if (activeCat===id) { setActiveCat(null); setActiveSub(null); setResults([]); setHasSearched(false) }
-  else { setActiveCat(id); setActiveSub(null) }
-}
+    if (id === 'events') { setSearchError("✨ Weekend & Événements — Bientôt disponible !"); setTimeout(() => setSearchError(null), 3000); return }
+    if (activeCat===id) { setActiveCat(null); setActiveSub(null); setResults([]); setHasSearched(false) }
+    else { setActiveCat(id); setActiveSub(null) }
+  }
+
   const clickSub = (sub) => { const next = activeSub===sub?null:sub; setActiveSub(next); doSearch(activeCat, next, budget) }
 
   const filterByAge = (activity) => {
@@ -456,31 +489,31 @@ export default function App() {
   }
 
   const renderCatGrid = () => {
-  const items = []
-  for (let i = 0; i < CATS.length; i += 2) {
-    const pair = CATS.slice(i, i+2)
-    const activeCatInPair = pair.find(c => c.id===activeCat)
-    items.push(
-      <div key={i}>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:9, marginBottom:activeCatInPair?0:9 }}>
-          {pair.map((cat,j) => (
-            <CatTile key={cat.id} cat={cat} active={activeCat===cat.id} delay={(i+j)*0.04} onClick={() => clickCat(cat.id)} />
-          ))}
-          {pair.length < 2 && <div />}
+    const items = []
+    for (let i = 0; i < CATS.length; i += 2) {
+      const pair = CATS.slice(i, i+2)
+      const activeCatInPair = pair.find(c => c.id===activeCat)
+      items.push(
+        <div key={i}>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:9, marginBottom:activeCatInPair?0:9 }}>
+            {pair.map((cat,j) => (
+              <CatTile key={cat.id} cat={cat} active={activeCat===cat.id} delay={(i+j)*0.04} onClick={() => clickCat(cat.id)} />
+            ))}
+            {pair.length < 2 && <div />}
+          </div>
+          {activeCatInPair && (
+            <SubsPanel
+              cat={activeCatInPair}
+              activeSub={activeSub}
+              onSub={clickSub}
+              onTout={() => doSearchTout(activeCatInPair.id)}
+            />
+          )}
         </div>
-        {activeCatInPair && (
-          <SubsPanel
-            cat={activeCatInPair}
-            activeSub={activeSub}
-            onSub={clickSub}
-            onTout={() => doSearchTout(activeCatInPair.id)}
-          />
-        )}
-      </div>
-    )
+      )
+    }
+    return items
   }
-  return items
-}
 
   return (
     <div style={{ minHeight:'100vh', background:'#FFF8F1' }}>
@@ -587,25 +620,18 @@ export default function App() {
             <div style={{ display:'flex', gap:8 }}>
               <div style={{ flex:1, display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:14, padding:'12px 15px', gap:10, border:'1.5px solid #EDE8E1' }}>
                 <span style={{ fontSize:16, flexShrink:0, color:'#9AAABB' }}>🔍</span>
-                <input style={{ flex:1, fontSize:14, fontWeight:500, color:'#1B2B4B', fontFamily:'var(--font-body)' }} placeholder="Bowling, cinéma, zoo, anniversaire…" value={query}
+                <input
+                  style={{ flex:1, fontSize:14, fontWeight:500, color:'#1B2B4B', fontFamily:'var(--font-body)' }}
+                  placeholder="Bowling, cinéma, zoo, anniversaire…"
+                  value={query}
                   onChange={e => setQuery(e.target.value)}
-                  onKeyDown={e => {
-                    if (e.key==='Enter'&&query.trim()) {
-                      const terms = query.toLowerCase().split(',').map(t => t.trim()).filter(Boolean)
-                      const matches = terms.map(term => CATS.find(c => c.l.toLowerCase().includes(term)||c.subs.some(s => s.toLowerCase().includes(term)))).filter(Boolean)
-                      const cat = matches[0]||CATS[0]
-                      setActiveCat(cat.id); doSearch(cat.id, null, budget)
-                    }
-                  }} />
+                  onKeyDown={e => { if (e.key==='Enter') handleTextSearch() }}
+                />
                 {query && <button onClick={() => setQuery('')} style={{ color:'#C5C5C5', fontSize:14 }}>✕</button>}
               </div>
-              <button onClick={() => {
-                if (!query.trim()&&!city) return
-                const terms = query.toLowerCase().split(',').map(t => t.trim()).filter(Boolean)
-                const matches = terms.map(term => CATS.find(c => c.l.toLowerCase().includes(term)||c.subs.some(s => s.toLowerCase().includes(term)))).filter(Boolean)
-                const cat = matches[0]||CATS[0]
-                setActiveCat(cat.id); doSearch(cat.id, null, budget)
-              }} style={{ background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', color:'#fff', padding:'12px 18px', borderRadius:14, fontSize:14, fontWeight:700, flexShrink:0, boxShadow:'0 4px 14px rgba(255,107,74,0.38)', whiteSpace:'nowrap' }}>
+              <button
+                onClick={() => handleTextSearch()}
+                style={{ background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', color:'#fff', padding:'12px 18px', borderRadius:14, fontSize:14, fontWeight:700, flexShrink:0, boxShadow:'0 4px 14px rgba(255,107,74,0.38)', whiteSpace:'nowrap' }}>
                 Trouver →
               </button>
             </div>
