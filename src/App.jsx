@@ -456,29 +456,31 @@ export default function App() {
   }
 
   const renderCatGrid = () => {
-    const rows = []
-    for (let i = 0; i < CATS.length; i += 3) {
-      const row = CATS.slice(i, i+3)
-      const activeInRow = row.find(c => c.id===activeCat)
-      rows.push(
-        <div key={i}>
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:9, marginBottom:activeInRow?0:9 }}>
-            {row.map((cat,j) => <CatTile key={cat.id} cat={cat} active={activeCat===cat.id} delay={(i+j)*0.04} onClick={() => clickCat(cat.id)} />)}
-            {row.length < 3 && Array(3-row.length).fill(0).map((_,k) => <div key={`e${k}`} />)}
-          </div>
-          {activeInRow && (
-            <SubsPanel
-              cat={activeInRow}
-              activeSub={activeSub}
-              onSub={clickSub}
-              onTout={() => doSearchTout(activeInRow.id)}
-            />
-          )}
+  const items = []
+  for (let i = 0; i < CATS.length; i += 2) {
+    const pair = CATS.slice(i, i+2)
+    const activeCatInPair = pair.find(c => c.id===activeCat)
+    items.push(
+      <div key={i}>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:9, marginBottom:activeCatInPair?0:9 }}>
+          {pair.map((cat,j) => (
+            <CatTile key={cat.id} cat={cat} active={activeCat===cat.id} delay={(i+j)*0.04} onClick={() => clickCat(cat.id)} />
+          ))}
+          {pair.length < 2 && <div />}
         </div>
-      )
-    }
-    return rows
+        {activeCatInPair && (
+          <SubsPanel
+            cat={activeCatInPair}
+            activeSub={activeSub}
+            onSub={clickSub}
+            onTout={() => doSearchTout(activeCatInPair.id)}
+          />
+        )}
+      </div>
+    )
   }
+  return items
+}
 
   return (
     <div style={{ minHeight:'100vh', background:'#FFF8F1' }}>
