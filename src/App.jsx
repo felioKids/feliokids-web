@@ -323,6 +323,8 @@ export default function App() {
   const [openNowFilter, setOpenNowFilter] = useState(false)
   const [gpsLoading,    setGpsLoading]    = useState(false)
   const [gpsActive,     setGpsActive]     = useState(false)
+const [favsOpen, setFavsOpen] = useState(false)
+const [favsList, setFavsList] = useState([])
   const cityTimer = useRef(null)
 
   const fetchWeather = async (lat, lng) => {
@@ -685,6 +687,35 @@ textsearch: true,
       </div>
       <NewsletterPopup isOpen={popupOpen} onClose={() => setPopupOpen(false)} />
       <WeekendPanel lat={userLocation?.lat} lng={userLocation?.lng} isOpen={weekendOpen} onClose={() => setWeekendOpen(false)} />
+
+      {/* Bouton Mes favoris — fixé en bas */}
+      <button
+        onClick={() => { setFavsList(JSON.parse(localStorage.getItem('fk_favs')||'[]')); setFavsOpen(true) }}
+        style={{ position:'fixed', bottom:20, right:16, background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', color:'#fff', border:'none', borderRadius:99, padding:'12px 20px', fontSize:13, fontWeight:800, boxShadow:'0 4px 20px rgba(255,107,74,0.45)', cursor:'pointer', zIndex:200, display:'flex', alignItems:'center', gap:7 }}
+      >
+        ❤️ Mes favoris
+      </button>
+
+      {/* Panel Mes favoris */}
+      {favsOpen && (
+        <div onClick={() => setFavsOpen(false)} style={{ position:'fixed', inset:0, background:'rgba(27,43,75,0.5)', backdropFilter:'blur(6px)', zIndex:250 }}>
+          <div onClick={e => e.stopPropagation()} style={{ position:'absolute', bottom:0, left:0, right:0, maxHeight:'80vh', overflowY:'auto', background:'#FFF8F1', borderRadius:'24px 24px 0 0', padding:'20px 16px 40px' }}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
+              <span style={{ fontSize:18, fontWeight:800, color:'#1B2B4B', fontFamily:'Bricolage Grotesque, sans-serif' }}>❤️ Mes favoris</span>
+              <button onClick={() => setFavsOpen(false)} style={{ background:'none', border:'none', fontSize:20, cursor:'pointer', color:'#aaa' }}>✕</button>
+            </div>
+            {favsList.length === 0 ? (
+              <div style={{ textAlign:'center', padding:'40px 0', color:'#9AAABB' }}>
+                <div style={{ fontSize:40, marginBottom:12 }}>🤍</div>
+                <div style={{ fontSize:14, fontWeight:600 }}>Aucun favori pour l'instant</div>
+                <div style={{ fontSize:12, marginTop:6 }}>Appuie sur 🤍 sur une activité pour la sauvegarder</div>
+              </div>
+            ) : favsList.map(activity => (
+              <ActivityCard key={activity.place_id} activity={activity} onSelect={(act) => window.open(`https://www.google.com/maps/place/?q=place_id:${act.place_id}`,'_blank')} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

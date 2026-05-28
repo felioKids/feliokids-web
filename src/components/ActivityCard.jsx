@@ -61,7 +61,6 @@ async function shareActivity(activity) {
   }
 }
 
-// ── Pobiera telefon z naszego proxy /api/details ─────────────────────────────
 async function fetchPlaceDetails(placeId) {
   const cacheKey = `fk_phone_${placeId}`;
   const cached = sessionStorage.getItem(cacheKey);
@@ -206,7 +205,36 @@ export default function ActivityCard({ activity, onSelect, distanceKm }) {
   const [activePanel, setActivePanel] = useState(null);
 
   // ── Telefon dla kategorii anniversaire ────────────────────────────────────
-  const [phone, setPhone] = useState(null); // null = jeszcze nie pobrano, '' = brak telefonu
+  const [phone, setPhone] = useState(null);
+
+  // ── Ulubione ──────────────────────────────────────────────────────────────
+  const [isFav, setIsFav] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('fk_favs') || '[]').some(f => f.place_id === activity.place_id) }
+    catch { return false }
+  })
+
+  const toggleFav = useCallback((e) => {
+    e.stopPropagation()
+    try {
+      const favs = JSON.parse(localStorage.getItem('fk_favs') || '[]')
+      const exists = favs.some(f => f.place_id === activity.place_id)
+      const next = exists
+        ? favs.filter(f => f.place_id !== activity.place_id)
+        : [...favs, {
+            place_id: activity.place_id,
+            name: activity.name,
+            address: activity.address,
+            rating: activity.rating,
+            photoReference: activity.photoReference,
+            fallbackPhoto: activity.fallbackPhoto,
+            catId: activity.catId,
+            geometry: activity.geometry,
+            types: activity.types,
+          }]
+      localStorage.setItem('fk_favs', JSON.stringify(next))
+      setIsFav(!exists)
+    } catch {}
+  }, [activity])
 
   const cardRef = useRef(null);
 
@@ -217,7 +245,6 @@ export default function ActivityCard({ activity, onSelect, distanceKm }) {
   const isAnniversaire = activity.catId === 'anniversaire';
   const openStatus = openNow ?? activity.opening_hours?.open_now ?? null;
 
-  // Pobierz telefon automatycznie gdy to karta anniversaire
   useEffect(() => {
     if (!isAnniversaire || !activity.place_id || phone !== null) return;
     fetchPlaceDetails(activity.place_id).then(details => {
@@ -258,17 +285,12 @@ export default function ActivityCard({ activity, onSelect, distanceKm }) {
   }
   const dist = formatDistance(distanceKm);
 
-  // ── Przycisk Appeler — logika ─────────────────────────────────────────────
-  // Stan:  null = ładowanie  |  '' = brak numeru  |  '+33...' = jest numer
   function renderAppelerBtn() {
     if (!isAnniversaire) return null;
-
     if (phone === null) {
-      // Ładowanie — spinner w przycisku
       return <ActionBtn emoji="📞" label="Appeler" loading={true} onClick={() => {}} />;
     }
     if (phone) {
-      // Jest numer → tel: link, kliknie i zadzwoni
       return (
         <ActionBtn
           emoji="📞"
@@ -278,7 +300,6 @@ export default function ActivityCard({ activity, onSelect, distanceKm }) {
         />
       );
     }
-    // Brak numeru → otwiera Google Maps jako fallback
     return (
       <ActionBtn
         emoji="📞"
@@ -304,7 +325,17 @@ export default function ActivityCard({ activity, onSelect, distanceKm }) {
           </span>
         )}
 
-        {/* Badge 🎂 Anniversaires pour les cartes anniversaire */}
+        {/* Bouton favori ❤️ */}
+        <button
+          onClick={toggleFav}
+          style={{ position:'absolute', bottom:'10px', right:'10px', background:'rgba(0,0,0,0.35)', backdropFilter:'blur(4px)', border:'none', borderRadius:'50%', width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', fontSize:16, transition:'transform 0.15s' }}
+          onMouseEnter={e => e.currentTarget.style.transform='scale(1.15)'}
+          onMouseLeave={e => e.currentTarget.style.transform='scale(1)'}
+        >
+          {isFav ? '❤️' : '🤍'}
+        </button>
+
+        {/* Badge 🎂 Anniversaires */}
         {isAnniversaire && (
           <span style={{ position:'absolute', top:'10px', left:'10px', background:'rgba(255,107,74,0.92)', color:'#fff', fontSize:'10px', fontWeight:700, fontFamily:'Outfit, sans-serif', padding:'3px 8px', borderRadius:'20px', letterSpacing:'0.03em', backdropFilter:'blur(4px)' }}>
             🎂 Anniversaires
@@ -322,7 +353,6 @@ export default function ActivityCard({ activity, onSelect, distanceKm }) {
           </p>
         )}
 
-        {/* Numer telefonu widoczny pod adresem jeśli jest */}
         {isAnniversaire && phone && (
           <a
             href={`tel:${phone.replace(/\s/g, '')}`}
