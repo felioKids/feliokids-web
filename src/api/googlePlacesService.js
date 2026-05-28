@@ -114,6 +114,12 @@ const BLOCKED_NAME_KEYWORDS = [
   'concessionnaire', 'location voiture', 'taxi', 'transport',
   // Inne
   'conception et installation', 'conseil pour votre', 'diaconesses',
+// Inne
+  'conception et installation', 'conseil pour votre', 'diaconesses',
+  // Fałszywe aquarium / baseny
+  "aqua'lité", 'aqua lité', 'aqua service', 'aqua concept',
+  'pisciniste', 'entretien piscine', 'traitement eau',
+  'naturoscope',
 ];
 const results = data.results || [];
 
