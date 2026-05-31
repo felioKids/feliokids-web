@@ -397,7 +397,7 @@ const [favsList, setFavsList] = useState([])
 
   const handleTextSearch = useCallback(async () => {
     if (!query.trim()) return
-    if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); return }
+   if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 100); return }
     if (!userLocation) { setSearchError("Sélectionnez une ville dans la liste pour activer la recherche."); return }
     setLoading(true)
     setSearchError(null)
@@ -435,7 +435,7 @@ textsearch: true,
     const b   = bgt   !== undefined ? bgt   : budget
     const r   = rad   !== undefined ? rad   : radius
     if (!cat || !s) return
-    if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); return }
+    if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 100); return }
     setLoading(true); setSearchError(null); setHasSearched(true)
     try {
       const activities = await searchActivities({ city:city.trim(), radiusKm:r, budget:b, catId:cat, subName:s })
@@ -451,7 +451,7 @@ textsearch: true,
   }, [activeCat, activeSub, budget, city, radius])
 
   const doSearchTout = useCallback(async (catId) => {
-    if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); return }
+    if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 100); return }
     const config = TOUT_CONFIG[catId]
     if (!config) return
     setActiveSub(null)
