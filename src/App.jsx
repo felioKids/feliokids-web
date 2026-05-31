@@ -497,15 +497,15 @@ export default function App() {
         {showEmail && <EmailModal onClose={() => setShowEmail(false)} />}
         <HeroSlideshow onWeekendClick={() => setWeekendOpen(true)} />
 
-        <div style={{ padding:'0 14px', marginTop:-24, position:'relative', zIndex:10 }}>
-          <div style={{ background:'#fff', borderRadius:'22px 22px 16px 16px', padding:'6px 18px 22px', boxShadow:'0 -4px 24px rgba(0,0,0,0.07), 0 8px 40px rgba(27,43,75,0.10)', border:'1px solid #F0EBE3' }}>
+        <div style={{ padding:'0 10px', marginTop:-24, position:'relative', zIndex:10 }}>
+          <div style={{ background:'#fff', borderRadius:'22px 22px 16px 16px', padding:'6px 14px 22px', boxShadow:'0 -4px 24px rgba(0,0,0,0.07), 0 8px 40px rgba(27,43,75,0.10)', border:'1px solid #F0EBE3' }}>
 
             {/* handle bar */}
             <div style={{ width:40, height:4, borderRadius:99, background:'#E8E2DA', margin:'10px auto 18px' }} />
 
             {/* 1. Ville */}
             <div style={{ position:'relative', marginBottom:12 }}>
-              <div className="city-field" style={{ display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:16, padding:'15px 16px', gap:10, border:`1.5px solid ${searchError && !city.trim() ? '#FF6B4A' : gpsActive ? '#FFCFC4' : '#EDE8E1'}`, transition:'border-color .2s', minHeight:54 }}>
+              <div className="city-field" style={{ display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:16, padding:'13px 12px', gap:8, border:`1.5px solid ${searchError && !city.trim() ? '#FF6B4A' : gpsActive ? '#FFCFC4' : '#EDE8E1'}`, transition:'border-color .2s', minHeight:52 }}>
                 <span style={{ fontSize:18, flexShrink:0 }}>📍</span>
                 <input
                   id="city-input"
