@@ -542,7 +542,7 @@ export default function App() {
             </div>
 
             {/* 2. Km + Open now */}
-            <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:12, flexWrap:'nowrap' }}>
+            <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:12 }}>
               <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #EDE8E1', borderRadius:99, overflow:'hidden' }}>
                 <button
                   onPointerDown={() => { const step = () => { setRadius(r => { const next=Math.max(5,r-5); if(activeCat && activeSub) doSearch(activeCat,activeSub,budget,next); else if(activeCat) doSearchTout(activeCat); return next }); }; step(); const t=setInterval(step,400); window._rTimer=t }}
@@ -556,7 +556,7 @@ export default function App() {
                   onPointerUp={() => clearInterval(window._rTimer)} onPointerLeave={() => clearInterval(window._rTimer)}
                   style={{ width:44, height:44, fontSize:20, fontWeight:700, color:'#1B2B4B', background:'#F5F3F0', borderLeft:'1.5px solid #EDE8E1', flexShrink:0 }}>+</button>
               </div>
-              <span style={{ fontSize:12, color:'#C5C5C5', fontWeight:500 }}>autour de toi</span>
+
               <button onClick={() => {
                 const next = !openNowFilter
                 setOpenNowFilter(next)
@@ -567,14 +567,14 @@ export default function App() {
                 background: openNowFilter ? '#FF6B4A' : '#F5F3F0',
                 color: openNowFilter ? '#fff' : '#5A6A82',
                 border: openNowFilter ? 'none' : '1.5px solid #EDE8E1',
-                cursor:'pointer', transition:'all .15s', minHeight:40,
+                cursor:'pointer', transition:'all .15s', flexShrink:0, whiteSpace:'nowrap', minHeight:40,
               }}>🟢 Open now</button>
             </div>
 
             {/* 3. Âge */}
             <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:14 }}>
               <div style={{ display:'flex', gap:6, flexWrap:'nowrap', overflowX:'auto', paddingBottom:4 }}>
-                {[{id:null,label:'Tous'},{id:'0-3',label:'0-3 ans'},{id:'4-6',label:'4-6 ans'},{id:'7-12',label:'7-12 ans'},{id:'13+',label:'Ado'}].map(a => (
+                {[{id:null,label:'Tous'},{id:'0-3',label:'0–3'},{id:'4-6',label:'4–6'},{id:'7-12',label:'7–12'},{id:'13+',label:'Ado'}].map(a => (
                   <button key={String(a.id)} onClick={() => {
                     setAgeFilter(a.id)
                     if (activeCat && activeSub) setTimeout(() => doSearch(activeCat, activeSub, budget), 50)
