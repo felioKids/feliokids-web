@@ -525,7 +525,7 @@ export default function App() {
                   style={{ background:'none', border:'none', cursor: gpsLoading ? 'wait' : 'pointer', padding:4, display:'flex', alignItems:'center', gap:5, flexShrink:0, opacity: gpsLoading ? 0.6 : 1, transition:'opacity .2s' }}>
                   <GpsIcon loading={gpsLoading} active={gpsActive} />
                   <span style={{ fontSize:12, fontWeight:700, color: gpsActive ? '#FF6B4A' : '#C5C5C5', whiteSpace:'nowrap' }}>
-                    {gpsLoading ? 'Localisation...' : 'Ma position'}
+                    {gpsLoading ? 'Localisation...' : 'Localisez'}
                   </span>
                 </button>
               </div>
