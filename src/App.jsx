@@ -580,7 +580,7 @@ export default function App() {
                     if (activeCat && activeSub) setTimeout(() => doSearch(activeCat, activeSub, budget), 50)
                     else if (activeCat) setTimeout(() => doSearchTout(activeCat), 50)
                   }} style={{
-                    padding:'10px 14px', borderRadius:99, fontSize:13, fontWeight:700, minHeight:44,
+                    padding:'8px 12px', borderRadius:99, fontSize:12, fontWeight:700, minHeight:40,
                     background: ageFilter===a.id ? '#FF6B4A' : '#F5F3F0',
                     color: ageFilter===a.id ? '#fff' : '#5A6A82',
                     border: ageFilter===a.id ? 'none' : '1.5px solid #EDE8E1',
