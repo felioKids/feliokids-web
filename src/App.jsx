@@ -413,7 +413,7 @@ const [favsList, setFavsList] = useState([])
         lat: userLocation.lat,
         lng: userLocation.lng,
         radius: radius * 1000,
-        keyword: query.trim() + ' enfants famille',
+       keyword: query.trim(),
 catId: 'search',
 textsearch: true,
       })
