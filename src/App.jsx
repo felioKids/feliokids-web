@@ -542,7 +542,7 @@ export default function App() {
             </div>
 
             {/* 2. Km + Open now */}
-            <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:12, flexWrap:'wrap' }}>
+            <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:12, flexWrap:'nowrap' }}>
               <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #EDE8E1', borderRadius:99, overflow:'hidden' }}>
                 <button
                   onPointerDown={() => { const step = () => { setRadius(r => { const next=Math.max(5,r-5); if(activeCat && activeSub) doSearch(activeCat,activeSub,budget,next); else if(activeCat) doSearchTout(activeCat); return next }); }; step(); const t=setInterval(step,400); window._rTimer=t }}
@@ -567,7 +567,7 @@ export default function App() {
                 background: openNowFilter ? '#FF6B4A' : '#F5F3F0',
                 color: openNowFilter ? '#fff' : '#5A6A82',
                 border: openNowFilter ? 'none' : '1.5px solid #EDE8E1',
-                cursor:'pointer', transition:'all .15s', marginLeft:'auto', minHeight:44,
+                cursor:'pointer', transition:'all .15s', minHeight:40,
               }}>🟢 Open now</button>
             </div>
 
