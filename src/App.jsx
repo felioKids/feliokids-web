@@ -69,11 +69,11 @@ function HeroSlideshow({ onWeekendClick }) {
   const [popupOpen, setPopupOpen] = useState(false)
   useEffect(() => { const t = setInterval(() => setCur(c => (c+1)%SLIDES.length), 4500); return () => clearInterval(t) }, [])
   return (
-    <div style={{ position:'relative', width:'100%', height:'180px', overflow:'hidden', flexShrink:0 }}>
+<div style={{ position:'relative', width:'100%', height:'320px', overflow:'hidden', flexShrink:0 }}>
       {SLIDES.map((s,i) => (
         <div key={i} style={{ position:'absolute', inset:0, opacity:i===cur?1:0, transition:'opacity 1.2s ease', zIndex:i===cur?1:0 }}>
           <img src={s.img} alt="" style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'center 25%' }} />
-          <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom,rgba(10,20,40,0.18) 0%,rgba(10,20,40,0.80) 100%)' }} />
+          <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom,rgba(10,20,40,0.50) 0%,rgba(10,20,40,0.10) 35%,rgba(255,248,241,0.85) 85%,rgba(255,248,241,1) 100%)' }} />
         </div>
       ))}
       <div style={{ position:'absolute', top:0, left:0, right:0, padding:'14px 16px', display:'flex', justifyContent:'space-between', alignItems:'center', zIndex:10 }}>
@@ -93,7 +93,7 @@ function HeroSlideshow({ onWeekendClick }) {
         </div>
       </div>
       <div style={{ position:'absolute', bottom:32, left:20, right:20, zIndex:10 }}>
-        <div style={{ fontSize:10, fontWeight:700, color:'rgba(255,255,255,0.62)', letterSpacing:'1.8px', marginBottom:8 }}>{SLIDES[cur].label}</div>
+       <div style={{ fontSize:9, fontWeight:700, color:'rgba(255,255,255,0.55)', letterSpacing:'1.5px', marginBottom:6 }}>{SLIDES[cur].label}</div>
         <div style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontSize:23, fontWeight:900, color:'#fff', lineHeight:1.22, marginBottom:8, textShadow:'0 2px 14px rgba(0,0,0,0.35)' }}>{SLIDES[cur].title}</div>
         <div style={{ fontSize:13, color:'rgba(255,255,255,0.76)', lineHeight:1.6, fontWeight:500 }}>{SLIDES[cur].sub}</div>
       </div>
@@ -529,7 +529,7 @@ textsearch: true,
         {showEmail && <EmailModal onClose={() => setShowEmail(false)} />}
         <HeroSlideshow onWeekendClick={() => setWeekendOpen(true)} />
 
-        <div style={{ padding:'0 14px', marginTop:-26, position:'relative', zIndex:10 }}>
+        <div style={{ padding:'0 14px',marginTop:-60, position:'relative', zIndex:10 }}>
           <div style={{ background:'#fff', borderRadius:24, padding:'22px 18px', boxShadow:'0 8px 40px rgba(27,43,75,0.13)', border:'1px solid #F0EBE3' }}>
 
             {/* 1. Ville */}
