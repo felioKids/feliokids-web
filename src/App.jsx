@@ -541,53 +541,50 @@ export default function App() {
               )}
             </div>
 
-            {/* 2. Km + Open now */}
-            <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:12 }}>
-              <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #EDE8E1', borderRadius:99, overflow:'hidden' }}>
+            {/* 2. Km + Open now — jedna linia */}
+            <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:10 }}>
+              <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #EDE8E1', borderRadius:99, overflow:'hidden', flexShrink:0 }}>
                 <button
                   onPointerDown={() => { const step = () => { setRadius(r => { const next=Math.max(5,r-5); if(activeCat && activeSub) doSearch(activeCat,activeSub,budget,next); else if(activeCat) doSearchTout(activeCat); return next }); }; step(); const t=setInterval(step,400); window._rTimer=t }}
                   onPointerUp={() => clearInterval(window._rTimer)} onPointerLeave={() => clearInterval(window._rTimer)}
                   style={{ width:44, height:44, fontSize:20, fontWeight:700, color:'#1B2B4B', background:'#F5F3F0', borderRight:'1.5px solid #EDE8E1', flexShrink:0 }}>−</button>
-                <div style={{ minWidth:76, textAlign:'center', padding:'0 10px' }}>
-                  <span style={{ fontSize:15, fontWeight:700, color:'#1B2B4B' }}>{radius} km</span>
+                <div style={{ minWidth:64, textAlign:'center', padding:'0 8px' }}>
+                  <span style={{ fontSize:14, fontWeight:700, color:'#1B2B4B' }}>{radius} km</span>
                 </div>
                 <button
                   onPointerDown={() => { const step = () => { setRadius(r => { const next=Math.min(50,r+5); if(activeCat && activeSub) doSearch(activeCat,activeSub,budget,next); else if(activeCat) doSearchTout(activeCat); return next }); }; step(); const t=setInterval(step,400); window._rTimer=t }}
                   onPointerUp={() => clearInterval(window._rTimer)} onPointerLeave={() => clearInterval(window._rTimer)}
                   style={{ width:44, height:44, fontSize:20, fontWeight:700, color:'#1B2B4B', background:'#F5F3F0', borderLeft:'1.5px solid #EDE8E1', flexShrink:0 }}>+</button>
               </div>
-
               <button onClick={() => {
                 const next = !openNowFilter
                 setOpenNowFilter(next)
                 if (activeCat && activeSub) setTimeout(() => doSearch(activeCat, activeSub, budget), 50)
                 else if (activeCat) setTimeout(() => doSearchTout(activeCat), 50)
               }} style={{
-                padding:'10px 16px', borderRadius:99, fontSize:13, fontWeight:700,
+                height:44, padding:'0 14px', borderRadius:99, fontSize:13, fontWeight:700, flexShrink:0,
                 background: openNowFilter ? '#FF6B4A' : '#F5F3F0',
                 color: openNowFilter ? '#fff' : '#5A6A82',
                 border: openNowFilter ? 'none' : '1.5px solid #EDE8E1',
-                cursor:'pointer', transition:'all .15s', flexShrink:0, whiteSpace:'nowrap', minHeight:40,
+                cursor:'pointer', transition:'all .15s', whiteSpace:'nowrap',
               }}>🟢 Open now</button>
             </div>
 
-            {/* 3. Âge */}
-            <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:14 }}>
-              <div style={{ display:'flex', gap:6, flexWrap:'nowrap', overflowX:'auto', paddingBottom:4 }}>
-                {[{id:null,label:'Tous'},{id:'0-3',label:'0–3'},{id:'4-6',label:'4–6'},{id:'7-12',label:'7–12'},{id:'13+',label:'Ado'}].map(a => (
-                  <button key={String(a.id)} onClick={() => {
-                    setAgeFilter(a.id)
-                    if (activeCat && activeSub) setTimeout(() => doSearch(activeCat, activeSub, budget), 50)
-                    else if (activeCat) setTimeout(() => doSearchTout(activeCat), 50)
-                  }} style={{
-                    padding:'8px 12px', borderRadius:99, fontSize:12, fontWeight:700, minHeight:40,
-                    background: ageFilter===a.id ? '#FF6B4A' : '#F5F3F0',
-                    color: ageFilter===a.id ? '#fff' : '#5A6A82',
-                    border: ageFilter===a.id ? 'none' : '1.5px solid #EDE8E1',
-                    cursor:'pointer', transition:'all .15s',
-                  }}>{a.label}</button>
-                ))}
-              </div>
+            {/* 3. Âge — scroll horizontal */}
+            <div style={{ display:'flex', gap:6, overflowX:'auto', marginBottom:14, paddingBottom:2, WebkitOverflowScrolling:'touch', scrollbarWidth:'none' }}>
+              {[{id:null,label:'Tous'},{id:'0-3',label:'0-3 ans'},{id:'4-6',label:'4-6 ans'},{id:'7-12',label:'7-12 ans'},{id:'13+',label:'Ado'}].map(a => (
+                <button key={String(a.id)} onClick={() => {
+                  setAgeFilter(a.id)
+                  if (activeCat && activeSub) setTimeout(() => doSearch(activeCat, activeSub, budget), 50)
+                  else if (activeCat) setTimeout(() => doSearchTout(activeCat), 50)
+                }} style={{
+                  height:44, padding:'0 16px', borderRadius:99, fontSize:13, fontWeight:700, flexShrink:0,
+                  background: ageFilter===a.id ? '#FF6B4A' : '#F5F3F0',
+                  color: ageFilter===a.id ? '#fff' : '#5A6A82',
+                  border: ageFilter===a.id ? 'none' : '1.5px solid #EDE8E1',
+                  cursor:'pointer', transition:'all .15s', whiteSpace:'nowrap',
+                }}>{a.label}</button>
+              ))}
             </div>
 
             {/* 4. Pogoda + Découvrir tout */}
