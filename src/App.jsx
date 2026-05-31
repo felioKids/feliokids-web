@@ -76,8 +76,6 @@ function HeroSlideshow({ onWeekendClick }) {
           <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0) 28%, rgba(5,12,5,0.55) 58%, rgba(5,10,5,0.93) 100%)' }} />
         </div>
       ))}
-
-      {/* NAV */}
       <div style={{ position:'absolute', top:0, left:0, right:0, padding:'14px 16px', display:'flex', justifyContent:'space-between', alignItems:'center', zIndex:10 }}>
         <button onClick={() => window.location.reload()} style={{ display:'flex', alignItems:'center', gap:9, background:'none', border:'none', cursor:'pointer', padding:0 }}>
           <FelioLogo size={36} fontSize={14} />
@@ -94,8 +92,6 @@ function HeroSlideshow({ onWeekendClick }) {
           <button onClick={() => setPopupOpen(true)} style={{ background:'rgba(255,255,255,0.12)', backdropFilter:'blur(8px)', color:'#fff', padding:'6px 12px', borderRadius:99, fontSize:11, fontWeight:700, border:'1px solid rgba(255,255,255,0.22)', cursor:'pointer' }}>🔔 Alertes</button>
         </div>
       </div>
-
-      {/* DOTS pionowe — prawy bok */}
       <div style={{ position:'absolute', top:'50%', right:14, transform:'translateY(-50%)', display:'flex', flexDirection:'column', gap:6, zIndex:10 }}>
         {SLIDES.map((_,i) => (
           <button key={i} onClick={() => setCur(i)} style={{
@@ -105,8 +101,6 @@ function HeroSlideshow({ onWeekendClick }) {
           }} />
         ))}
       </div>
-
-      {/* TEKST — dół */}
       <div style={{ position:'absolute', bottom:30, left:18, right:32, zIndex:10 }}>
         <div style={{ display:'inline-flex', alignItems:'center', gap:6, background:'rgba(255,107,74,0.88)', padding:'4px 11px', borderRadius:99, marginBottom:10 }}>
           <div style={{ width:5, height:5, borderRadius:'50%', background:'#fff', flexShrink:0 }} />
@@ -121,7 +115,6 @@ function HeroSlideshow({ onWeekendClick }) {
         </div>
         <div style={{ fontSize:12, color:'rgba(255,255,255,0.72)', lineHeight:1.6, fontWeight:500 }}>{SLIDES[cur].sub}</div>
       </div>
-
       <NewsletterPopup isOpen={popupOpen} onClose={() => setPopupOpen(false)} />
     </div>
   )
@@ -156,7 +149,7 @@ function SubsPanel({ cat, activeSub, onSub, onTout }) {
       </div>
       <div className="scroll-x" style={{ display:'flex', gap:7, paddingBottom:2 }}>
         <button onClick={onTout} style={{
-          padding:'8px 15px', borderRadius:99, fontSize:12, fontWeight:700, flexShrink:0, transition:'all .18s',
+          padding:'9px 16px', borderRadius:99, fontSize:13, fontWeight:700, flexShrink:0, transition:'all .18s',
           background: activeSub===null ? cat.c : '#F5F3F0',
           color: activeSub===null ? '#fff' : '#5A6A82',
           border: activeSub===null ? 'none' : '1.5px solid #EDE8E1',
@@ -164,7 +157,7 @@ function SubsPanel({ cat, activeSub, onSub, onTout }) {
         }}>Tout</button>
         {cat.subs.map(s => (
           <button key={s} onClick={() => onSub(s)} style={{
-            padding:'8px 15px', borderRadius:99, fontSize:12, fontWeight:700, flexShrink:0, transition:'all .18s',
+            padding:'9px 16px', borderRadius:99, fontSize:13, fontWeight:700, flexShrink:0, transition:'all .18s',
             background:activeSub===s?cat.c:'#F5F3F0', color:activeSub===s?'#fff':'#5A6A82',
             border:activeSub===s?'none':'1.5px solid #EDE8E1', boxShadow:activeSub===s?`0 3px 10px ${cat.c}44`:'none',
           }}>{s}</button>
@@ -221,17 +214,17 @@ function WeatherBanner({ weather, city, setActiveCat, setActiveSub, doSearch, ag
     setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 300)
   }
   return (
-    <button onClick={handleClick} style={{ width:'100%', background:gradient, borderRadius:14, padding:'12px 15px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:10, border:'none', cursor:'pointer', boxShadow:'0 3px 16px rgba(0,0,0,0.15)', transition:'transform .15s ease' }}
+    <button onClick={handleClick} style={{ width:'100%', background:gradient, borderRadius:16, padding:'14px 16px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:10, border:'none', cursor:'pointer', boxShadow:'0 3px 16px rgba(0,0,0,0.15)', transition:'transform .15s ease' }}
       onMouseEnter={e => e.currentTarget.style.transform='scale(1.015)'}
       onMouseLeave={e => e.currentTarget.style.transform='scale(1)'}>
-      <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-        <span style={{ fontSize:22, lineHeight:1, flexShrink:0 }}>{emoji}</span>
+      <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+        <span style={{ fontSize:26, lineHeight:1, flexShrink:0 }}>{emoji}</span>
         <div style={{ textAlign:'left' }}>
-          <div style={{ fontSize:12, fontWeight:800, color:'#fff', lineHeight:1.35 }}>{line1}{ageLabel}{openLabel}</div>
-          <div style={{ fontSize:10, color:'rgba(255,255,255,0.72)', fontWeight:600, marginTop:3 }}>{icon} {temp}°C · {line2}</div>
+          <div style={{ fontSize:13, fontWeight:800, color:'#fff', lineHeight:1.35 }}>{line1}{ageLabel}{openLabel}</div>
+          <div style={{ fontSize:11, color:'rgba(255,255,255,0.72)', fontWeight:600, marginTop:4 }}>{icon} {temp}°C · {line2}</div>
         </div>
       </div>
-      <div style={{ width:28, height:28, borderRadius:8, flexShrink:0, background:'rgba(255,255,255,0.2)', border:'1px solid rgba(255,255,255,0.3)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:15, color:'#fff', fontWeight:700 }}>›</div>
+      <div style={{ width:32, height:32, borderRadius:10, flexShrink:0, background:'rgba(255,255,255,0.2)', border:'1px solid rgba(255,255,255,0.3)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:16, color:'#fff', fontWeight:700 }}>›</div>
     </button>
   )
 }
@@ -289,21 +282,21 @@ function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasS
   }
   if (!city) return null
   return (
-    <button onClick={handleClick} disabled={running} style={{ width:'100%', background:'linear-gradient(135deg,#1B2B4B,#2C3E6A)', borderRadius:14, padding:'12px 15px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:10, border:'none', cursor:running?'wait':'pointer', boxShadow:'0 3px 16px rgba(27,43,75,0.25)', transition:'transform .15s ease', opacity:running?0.9:1 }}
+    <button onClick={handleClick} disabled={running} style={{ width:'100%', background:'linear-gradient(135deg,#1B2B4B,#2C3E6A)', borderRadius:16, padding:'14px 16px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:10, border:'none', cursor:running?'wait':'pointer', boxShadow:'0 3px 16px rgba(27,43,75,0.25)', transition:'transform .15s ease', opacity:running?0.9:1 }}
       onMouseEnter={e => { if(!running) e.currentTarget.style.transform='scale(1.015)' }}
       onMouseLeave={e => e.currentTarget.style.transform='scale(1)'}>
-      <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-        <span style={{ fontSize:22, lineHeight:1, flexShrink:0 }}>{running?'⏳':'🗺️'}</span>
+      <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+        <span style={{ fontSize:26, lineHeight:1, flexShrink:0 }}>{running?'⏳':'🗺️'}</span>
         <div style={{ textAlign:'left' }}>
-          <div style={{ fontSize:12, fontWeight:800, color:'#fff', lineHeight:1.35 }}>{running?'Recherche en cours…':`Découvrir tout à ${city}`}</div>
-          <div style={{ fontSize:10, color:'rgba(255,255,255,0.65)', fontWeight:600, marginTop:3 }}>
+          <div style={{ fontSize:13, fontWeight:800, color:'#fff', lineHeight:1.35 }}>{running?'Recherche en cours…':`Découvrir tout à ${city}`}</div>
+          <div style={{ fontSize:11, color:'rgba(255,255,255,0.65)', fontWeight:600, marginTop:4 }}>
             {ageFilter==='0-3'?'Parcs · Piscines · Bibliothèques · Fermes →':'Forêts · Zoos · Cinémas · Piscines · Châteaux →'}
           </div>
         </div>
       </div>
       {running
-        ? <div style={{ width:22, height:22, borderRadius:'50%', flexShrink:0, border:'2.5px solid rgba(255,255,255,0.25)', borderTopColor:'#fff', animation:'spin 0.75s linear infinite' }} />
-        : <div style={{ width:28, height:28, borderRadius:8, flexShrink:0, background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.25)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:15, color:'#fff', fontWeight:700 }}>›</div>
+        ? <div style={{ width:24, height:24, borderRadius:'50%', flexShrink:0, border:'2.5px solid rgba(255,255,255,0.25)', borderTopColor:'#fff', animation:'spin 0.75s linear infinite' }} />
+        : <div style={{ width:32, height:32, borderRadius:10, flexShrink:0, background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.25)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:16, color:'#fff', fontWeight:700 }}>›</div>
       }
     </button>
   )
@@ -399,22 +392,10 @@ export default function App() {
             { headers: { 'Accept-Language': 'fr' } }
           )
           const d = await r.json()
-          const name =
-            d.address?.city ||
-            d.address?.town ||
-            d.address?.village ||
-            d.address?.municipality ||
-            d.display_name.split(',')[0].trim()
-          setCity(name)
-          setUserLocation({ lat, lng })
-          setGpsActive(true)
-          setCitySuggs([])
-          setShowSugg(false)
+          const name = d.address?.city || d.address?.town || d.address?.village || d.address?.municipality || d.display_name.split(',')[0].trim()
+          setCity(name); setUserLocation({ lat, lng }); setGpsActive(true); setCitySuggs([]); setShowSugg(false)
           await fetchWeather(lat, lng)
-        } catch {
-        } finally {
-          setGpsLoading(false)
-        }
+        } catch {} finally { setGpsLoading(false) }
       },
       () => { setGpsLoading(false) },
       { timeout: 10000, maximumAge: 0, enableHighAccuracy: false }
@@ -425,35 +406,13 @@ export default function App() {
     if (!query.trim()) return
     if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); setTimeout(() => document.getElementById('city-input')?.scrollIntoView({ behavior:'smooth', block:'center' }), 100); return }
     if (!userLocation) { setSearchError("Sélectionnez une ville dans la liste pour activer la recherche."); return }
-    setLoading(true)
-    setSearchError(null)
-    setHasSearched(true)
-    setActiveCat(null)
-    setActiveSub(null)
+    setLoading(true); setSearchError(null); setHasSearched(true); setActiveCat(null); setActiveSub(null)
     try {
-      const res = await searchActivitiesGoogle({
-        lat: userLocation.lat,
-        lng: userLocation.lng,
-        radius: radius * 1000,
-        keyword: query.trim(),
-        catId: 'search',
-        textsearch: true,
-      })
-      if (res.length === 0) {
-        setSearchError(`Aucun résultat pour "${query}" près de "${city}". Essayez un autre mot.`)
-        setResults([])
-        setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 100)
-      } else {
-        setResults(res)
-        setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 300)
-      }
-    } catch (err) {
-      console.error('[TextSearch]', err)
-      setSearchError('Une erreur est survenue. Vérifiez votre connexion.')
-      setResults([])
-    } finally {
-      setLoading(false)
-    }
+      const res = await searchActivitiesGoogle({ lat: userLocation.lat, lng: userLocation.lng, radius: radius * 1000, keyword: query.trim(), catId: 'search', textsearch: true })
+      if (res.length === 0) { setSearchError(`Aucun résultat pour "${query}" près de "${city}". Essayez un autre mot.`); setResults([]); setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 100) }
+      else { setResults(res); setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 300) }
+    } catch (err) { console.error('[TextSearch]', err); setSearchError('Une erreur est survenue. Vérifiez votre connexion.'); setResults([]) }
+    finally { setLoading(false) }
   }, [query, city, userLocation, radius])
 
   const doSearch = useCallback(async (catId, sub, bgt, rad) => {
@@ -481,17 +440,13 @@ export default function App() {
     if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); setTimeout(() => document.getElementById('city-input')?.scrollIntoView({ behavior:'smooth', block:'center' }), 100); return }
     const config = TOUT_CONFIG[catId]
     if (!config) return
-    setActiveSub(null)
-    setLoading(true); setSearchError(null); setHasSearched(true)
+    setActiveSub(null); setLoading(true); setSearchError(null); setHasSearched(true)
     try {
       const activities = await searchActivities({ city:city.trim(), radiusKm:radius, budget, catId, subName:config.keyword })
-      if (activities.length===0) { setSearchError(`Aucun résultat dans un rayon de ${radius} km autour de "${city}". Essayez d'élargir la zone.`); setResults([]);setTimeout(() => document.getElementById('city-input')?.scrollIntoView({ behavior:'smooth', block:'center' }), 100) }
+      if (activities.length===0) { setSearchError(`Aucun résultat dans un rayon de ${radius} km autour de "${city}". Essayez d'élargir la zone.`); setResults([]); setTimeout(() => document.getElementById('city-input')?.scrollIntoView({ behavior:'smooth', block:'center' }), 100) }
       else { setResults(activities); setSearchError(null); setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth', block:'start' }), 300) }
-    } catch (err) {
-      console.error('[FelioKids]',err)
-      setSearchError('Une erreur est survenue. Vérifiez votre connexion.')
-      setResults([])
-    } finally { setLoading(false) }
+    } catch (err) { console.error('[FelioKids]',err); setSearchError('Une erreur est survenue. Vérifiez votre connexion.'); setResults([]) }
+    finally { setLoading(false) }
   }, [city, radius, budget])
 
   const clickCat = (id) => {
@@ -526,19 +481,10 @@ export default function App() {
       items.push(
         <div key={i}>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:9, marginBottom:activeCatInPair?0:9 }}>
-            {pair.map((cat,j) => (
-              <CatTile key={cat.id} cat={cat} active={activeCat===cat.id} delay={(i+j)*0.04} onClick={() => clickCat(cat.id)} />
-            ))}
+            {pair.map((cat,j) => <CatTile key={cat.id} cat={cat} active={activeCat===cat.id} delay={(i+j)*0.04} onClick={() => clickCat(cat.id)} />)}
             {pair.length < 2 && <div />}
           </div>
-          {activeCatInPair && (
-            <SubsPanel
-              cat={activeCatInPair}
-              activeSub={activeSub}
-              onSub={clickSub}
-              onTout={() => doSearchTout(activeCatInPair.id)}
-            />
-          )}
+          {activeCatInPair && <SubsPanel cat={activeCatInPair} activeSub={activeSub} onSub={clickSub} onTout={() => doSearchTout(activeCatInPair.id)} />}
         </div>
       )
     }
@@ -553,16 +499,17 @@ export default function App() {
 
         <div style={{ padding:'0 14px', marginTop:-22, position:'relative', zIndex:10 }}>
           <div style={{ background:'#fff', borderRadius:'22px 22px 16px 16px', padding:'6px 18px 22px', boxShadow:'0 -4px 24px rgba(0,0,0,0.07), 0 8px 40px rgba(27,43,75,0.10)', border:'1px solid #F0EBE3' }}>
+
             {/* handle bar */}
-            <div style={{ width:40, height:4, borderRadius:99, background:'#E8E2DA', margin:'10px auto 16px' }} />
+            <div style={{ width:40, height:4, borderRadius:99, background:'#E8E2DA', margin:'10px auto 18px' }} />
 
             {/* 1. Ville */}
-            <div style={{ position:'relative', marginBottom:14 }}>
-              <div className="city-field" style={{ display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:14, padding:'12px 15px', gap:10, border:`1.5px solid ${searchError && !city.trim() ? '#FF6B4A' : gpsActive ? '#FFCFC4' : '#EDE8E1'}`, transition:'border-color .2s' }}>
-                <span style={{ fontSize:16, flexShrink:0 }}>📍</span>
+            <div style={{ position:'relative', marginBottom:12 }}>
+              <div className="city-field" style={{ display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:16, padding:'15px 16px', gap:10, border:`1.5px solid ${searchError && !city.trim() ? '#FF6B4A' : gpsActive ? '#FFCFC4' : '#EDE8E1'}`, transition:'border-color .2s', minHeight:54 }}>
+                <span style={{ fontSize:18, flexShrink:0 }}>📍</span>
                 <input
                   id="city-input"
-                  style={{ flex:1, fontSize:15, fontWeight:600, color:'#1B2B4B', fontFamily:'var(--font-body)' }}
+                  style={{ flex:1, fontSize:16, fontWeight:600, color:'#1B2B4B', fontFamily:'var(--font-body)' }}
                   placeholder="Ville ou commune..."
                   value={city}
                   onChange={e => handleCityInput(e.target.value)}
@@ -570,18 +517,14 @@ export default function App() {
                   onFocus={() => { if(citySuggs.length) setShowSugg(true) }}
                   onBlur={() => setTimeout(() => setShowSugg(false), 180)}
                 />
-                {weather && <span style={{ fontSize:12, color:'#9AAABB', fontWeight:600, flexShrink:0 }}>{weather.icon} {weather.temp}°C</span>}
+                {weather && <span style={{ fontSize:13, color:'#9AAABB', fontWeight:600, flexShrink:0 }}>{weather.icon} {weather.temp}°C</span>}
                 {city && !weather && !gpsLoading && (
-                  <button onClick={() => { setCity(''); setWeather(null); setGpsActive(false) }} style={{ color:'#C5C5C5', fontSize:14, flexShrink:0 }}>✕</button>
+                  <button onClick={() => { setCity(''); setWeather(null); setGpsActive(false) }} style={{ color:'#C5C5C5', fontSize:16, flexShrink:0, padding:4 }}>✕</button>
                 )}
-                <button
-                  onClick={handleGps}
-                  className="gps-btn"
-                  title="Utiliser ma position GPS"
-                  style={{ background:'none', border:'none', cursor: gpsLoading ? 'wait' : 'pointer', padding:2, display:'flex', alignItems:'center', gap:5, flexShrink:0, opacity: gpsLoading ? 0.6 : 1, transition:'opacity .2s' }}
-                >
+                <button onClick={handleGps} className="gps-btn" title="Utiliser ma position GPS"
+                  style={{ background:'none', border:'none', cursor: gpsLoading ? 'wait' : 'pointer', padding:4, display:'flex', alignItems:'center', gap:5, flexShrink:0, opacity: gpsLoading ? 0.6 : 1, transition:'opacity .2s' }}>
                   <GpsIcon loading={gpsLoading} active={gpsActive} />
-                  <span style={{ fontSize:11, fontWeight:700, color: gpsActive ? '#FF6B4A' : '#C5C5C5', whiteSpace:'nowrap' }}>
+                  <span style={{ fontSize:12, fontWeight:700, color: gpsActive ? '#FF6B4A' : '#C5C5C5', whiteSpace:'nowrap' }}>
                     {gpsLoading ? 'Localisation...' : 'Ma position'}
                   </span>
                 </button>
@@ -589,7 +532,7 @@ export default function App() {
               {showSugg && citySuggs.length > 0 && (
                 <div className="anim-down" style={{ position:'absolute', top:'110%', left:0, right:0, background:'#fff', borderRadius:15, boxShadow:'0 8px 32px rgba(27,43,75,0.13)', zIndex:50, overflow:'hidden', border:'1px solid #F0EBE3' }}>
                   {citySuggs.map((s,i) => (
-                    <div key={i} style={{ padding:'11px 15px', fontSize:14, cursor:'pointer', borderBottom:i<citySuggs.length-1?'1px solid #F5F1EC':'none', fontWeight:500, color:'#1B2B4B', display:'flex', alignItems:'center', gap:8 }}
+                    <div key={i} style={{ padding:'13px 16px', fontSize:15, cursor:'pointer', borderBottom:i<citySuggs.length-1?'1px solid #F5F1EC':'none', fontWeight:500, color:'#1B2B4B', display:'flex', alignItems:'center', gap:8 }}
                       onMouseDown={() => chooseSugg(s)} onMouseEnter={e => e.currentTarget.style.background='#FFF8F1'} onMouseLeave={e => e.currentTarget.style.background='#fff'}>
                       <span>📍</span>{s.display_name.split(',').slice(0,3).join(', ')}
                     </div>
@@ -599,47 +542,45 @@ export default function App() {
             </div>
 
             {/* 2. Km + Open now */}
-            <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:14, flexWrap:'wrap' }}>
-              <span style={{ fontSize:11, fontWeight:600, color:'#C5C5C5', flexShrink:0 }}>📏</span>
+            <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:12, flexWrap:'wrap' }}>
               <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #EDE8E1', borderRadius:99, overflow:'hidden' }}>
                 <button
                   onPointerDown={() => { const step = () => { setRadius(r => { const next=Math.max(5,r-5); if(activeCat && activeSub) doSearch(activeCat,activeSub,budget,next); else if(activeCat) doSearchTout(activeCat); return next }); }; step(); const t=setInterval(step,400); window._rTimer=t }}
                   onPointerUp={() => clearInterval(window._rTimer)} onPointerLeave={() => clearInterval(window._rTimer)}
-                  style={{ width:36, height:34, fontSize:18, fontWeight:700, color:'#1B2B4B', background:'#F5F3F0', borderRight:'1.5px solid #EDE8E1', flexShrink:0 }}>−</button>
-                <div style={{ minWidth:72, textAlign:'center', padding:'0 10px' }}>
-                  <span style={{ fontSize:14, fontWeight:700, color:'#1B2B4B' }}>{radius} km</span>
+                  style={{ width:44, height:44, fontSize:20, fontWeight:700, color:'#1B2B4B', background:'#F5F3F0', borderRight:'1.5px solid #EDE8E1', flexShrink:0 }}>−</button>
+                <div style={{ minWidth:76, textAlign:'center', padding:'0 10px' }}>
+                  <span style={{ fontSize:15, fontWeight:700, color:'#1B2B4B' }}>{radius} km</span>
                 </div>
                 <button
                   onPointerDown={() => { const step = () => { setRadius(r => { const next=Math.min(50,r+5); if(activeCat && activeSub) doSearch(activeCat,activeSub,budget,next); else if(activeCat) doSearchTout(activeCat); return next }); }; step(); const t=setInterval(step,400); window._rTimer=t }}
                   onPointerUp={() => clearInterval(window._rTimer)} onPointerLeave={() => clearInterval(window._rTimer)}
-                  style={{ width:36, height:34, fontSize:18, fontWeight:700, color:'#1B2B4B', background:'#F5F3F0', borderLeft:'1.5px solid #EDE8E1', flexShrink:0 }}>+</button>
+                  style={{ width:44, height:44, fontSize:20, fontWeight:700, color:'#1B2B4B', background:'#F5F3F0', borderLeft:'1.5px solid #EDE8E1', flexShrink:0 }}>+</button>
               </div>
-              <span style={{ fontSize:11, color:'#C5C5C5', fontWeight:500 }}>autour de toi</span>
+              <span style={{ fontSize:12, color:'#C5C5C5', fontWeight:500 }}>autour de toi</span>
               <button onClick={() => {
                 const next = !openNowFilter
                 setOpenNowFilter(next)
                 if (activeCat && activeSub) setTimeout(() => doSearch(activeCat, activeSub, budget), 50)
                 else if (activeCat) setTimeout(() => doSearchTout(activeCat), 50)
               }} style={{
-                padding:'4px 12px', borderRadius:99, fontSize:11, fontWeight:700,
+                padding:'10px 16px', borderRadius:99, fontSize:13, fontWeight:700,
                 background: openNowFilter ? '#FF6B4A' : '#F5F3F0',
                 color: openNowFilter ? '#fff' : '#5A6A82',
                 border: openNowFilter ? 'none' : '1.5px solid #EDE8E1',
-                cursor:'pointer', transition:'all .15s', marginLeft:'auto',
+                cursor:'pointer', transition:'all .15s', marginLeft:'auto', minHeight:44,
               }}>🟢 Open now</button>
             </div>
 
             {/* 3. Âge */}
             <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:14 }}>
-              <span style={{ fontSize:11, fontWeight:600, color:'#C5C5C5', flexShrink:0 }}>👶</span>
-              <div style={{ display:'flex', gap:5, flexWrap:'wrap' }}>
-                {[{id:null,label:'Tous'},{id:'0-3',label:'0-3 ans'},{id:'4-6',label:'4-6 ans'},{id:'7-12',label:'7-12 ans'},{id:'13+',label:'Ado'}].map(a => (
+              <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
+                {[{id:null,label:'Tous'},{id:'0-3',label:'👶 0-3'},{id:'4-6',label:'🧒 4-6'},{id:'7-12',label:'👦 7-12'},{id:'13+',label:'🧑 Ado'}].map(a => (
                   <button key={String(a.id)} onClick={() => {
                     setAgeFilter(a.id)
                     if (activeCat && activeSub) setTimeout(() => doSearch(activeCat, activeSub, budget), 50)
                     else if (activeCat) setTimeout(() => doSearchTout(activeCat), 50)
                   }} style={{
-                    padding:'4px 10px', borderRadius:99, fontSize:11, fontWeight:700,
+                    padding:'10px 14px', borderRadius:99, fontSize:13, fontWeight:700, minHeight:44,
                     background: ageFilter===a.id ? '#FF6B4A' : '#F5F3F0',
                     color: ageFilter===a.id ? '#fff' : '#5A6A82',
                     border: ageFilter===a.id ? 'none' : '1.5px solid #EDE8E1',
@@ -658,22 +599,21 @@ export default function App() {
             )}
 
             {/* 5. Recherche libre */}
-            <p style={{ fontFamily:'var(--font-body)', fontSize:12, fontWeight:600, color:'#9AAABB', marginBottom:10, letterSpacing:'0.2px' }}>Vous savez déjà ce que vous cherchez ? 👇</p>
+            <p style={{ fontFamily:'var(--font-body)', fontSize:13, fontWeight:600, color:'#9AAABB', marginBottom:10, letterSpacing:'0.2px' }}>Vous savez déjà ce que vous cherchez ? 👇</p>
             <div style={{ display:'flex', gap:8 }}>
-              <div style={{ flex:1, display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:14, padding:'12px 15px', gap:10, border:'1.5px solid #EDE8E1' }}>
-                <span style={{ fontSize:16, flexShrink:0, color:'#9AAABB' }}>🔍</span>
+              <div style={{ flex:1, display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:16, padding:'14px 16px', gap:10, border:'1.5px solid #EDE8E1', minHeight:54 }}>
+                <span style={{ fontSize:18, flexShrink:0, color:'#9AAABB' }}>🔍</span>
                 <input
-                  style={{ flex:1, fontSize:14, fontWeight:500, color:'#1B2B4B', fontFamily:'var(--font-body)' }}
-                  placeholder="Bowling, cinéma, zoo, anniversaire…"
+                  style={{ flex:1, fontSize:15, fontWeight:500, color:'#1B2B4B', fontFamily:'var(--font-body)' }}
+                  placeholder="Bowling, cinéma, zoo…"
                   value={query}
                   onChange={e => setQuery(e.target.value)}
                   onKeyDown={e => { if (e.key==='Enter') handleTextSearch() }}
                 />
-                {query && <button onClick={() => setQuery('')} style={{ color:'#C5C5C5', fontSize:14 }}>✕</button>}
+                {query && <button onClick={() => setQuery('')} style={{ color:'#C5C5C5', fontSize:16, padding:4 }}>✕</button>}
               </div>
-              <button
-                onClick={() => handleTextSearch()}
-                style={{ background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', color:'#fff', padding:'12px 18px', borderRadius:14, fontSize:14, fontWeight:700, flexShrink:0, boxShadow:'0 4px 14px rgba(255,107,74,0.38)', whiteSpace:'nowrap' }}>
+              <button onClick={() => handleTextSearch()}
+                style={{ background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', color:'#fff', padding:'14px 18px', borderRadius:16, fontSize:15, fontWeight:700, flexShrink:0, boxShadow:'0 4px 14px rgba(255,107,74,0.38)', whiteSpace:'nowrap', minHeight:54 }}>
                 Trouver →
               </button>
             </div>
@@ -696,9 +636,7 @@ export default function App() {
           )}
           {loading && (
             <div style={{ textAlign:'center', padding:'44px 0' }}>
-              <div style={{ animation:'spin 1s linear infinite', display:'inline-block' }}>
-                <FelioLogo size={52} fontSize={22} />
-              </div>
+              <div style={{ animation:'spin 1s linear infinite', display:'inline-block' }}><FelioLogo size={52} fontSize={22} /></div>
               <div style={{ color:'#9AAABB', fontSize:14, fontWeight:600, marginTop:14 }}>Recherche en cours...</div>
             </div>
           )}
@@ -725,18 +663,15 @@ export default function App() {
           FelioKids · <a href="mailto:contact.feliokids@gmail.com" style={{ color:'#FF6B4A', fontWeight:600 }}>contact.feliokids@gmail.com</a>
         </div>
       </div>
+
       <NewsletterPopup isOpen={popupOpen} onClose={() => setPopupOpen(false)} />
       <WeekendPanel lat={userLocation?.lat} lng={userLocation?.lng} isOpen={weekendOpen} onClose={() => setWeekendOpen(false)} />
 
-      {/* Bouton Mes favoris */}
-      <button
-        onClick={() => { setFavsList(JSON.parse(localStorage.getItem('fk_favs')||'[]')); setFavsOpen(true) }}
-        style={{ position:'fixed', bottom:20, right:16, background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', color:'#fff', border:'none', borderRadius:99, padding:'12px 20px', fontSize:13, fontWeight:800, boxShadow:'0 4px 20px rgba(255,107,74,0.45)', cursor:'pointer', zIndex:200, display:'flex', alignItems:'center', gap:7 }}
-      >
+      <button onClick={() => { setFavsList(JSON.parse(localStorage.getItem('fk_favs')||'[]')); setFavsOpen(true) }}
+        style={{ position:'fixed', bottom:20, right:16, background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', color:'#fff', border:'none', borderRadius:99, padding:'12px 20px', fontSize:13, fontWeight:800, boxShadow:'0 4px 20px rgba(255,107,74,0.45)', cursor:'pointer', zIndex:200, display:'flex', alignItems:'center', gap:7 }}>
         ❤️ Mes favoris
       </button>
 
-      {/* Panel Mes favoris */}
       {favsOpen && (
         <div onClick={() => setFavsOpen(false)} style={{ position:'fixed', inset:0, background:'rgba(27,43,75,0.5)', backdropFilter:'blur(6px)', zIndex:250 }}>
           <div onClick={e => e.stopPropagation()} style={{ position:'absolute', bottom:0, left:0, right:0, maxHeight:'80vh', overflowY:'auto', background:'#FFF8F1', borderRadius:'24px 24px 0 0', padding:'20px 16px 40px' }}>
