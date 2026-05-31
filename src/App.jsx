@@ -69,37 +69,59 @@ function HeroSlideshow({ onWeekendClick }) {
   const [popupOpen, setPopupOpen] = useState(false)
   useEffect(() => { const t = setInterval(() => setCur(c => (c+1)%SLIDES.length), 4500); return () => clearInterval(t) }, [])
   return (
-<div style={{ position:'relative', width:'100%', height:'320px', overflow:'hidden', flexShrink:0 }}>
+    <div style={{ position:'relative', width:'100%', height:'400px', overflow:'hidden', flexShrink:0 }}>
       {SLIDES.map((s,i) => (
         <div key={i} style={{ position:'absolute', inset:0, opacity:i===cur?1:0, transition:'opacity 1.2s ease', zIndex:i===cur?1:0 }}>
           <img src={s.img} alt="" style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'center 25%' }} />
-          <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom,rgba(10,20,40,0.50) 0%,rgba(10,20,40,0.10) 35%,rgba(255,248,241,0.85) 85%,rgba(255,248,241,1) 100%)' }} />
+          <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0) 28%, rgba(5,12,5,0.55) 58%, rgba(5,10,5,0.93) 100%)' }} />
         </div>
       ))}
+
+      {/* NAV */}
       <div style={{ position:'absolute', top:0, left:0, right:0, padding:'14px 16px', display:'flex', justifyContent:'space-between', alignItems:'center', zIndex:10 }}>
         <button onClick={() => window.location.reload()} style={{ display:'flex', alignItems:'center', gap:9, background:'none', border:'none', cursor:'pointer', padding:0 }}>
           <FelioLogo size={36} fontSize={14} />
           <div>
-            <div style={{ fontWeight:800, fontSize:16, color:'#fff', lineHeight:1, textShadow:'0 1px 6px rgba(0,0,0,0.3)', display:'flex', alignItems:'center' }}>
+            <div style={{ fontWeight:800, fontSize:16, color:'#fff', lineHeight:1, textShadow:'0 1px 6px rgba(0,0,0,0.4)', display:'flex', alignItems:'center' }}>
               <span style={{ fontFamily:'Georgia, serif', fontWeight:800, fontSize:16, color:'#fff' }}>f</span>
               <span style={{ fontFamily:'Outfit, sans-serif', fontWeight:800, fontSize:16, color:'#fff' }}>elioKids</span>
             </div>
-            <div style={{ fontSize:9, color:'rgba(255,255,255,0.65)', fontWeight:600, letterSpacing:'0.8px' }}>FAMILY DISCOVERY</div>
+            <div style={{ fontSize:9, color:'rgba(255,255,255,0.55)', fontWeight:600, letterSpacing:'0.8px' }}>FAMILY DISCOVERY</div>
           </div>
         </button>
         <div style={{ display:'flex', gap:7 }}>
-          <button onClick={onWeekendClick} style={{ background:'rgba(255,255,255,0.18)', backdropFilter:'blur(8px)', color:'#fff', padding:'6px 12px', borderRadius:99, fontSize:11, fontWeight:700, border:'1px solid rgba(255,255,255,0.28)', cursor:'pointer' }}>✨ Weekend</button>
-          <button onClick={() => setPopupOpen(true)} style={{ background:'rgba(255,255,255,0.18)', backdropFilter:'blur(8px)', color:'#fff', padding:'6px 12px', borderRadius:99, fontSize:11, fontWeight:700, border:'1px solid rgba(255,255,255,0.28)', cursor:'pointer' }}>🔔 Alertes</button>
+          <button onClick={onWeekendClick} style={{ background:'rgba(255,255,255,0.12)', backdropFilter:'blur(8px)', color:'#fff', padding:'6px 12px', borderRadius:99, fontSize:11, fontWeight:700, border:'1px solid rgba(255,255,255,0.22)', cursor:'pointer' }}>✨ Weekend</button>
+          <button onClick={() => setPopupOpen(true)} style={{ background:'rgba(255,255,255,0.12)', backdropFilter:'blur(8px)', color:'#fff', padding:'6px 12px', borderRadius:99, fontSize:11, fontWeight:700, border:'1px solid rgba(255,255,255,0.22)', cursor:'pointer' }}>🔔 Alertes</button>
         </div>
       </div>
-      <div style={{ position:'absolute', bottom:32, left:20, right:20, zIndex:10 }}>
-       <div style={{ fontSize:9, fontWeight:700, color:'rgba(255,255,255,0.55)', letterSpacing:'1.5px', marginBottom:6 }}>{SLIDES[cur].label}</div>
-        <div style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontSize:23, fontWeight:900, color:'#fff', lineHeight:1.22, marginBottom:8, textShadow:'0 2px 14px rgba(0,0,0,0.35)' }}>{SLIDES[cur].title}</div>
-        <div style={{ fontSize:13, color:'rgba(255,255,255,0.76)', lineHeight:1.6, fontWeight:500 }}>{SLIDES[cur].sub}</div>
+
+      {/* DOTS pionowe — prawy bok */}
+      <div style={{ position:'absolute', top:'50%', right:14, transform:'translateY(-50%)', display:'flex', flexDirection:'column', gap:6, zIndex:10 }}>
+        {SLIDES.map((_,i) => (
+          <button key={i} onClick={() => setCur(i)} style={{
+            width:5, height:i===cur?20:5, borderRadius:99, padding:0, border:'none', cursor:'pointer',
+            background:i===cur?'#FF6B4A':'rgba(255,255,255,0.35)',
+            transition:'all .35s cubic-bezier(.22,.68,0,1.2)',
+          }} />
+        ))}
       </div>
-      <div style={{ position:'absolute', bottom:12, right:18, display:'flex', gap:5, zIndex:10 }}>
-        {SLIDES.map((_,i) => <button key={i} onClick={() => setCur(i)} style={{ width:i===cur?20:6, height:6, borderRadius:99, padding:0, background:i===cur?'#FF6B4A':'rgba(255,255,255,0.4)', transition:'all .3s' }} />)}
+
+      {/* TEKST — dół */}
+      <div style={{ position:'absolute', bottom:30, left:18, right:32, zIndex:10 }}>
+        <div style={{ display:'inline-flex', alignItems:'center', gap:6, background:'rgba(255,107,74,0.88)', padding:'4px 11px', borderRadius:99, marginBottom:10 }}>
+          <div style={{ width:5, height:5, borderRadius:'50%', background:'#fff', flexShrink:0 }} />
+          <span style={{ fontSize:9, fontWeight:700, color:'#fff', letterSpacing:'1px' }}>{SLIDES[cur].label}</span>
+        </div>
+        <div style={{ fontFamily:"'Bricolage Grotesque','Plus Jakarta Sans',sans-serif", fontSize:27, fontWeight:900, color:'#fff', lineHeight:1.18, marginBottom:9, textShadow:'0 2px 20px rgba(0,0,0,0.5)' }}>
+          {SLIDES[cur].title.split(' ').map((word, wi, arr) =>
+            wi === arr.length - 1
+              ? <span key={wi} style={{ color:'#FF9A6C' }}>{word}</span>
+              : <span key={wi}>{word} </span>
+          )}
+        </div>
+        <div style={{ fontSize:12, color:'rgba(255,255,255,0.72)', lineHeight:1.6, fontWeight:500 }}>{SLIDES[cur].sub}</div>
       </div>
+
       <NewsletterPopup isOpen={popupOpen} onClose={() => setPopupOpen(false)} />
     </div>
   )
@@ -249,10 +271,10 @@ function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasS
   const [running, setRunning] = useState(false)
   const handleClick = async () => {
     if (running) return
-if (!city?.trim()) {
-  document.getElementById('city-input')?.scrollIntoView({ behavior:'smooth', block:'center' })
-  return
-}
+    if (!city?.trim()) {
+      document.getElementById('city-input')?.scrollIntoView({ behavior:'smooth', block:'center' })
+      return
+    }
     setRunning(true); setLoading(true); setHasSearched(true); setSearchError(null); setActiveCat(null); setActiveSub(null)
     try {
       const allResults = await Promise.allSettled(getDiscoverQueries(ageFilter).map(({ catId, subName }) => searchActivities({ city:city.trim(), radiusKm:radius, budget, catId, subName })))
@@ -327,8 +349,8 @@ export default function App() {
   const [openNowFilter, setOpenNowFilter] = useState(false)
   const [gpsLoading,    setGpsLoading]    = useState(false)
   const [gpsActive,     setGpsActive]     = useState(false)
-const [favsOpen, setFavsOpen] = useState(false)
-const [favsList, setFavsList] = useState([])
+  const [favsOpen,      setFavsOpen]      = useState(false)
+  const [favsList,      setFavsList]      = useState([])
   const cityTimer = useRef(null)
 
   const fetchWeather = async (lat, lng) => {
@@ -401,7 +423,7 @@ const [favsList, setFavsList] = useState([])
 
   const handleTextSearch = useCallback(async () => {
     if (!query.trim()) return
-   if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); setTimeout(() => document.getElementById('city-input')?.scrollIntoView({ behavior:'smooth', block:'center' }), 100); return }
+    if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); setTimeout(() => document.getElementById('city-input')?.scrollIntoView({ behavior:'smooth', block:'center' }), 100); return }
     if (!userLocation) { setSearchError("Sélectionnez une ville dans la liste pour activer la recherche."); return }
     setLoading(true)
     setSearchError(null)
@@ -413,15 +435,15 @@ const [favsList, setFavsList] = useState([])
         lat: userLocation.lat,
         lng: userLocation.lng,
         radius: radius * 1000,
-       keyword: query.trim(),
-catId: 'search',
-textsearch: true,
+        keyword: query.trim(),
+        catId: 'search',
+        textsearch: true,
       })
-    if (res.length === 0) {
-  setSearchError(`Aucun résultat pour "${query}" près de "${city}". Essayez un autre mot.`)
-  setResults([])
-  setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 100)
-} else {
+      if (res.length === 0) {
+        setSearchError(`Aucun résultat pour "${query}" près de "${city}". Essayez un autre mot.`)
+        setResults([])
+        setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 100)
+      } else {
         setResults(res)
         setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 300)
       }
@@ -463,7 +485,7 @@ textsearch: true,
     setLoading(true); setSearchError(null); setHasSearched(true)
     try {
       const activities = await searchActivities({ city:city.trim(), radiusKm:radius, budget, catId, subName:config.keyword })
-     if (activities.length===0) { setSearchError(`Aucun résultat dans un rayon de ${radius} km autour de "${city}". Essayez d'élargir la zone.`); setResults([]);setTimeout(() => document.getElementById('city-input')?.scrollIntoView({ behavior:'smooth', block:'center' }), 100) }
+      if (activities.length===0) { setSearchError(`Aucun résultat dans un rayon de ${radius} km autour de "${city}". Essayez d'élargir la zone.`); setResults([]);setTimeout(() => document.getElementById('city-input')?.scrollIntoView({ behavior:'smooth', block:'center' }), 100) }
       else { setResults(activities); setSearchError(null); setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth', block:'start' }), 300) }
     } catch (err) {
       console.error('[FelioKids]',err)
@@ -529,17 +551,19 @@ textsearch: true,
         {showEmail && <EmailModal onClose={() => setShowEmail(false)} />}
         <HeroSlideshow onWeekendClick={() => setWeekendOpen(true)} />
 
-        <div style={{ padding:'0 14px',marginTop:-60, position:'relative', zIndex:10 }}>
-          <div style={{ background:'#fff', borderRadius:24, padding:'22px 18px', boxShadow:'0 8px 40px rgba(27,43,75,0.13)', border:'1px solid #F0EBE3' }}>
+        <div style={{ padding:'0 14px', marginTop:-22, position:'relative', zIndex:10 }}>
+          <div style={{ background:'#fff', borderRadius:'22px 22px 16px 16px', padding:'6px 18px 22px', boxShadow:'0 -4px 24px rgba(0,0,0,0.07), 0 8px 40px rgba(27,43,75,0.10)', border:'1px solid #F0EBE3' }}>
+            {/* handle bar */}
+            <div style={{ width:40, height:4, borderRadius:99, background:'#E8E2DA', margin:'10px auto 16px' }} />
 
             {/* 1. Ville */}
             <div style={{ position:'relative', marginBottom:14 }}>
               <div className="city-field" style={{ display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:14, padding:'12px 15px', gap:10, border:`1.5px solid ${searchError && !city.trim() ? '#FF6B4A' : gpsActive ? '#FFCFC4' : '#EDE8E1'}`, transition:'border-color .2s' }}>
                 <span style={{ fontSize:16, flexShrink:0 }}>📍</span>
                 <input
-  id="city-input"
-  style={{ flex:1, fontSize:15, fontWeight:600, color:'#1B2B4B', fontFamily:'var(--font-body)' }}
-  placeholder="Ville ou commune..."
+                  id="city-input"
+                  style={{ flex:1, fontSize:15, fontWeight:600, color:'#1B2B4B', fontFamily:'var(--font-body)' }}
+                  placeholder="Ville ou commune..."
                   value={city}
                   onChange={e => handleCityInput(e.target.value)}
                   onKeyDown={e => { if(e.key==='Enter'&&citySuggs[0]) chooseSugg(citySuggs[0]) }}
@@ -592,11 +616,11 @@ textsearch: true,
               </div>
               <span style={{ fontSize:11, color:'#C5C5C5', fontWeight:500 }}>autour de toi</span>
               <button onClick={() => {
-  const next = !openNowFilter
-  setOpenNowFilter(next)
-  if (activeCat && activeSub) setTimeout(() => doSearch(activeCat, activeSub, budget), 50)
-  else if (activeCat) setTimeout(() => doSearchTout(activeCat), 50)
-}} style={{
+                const next = !openNowFilter
+                setOpenNowFilter(next)
+                if (activeCat && activeSub) setTimeout(() => doSearch(activeCat, activeSub, budget), 50)
+                else if (activeCat) setTimeout(() => doSearchTout(activeCat), 50)
+              }} style={{
                 padding:'4px 12px', borderRadius:99, fontSize:11, fontWeight:700,
                 background: openNowFilter ? '#FF6B4A' : '#F5F3F0',
                 color: openNowFilter ? '#fff' : '#5A6A82',
@@ -610,11 +634,11 @@ textsearch: true,
               <span style={{ fontSize:11, fontWeight:600, color:'#C5C5C5', flexShrink:0 }}>👶</span>
               <div style={{ display:'flex', gap:5, flexWrap:'wrap' }}>
                 {[{id:null,label:'Tous'},{id:'0-3',label:'0-3 ans'},{id:'4-6',label:'4-6 ans'},{id:'7-12',label:'7-12 ans'},{id:'13+',label:'Ado'}].map(a => (
-                  <button key={String(a.id)} onClick={() => { 
-  setAgeFilter(a.id)
-  if (activeCat && activeSub) setTimeout(() => doSearch(activeCat, activeSub, budget), 50)
-  else if (activeCat) setTimeout(() => doSearchTout(activeCat), 50)
-}} style={{
+                  <button key={String(a.id)} onClick={() => {
+                    setAgeFilter(a.id)
+                    if (activeCat && activeSub) setTimeout(() => doSearch(activeCat, activeSub, budget), 50)
+                    else if (activeCat) setTimeout(() => doSearchTout(activeCat), 50)
+                  }} style={{
                     padding:'4px 10px', borderRadius:99, fontSize:11, fontWeight:700,
                     background: ageFilter===a.id ? '#FF6B4A' : '#F5F3F0',
                     color: ageFilter===a.id ? '#fff' : '#5A6A82',
@@ -704,7 +728,7 @@ textsearch: true,
       <NewsletterPopup isOpen={popupOpen} onClose={() => setPopupOpen(false)} />
       <WeekendPanel lat={userLocation?.lat} lng={userLocation?.lng} isOpen={weekendOpen} onClose={() => setWeekendOpen(false)} />
 
-      {/* Bouton Mes favoris — fixé en bas */}
+      {/* Bouton Mes favoris */}
       <button
         onClick={() => { setFavsList(JSON.parse(localStorage.getItem('fk_favs')||'[]')); setFavsOpen(true) }}
         style={{ position:'fixed', bottom:20, right:16, background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', color:'#fff', border:'none', borderRadius:99, padding:'12px 20px', fontSize:13, fontWeight:800, boxShadow:'0 4px 20px rgba(255,107,74,0.45)', cursor:'pointer', zIndex:200, display:'flex', alignItems:'center', gap:7 }}
