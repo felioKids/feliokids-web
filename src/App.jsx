@@ -469,6 +469,7 @@ textsearch: true,
 
   const clickCat = (id) => {
     if (id === 'events') { setSearchError("✨ Weekend & Événements — Bientôt disponible !"); setTimeout(() => setSearchError(null), 3000); return }
+    if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 100); return }
     if (activeCat===id) { setActiveCat(null); setActiveSub(null); setResults([]); setHasSearched(false) }
     else { setActiveCat(id); setActiveSub(null) }
   }
