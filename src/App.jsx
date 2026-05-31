@@ -599,7 +599,11 @@ textsearch: true,
               <span style={{ fontSize:11, fontWeight:600, color:'#C5C5C5', flexShrink:0 }}>👶</span>
               <div style={{ display:'flex', gap:5, flexWrap:'wrap' }}>
                 {[{id:null,label:'Tous'},{id:'0-3',label:'0-3 ans'},{id:'4-6',label:'4-6 ans'},{id:'7-12',label:'7-12 ans'},{id:'13+',label:'Ado'}].map(a => (
-                  <button key={String(a.id)} onClick={() => setAgeFilter(a.id)} style={{
+                  <button key={String(a.id)} onClick={() => { 
+  setAgeFilter(a.id)
+  if (activeCat && activeSub) setTimeout(() => doSearch(activeCat, activeSub, budget), 50)
+  else if (activeCat) setTimeout(() => doSearchTout(activeCat), 50)
+}} style={{
                     padding:'4px 10px', borderRadius:99, fontSize:11, fontWeight:700,
                     background: ageFilter===a.id ? '#FF6B4A' : '#F5F3F0',
                     color: ageFilter===a.id ? '#fff' : '#5A6A82',
