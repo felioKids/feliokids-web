@@ -397,7 +397,7 @@ const [favsList, setFavsList] = useState([])
 
   const handleTextSearch = useCallback(async () => {
     if (!query.trim()) return
-   if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 100); return }
+   if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); setTimeout(() => document.getElementById('city-input')?.scrollIntoView({ behavior:'smooth', block:'center' }), 100); return }
     if (!userLocation) { setSearchError("Sélectionnez une ville dans la liste pour activer la recherche."); return }
     setLoading(true)
     setSearchError(null)
@@ -435,7 +435,7 @@ textsearch: true,
     const b   = bgt   !== undefined ? bgt   : budget
     const r   = rad   !== undefined ? rad   : radius
     if (!cat || !s) return
-    if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 100); return }
+    if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); setTimeout(() => document.getElementById('city-input')?.scrollIntoView({ behavior:'smooth', block:'center' }), 100); return }
     setLoading(true); setSearchError(null); setHasSearched(true)
     try {
       const activities = await searchActivities({ city:city.trim(), radiusKm:r, budget:b, catId:cat, subName:s })
@@ -451,14 +451,14 @@ textsearch: true,
   }, [activeCat, activeSub, budget, city, radius])
 
   const doSearchTout = useCallback(async (catId) => {
-    if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 100); return }
+    if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); setTimeout(() => document.getElementById('city-input')?.scrollIntoView({ behavior:'smooth', block:'center' }), 100); return }
     const config = TOUT_CONFIG[catId]
     if (!config) return
     setActiveSub(null)
     setLoading(true); setSearchError(null); setHasSearched(true)
     try {
       const activities = await searchActivities({ city:city.trim(), radiusKm:radius, budget, catId, subName:config.keyword })
-      if (activities.length===0) { setSearchError(`Aucun résultat dans un rayon de ${radius} km autour de "${city}". Essayez d'élargir la zone.`); setResults([]) }
+     if (activities.length===0) { setSearchError(`Aucun résultat dans un rayon de ${radius} km autour de "${city}". Essayez d'élargir la zone.`); setResults([]);setTimeout(() => document.getElementById('city-input')?.scrollIntoView({ behavior:'smooth', block:'center' }), 100) }
       else { setResults(activities); setSearchError(null); setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth', block:'start' }), 300) }
     } catch (err) {
       console.error('[FelioKids]',err)
@@ -469,7 +469,7 @@ textsearch: true,
 
   const clickCat = (id) => {
     if (id === 'events') { setSearchError("✨ Weekend & Événements — Bientôt disponible !"); setTimeout(() => setSearchError(null), 3000); return }
-    if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 100); return }
+    if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); setTimeout(() => document.getElementById('city-input')?.scrollIntoView({ behavior:'smooth', block:'center' }), 100); return }
     if (activeCat===id) { setActiveCat(null); setActiveSub(null); setResults([]); setHasSearched(false) }
     else { setActiveCat(id); setActiveSub(null) }
   }
@@ -529,11 +529,12 @@ textsearch: true,
 
             {/* 1. Ville */}
             <div style={{ position:'relative', marginBottom:14 }}>
-              <div className="city-field" style={{ display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:14, padding:'12px 15px', gap:10, border:`1.5px solid ${gpsActive ? '#FFCFC4' : '#EDE8E1'}`, transition:'border-color .2s' }}>
+              <div className="city-field" style={{ display:'flex', alignItems:'center', background:'#FFF8F1', borderRadius:14, padding:'12px 15px', gap:10, border:`1.5px solid ${searchError && !city.trim() ? '#FF6B4A' : gpsActive ? '#FFCFC4' : '#EDE8E1'}`, transition:'border-color .2s' }}>
                 <span style={{ fontSize:16, flexShrink:0 }}>📍</span>
                 <input
-                  style={{ flex:1, fontSize:15, fontWeight:600, color:'#1B2B4B', fontFamily:'var(--font-body)' }}
-                  placeholder="Ville ou commune..."
+  id="city-input"
+  style={{ flex:1, fontSize:15, fontWeight:600, color:'#1B2B4B', fontFamily:'var(--font-body)' }}
+  placeholder="Ville ou commune..."
                   value={city}
                   onChange={e => handleCityInput(e.target.value)}
                   onKeyDown={e => { if(e.key==='Enter'&&citySuggs[0]) chooseSugg(citySuggs[0]) }}
