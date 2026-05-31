@@ -573,7 +573,7 @@ export default function App() {
 
             {/* 3. Âge */}
             <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:14 }}>
-              <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
+              <div style={{ display:'flex', gap:6, flexWrap:'nowrap', overflowX:'auto', paddingBottom:4 }}>
                 {[{id:null,label:'Tous'},{id:'0-3',label:'0-3 ans'},{id:'4-6',label:'4-6 ans'},{id:'7-12',label:'7-12 ans'},{id:'13+',label:'Ado'}].map(a => (
                   <button key={String(a.id)} onClick={() => {
                     setAgeFilter(a.id)
