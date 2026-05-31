@@ -69,7 +69,7 @@ function HeroSlideshow({ onWeekendClick }) {
   const [popupOpen, setPopupOpen] = useState(false)
   useEffect(() => { const t = setInterval(() => setCur(c => (c+1)%SLIDES.length), 4500); return () => clearInterval(t) }, [])
   return (
-    <div style={{ position:'relative', width:'100%', height:'400px', overflow:'hidden', flexShrink:0 }}>
+    <div style={{ position:'relative', width:'100%', height:'300px', overflow:'hidden', flexShrink:0 }}>
       {SLIDES.map((s,i) => (
         <div key={i} style={{ position:'absolute', inset:0, opacity:i===cur?1:0, transition:'opacity 1.2s ease', zIndex:i===cur?1:0 }}>
           <img src={s.img} alt="" style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'center 25%' }} />
@@ -497,7 +497,7 @@ export default function App() {
         {showEmail && <EmailModal onClose={() => setShowEmail(false)} />}
         <HeroSlideshow onWeekendClick={() => setWeekendOpen(true)} />
 
-        <div style={{ padding:'0 14px', marginTop:-22, position:'relative', zIndex:10 }}>
+        <div style={{ padding:'0 14px', marginTop:-24, position:'relative', zIndex:10 }}>
           <div style={{ background:'#fff', borderRadius:'22px 22px 16px 16px', padding:'6px 18px 22px', boxShadow:'0 -4px 24px rgba(0,0,0,0.07), 0 8px 40px rgba(27,43,75,0.10)', border:'1px solid #F0EBE3' }}>
 
             {/* handle bar */}
