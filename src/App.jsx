@@ -248,7 +248,11 @@ function getDiscoverQueries(ageFilter) {
 function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasSearched, setSearchError, setActiveCat, setActiveSub, ageFilter }) {
   const [running, setRunning] = useState(false)
   const handleClick = async () => {
-    if (!city?.trim() || running) return
+    if (running) return
+if (!city?.trim()) {
+  document.getElementById('city-input')?.scrollIntoView({ behavior:'smooth', block:'center' })
+  return
+}
     setRunning(true); setLoading(true); setHasSearched(true); setSearchError(null); setActiveCat(null); setActiveSub(null)
     try {
       const allResults = await Promise.allSettled(getDiscoverQueries(ageFilter).map(({ catId, subName }) => searchActivities({ city:city.trim(), radiusKm:radius, budget, catId, subName })))
@@ -413,10 +417,11 @@ const [favsList, setFavsList] = useState([])
 catId: 'search',
 textsearch: true,
       })
-      if (res.length === 0) {
-        setSearchError(`Aucun résultat pour "${query}" près de "${city}". Essayez un autre mot.`)
-        setResults([])
-      } else {
+    if (res.length === 0) {
+  setSearchError(`Aucun résultat pour "${query}" près de "${city}". Essayez un autre mot.`)
+  setResults([])
+  setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 100)
+} else {
         setResults(res)
         setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 300)
       }
@@ -439,7 +444,7 @@ textsearch: true,
     setLoading(true); setSearchError(null); setHasSearched(true)
     try {
       const activities = await searchActivities({ city:city.trim(), radiusKm:r, budget:b, catId:cat, subName:s })
-      if (activities.length===0) { setSearchError(`Aucun résultat pour "${s}" dans un rayon de ${r} km autour de "${city}". Essayez d'élargir la zone.`); setResults([]) }
+      if (activities.length===0) { setSearchError(`Aucun résultat pour "${s}" dans un rayon de ${r} km autour de "${city}". Essayez d'élargir la zone.`); setResults([]); setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 100) }
       else { setResults(activities); setSearchError(null); setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth', block:'start' }), 300) }
     } catch (err) {
       console.error('[FelioKids]',err)
@@ -574,19 +579,24 @@ textsearch: true,
               <span style={{ fontSize:11, fontWeight:600, color:'#C5C5C5', flexShrink:0 }}>📏</span>
               <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #EDE8E1', borderRadius:99, overflow:'hidden' }}>
                 <button
-                  onPointerDown={() => { const step = () => { setRadius(r => { const next=Math.max(5,r-5); if(activeCat) doSearch(activeCat,activeSub,budget,next); return next }); }; step(); const t=setInterval(step,400); window._rTimer=t }}
+                  onPointerDown={() => { const step = () => { setRadius(r => { const next=Math.max(5,r-5); if(activeCat && activeSub) doSearch(activeCat,activeSub,budget,next); else if(activeCat) doSearchTout(activeCat); return next }); }; step(); const t=setInterval(step,400); window._rTimer=t }}
                   onPointerUp={() => clearInterval(window._rTimer)} onPointerLeave={() => clearInterval(window._rTimer)}
                   style={{ width:36, height:34, fontSize:18, fontWeight:700, color:'#1B2B4B', background:'#F5F3F0', borderRight:'1.5px solid #EDE8E1', flexShrink:0 }}>−</button>
                 <div style={{ minWidth:72, textAlign:'center', padding:'0 10px' }}>
                   <span style={{ fontSize:14, fontWeight:700, color:'#1B2B4B' }}>{radius} km</span>
                 </div>
                 <button
-                  onPointerDown={() => { const step = () => { setRadius(r => { const next=Math.min(50,r+5); if(activeCat) doSearch(activeCat,activeSub,budget,next); return next }); }; step(); const t=setInterval(step,400); window._rTimer=t }}
+                  onPointerDown={() => { const step = () => { setRadius(r => { const next=Math.min(50,r+5); if(activeCat && activeSub) doSearch(activeCat,activeSub,budget,next); else if(activeCat) doSearchTout(activeCat); return next }); }; step(); const t=setInterval(step,400); window._rTimer=t }}
                   onPointerUp={() => clearInterval(window._rTimer)} onPointerLeave={() => clearInterval(window._rTimer)}
                   style={{ width:36, height:34, fontSize:18, fontWeight:700, color:'#1B2B4B', background:'#F5F3F0', borderLeft:'1.5px solid #EDE8E1', flexShrink:0 }}>+</button>
               </div>
               <span style={{ fontSize:11, color:'#C5C5C5', fontWeight:500 }}>autour de toi</span>
-              <button onClick={() => setOpenNowFilter(f => !f)} style={{
+              <button onClick={() => {
+  const next = !openNowFilter
+  setOpenNowFilter(next)
+  if (activeCat && activeSub) setTimeout(() => doSearch(activeCat, activeSub, budget), 50)
+  else if (activeCat) setTimeout(() => doSearchTout(activeCat), 50)
+}} style={{
                 padding:'4px 12px', borderRadius:99, fontSize:11, fontWeight:700,
                 background: openNowFilter ? '#FF6B4A' : '#F5F3F0',
                 color: openNowFilter ? '#fff' : '#5A6A82',
