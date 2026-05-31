@@ -492,8 +492,8 @@ export default function App() {
   }
 
   return (
-    <div style={{ minHeight:'100vh', background:'#FFF8F1' }}>
-      <div style={{ maxWidth:480, margin:'0 auto', paddingBottom:48 }}>
+    <div style={{ minHeight:'100vh', background:'#FFF8F1', overflowX:'hidden' }}>
+      <div style={{ maxWidth:480, margin:'0 auto', paddingBottom:48, overflowX:'hidden' }}>
         {showEmail && <EmailModal onClose={() => setShowEmail(false)} />}
         <HeroSlideshow onWeekendClick={() => setWeekendOpen(true)} />
 
