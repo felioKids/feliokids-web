@@ -497,8 +497,8 @@ export default function App() {
         {showEmail && <EmailModal onClose={() => setShowEmail(false)} />}
         <HeroSlideshow onWeekendClick={() => setWeekendOpen(true)} />
 
-        <div style={{ padding:'0 10px', marginTop:-24, position:'relative', zIndex:10 }}>
-          <div style={{ background:'#fff', borderRadius:'22px 22px 16px 16px', padding:'6px 14px 22px', boxShadow:'0 -4px 24px rgba(0,0,0,0.07), 0 8px 40px rgba(27,43,75,0.10)', border:'1px solid #F0EBE3' }}>
+        <div style={{padding:'0 10px 0 10px', marginTop:-24, position:'relative', zIndex:10, paddingRight:10 }}>
+          <div style={{ background:'#fff', borderRadius:'22px 22px 16px 16px', padding:'6px 12px 22px', boxShadow:'0 -4px 24px rgba(0,0,0,0.07), 0 8px 40px rgba(27,43,75,0.10)', border:'1px solid #F0EBE3' }}>
 
             {/* handle bar */}
             <div style={{ width:40, height:4, borderRadius:99, background:'#E8E2DA', margin:'10px auto 18px' }} />
@@ -610,7 +610,7 @@ export default function App() {
                 {query && <button onClick={() => setQuery('')} style={{ color:'#C5C5C5', fontSize:16, padding:4 }}>✕</button>}
               </div>
               <button onClick={() => handleTextSearch()}
-                style={{ background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', color:'#fff', padding:'14px 18px', borderRadius:16, fontSize:15, fontWeight:700, flexShrink:0, boxShadow:'0 4px 14px rgba(255,107,74,0.38)', whiteSpace:'nowrap', minHeight:54 }}>
+                style={{ background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', color:'#fff', padding:'14px 14px', borderRadius:16, fontSize:14, fontWeight:700, flexShrink:0, boxShadow:'0 4px 14px rgba(255,107,74,0.38)', whiteSpace:'nowrap', minHeight:54 }}>
                 Trouver →
               </button>
             </div>
