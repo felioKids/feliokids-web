@@ -120,10 +120,10 @@ function HeroSlideshow({ onWeekendClick }) {
   )
 }
 
-function CatTile({ cat, active, onClick, delay }) {
+function CatTile({ cat, active, onClick, delay, solo }) {
   return (
     <button id={`cat-tile-${cat.id}`} onClick={onClick} className="anim-up" style={{
-      animationDelay:`${delay}s`, position:'relative', overflow:'hidden', borderRadius:18, width:'100%', aspectRatio:'3/4',
+    animationDelay:`${delay}s`, position:'relative', overflow:'hidden', borderRadius:18, width:'100%', aspectRatio:solo?'16/9':'3/4',
       border:active?`3px solid ${cat.c}`:'3px solid transparent',
       boxShadow:active?`0 0 0 2px ${cat.c}44,0 8px 28px rgba(0,0,0,0.18)`:'0 2px 12px rgba(27,43,75,0.10)',
       transition:'all .22s cubic-bezier(.22,.68,0,1.2)', transform:active?'scale(1.03)':'scale(1)',
@@ -480,8 +480,8 @@ export default function App() {
       const activeCatInPair = pair.find(c => c.id===activeCat)
       items.push(
         <div key={i}>
-          <div style={{ display:'grid', gridTemplateColumns:pair.length < 2 ? '1fr' : 'repeat(2,1fr)', gap:9, marginBottom:activeCatInPair?0:9 }}>
-            {pair.map((cat,j) => <CatTile key={cat.id} cat={cat} active={activeCat===cat.id} delay={(i+j)*0.04} onClick={() => clickCat(cat.id)} />)}
+          <div style={{ display:'grid', gridTemplateColumns:pair.length < 2 ? '1fr' : 'repeat(2,1fr)', marginBottom:activeCatInPair?0:9, gap:9, marginBottom:activeCatInPair?0:9 }}>
+     {pair.map((cat,j) => <CatTile key={cat.id} cat={cat} active={activeCat===cat.id} delay={(i+j)*0.04} onClick={() => clickCat(cat.id)} solo={pair.length < 2} />)}
             {pair.length < 2 && null}
           </div>
           {activeCatInPair && <SubsPanel cat={activeCatInPair} activeSub={activeSub} onSub={clickSub} onTout={() => doSearchTout(activeCatInPair.id)} />}
