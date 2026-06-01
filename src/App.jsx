@@ -120,10 +120,10 @@ function HeroSlideshow({ onWeekendClick }) {
   )
 }
 
-function CatTile({ cat, active, onClick, delay, solo }) {
+function CatTile({ cat, active, onClick, delay }) {
   return (
     <button id={`cat-tile-${cat.id}`} onClick={onClick} className="anim-up" style={{
-    animationDelay:`${delay}s`, position:'relative', overflow:'hidden', borderRadius:18, width:'100%', aspectRatio:solo?'16/9':'3/4',
+      animationDelay:`${delay}s`, position:'relative', overflow:'hidden', borderRadius:18, width:'100%', aspectRatio:'3/4',
       border:active?`3px solid ${cat.c}`:'3px solid transparent',
       boxShadow:active?`0 0 0 2px ${cat.c}44,0 8px 28px rgba(0,0,0,0.18)`:'0 2px 12px rgba(27,43,75,0.10)',
       transition:'all .22s cubic-bezier(.22,.68,0,1.2)', transform:active?'scale(1.03)':'scale(1)',
@@ -480,8 +480,8 @@ export default function App() {
       const activeCatInPair = pair.find(c => c.id===activeCat)
       items.push(
         <div key={i}>
-          <div style={{ display:'grid', gridTemplateColumns:pair.length < 2 ? '1fr' : 'repeat(2,1fr)', marginBottom:activeCatInPair?0:9, gap:9, marginBottom:activeCatInPair?0:9 }}>
-     {pair.map((cat,j) => <CatTile key={cat.id} cat={cat} active={activeCat===cat.id} delay={(i+j)*0.04} onClick={() => clickCat(cat.id)} solo={pair.length < 2} />)}
+          <div style={{ display:'grid', gridTemplateColumns:pair.length < 2 ? '1fr' : 'repeat(2,1fr)', gap:9, marginBottom:activeCatInPair?0:9 }}>
+            {pair.map((cat,j) => <CatTile key={cat.id} cat={cat} active={activeCat===cat.id} delay={(i+j)*0.04} onClick={() => clickCat(cat.id)} />)}
             {pair.length < 2 && null}
           </div>
           {activeCatInPair && <SubsPanel cat={activeCatInPair} activeSub={activeSub} onSub={clickSub} onTout={() => doSearchTout(activeCatInPair.id)} />}
@@ -525,7 +525,7 @@ export default function App() {
                   style={{ background:'none', border:'none', cursor: gpsLoading ? 'wait' : 'pointer', padding:4, display:'flex', alignItems:'center', gap:5, flexShrink:0, opacity: gpsLoading ? 0.6 : 1, transition:'opacity .2s' }}>
                   <GpsIcon loading={gpsLoading} active={gpsActive} />
                   <span style={{ fontSize:12, fontWeight:700, color: gpsActive ? '#FF6B4A' : '#C5C5C5', whiteSpace:'nowrap' }}>
-                    {gpsLoading ? 'Localisation...' : 'GPS'}
+                    {gpsLoading ? 'Localisation...' : 'Ma position'}
                   </span>
                 </button>
               </div>
@@ -610,7 +610,7 @@ export default function App() {
                 {query && <button onClick={() => setQuery('')} style={{ color:'#C5C5C5', fontSize:16, padding:4 }}>✕</button>}
               </div>
               <button onClick={() => handleTextSearch()}
-                style={{ background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', color:'#fff', padding:'14px 10px', borderRadius:16, fontSize:13, fontWeight:700, flexShrink:0, boxShadow:'0 4px 14px rgba(255,107,74,0.38)', whiteSpace:'nowrap', minHeight:54 }}>
+                style={{ background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', color:'#fff', padding:'14px 18px', borderRadius:16, fontSize:15, fontWeight:700, flexShrink:0, boxShadow:'0 4px 14px rgba(255,107,74,0.38)', whiteSpace:'nowrap', minHeight:54 }}>
                 Trouver →
               </button>
             </div>
@@ -655,9 +655,8 @@ export default function App() {
           {!loading && !hasSearched && <div style={{ padding:'20px 0' }} />}
         </div>
 
-        <div style={{ textAlign:'center', padding:'20px 0 32px', color:'#C5C5C5', fontSize:12, display:'flex', alignItems:'center', justifyContent:'center', gap:7 }}>
-          <FelioLogo size={22} fontSize={10} />
-          FelioKids · <a href="mailto:contact.feliokids@gmail.com" style={{ color:'#FF6B4A', fontWeight:600 }}>contact.feliokids@gmail.com</a>
+        <div style={{ textAlign:'center', padding:'20px 0 32px', color:'#C5C5C5', fontSize:12 }}>
+          felioKids · © 2026 · <a href="mailto:contact.feliokids@gmail.com" style={{ color:'#C5C5C5' }}>contact.feliokids@gmail.com</a>
         </div>
       </div>
 
