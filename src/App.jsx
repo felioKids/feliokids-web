@@ -35,12 +35,12 @@ const CATS = [
   { id:'events',       l:'Weekend & Événements',  sub:'Bientôt disponible',          c:'#1B2B4B', img:'https://images.unsplash.com/photo-1498931299472-f7a63a5a1cfa?w=400&q=80',
     subs:['Festivals famille','Fêtes & marchés','Brocante','Spectacles','Expos temporaires','Concerts gratuits',"Feux d'artifice",'Événements saisonniers','Compétitions sportives'],
     tout:'événement famille weekend' },
-  { id:'resto',        l:'Restaurants famille',   sub:'Bien manger après',           c:'#E8734A', img:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=80',
-    subs:['Pizzerias','Crêperies','Burgers & grill','Sushi & japonais','Glaciers & glaces','Cuisine locale'],
-    tout:'restaurant famille enfant' },
   { id:'ateliers',     l:'Ateliers Créatifs',     sub:"Créer & s'exprimer",          c:'#D97706', img:'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400&q=80',
     subs:['Ateliers peinture','Poterie enfants','Ateliers musique','Bibliothèques & médiathèques','Ateliers science','Couture & DIY','Théâtre enfants'],
     tout:'atelier créatif enfant' },
+  { id:'resto',        l:'Restaurants famille',   sub:'Bien manger après',           c:'#E8734A', img:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=80',
+    subs:['Pizzerias','Crêperies','Burgers & grill','Sushi & japonais','Glaciers & glaces','Cuisine locale'],
+    tout:'restaurant famille enfant' },
 ]
 
 const TOUT_CONFIG = {
@@ -480,9 +480,9 @@ export default function App() {
       const activeCatInPair = pair.find(c => c.id===activeCat)
       items.push(
         <div key={i}>
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:9, marginBottom:activeCatInPair?0:9 }}>
+          <div style={{ display:'grid', gridTemplateColumns:pair.length < 2 ? '1fr' : 'repeat(2,1fr)', gap:9, marginBottom:activeCatInPair?0:9 }}>
             {pair.map((cat,j) => <CatTile key={cat.id} cat={cat} active={activeCat===cat.id} delay={(i+j)*0.04} onClick={() => clickCat(cat.id)} />)}
-            {pair.length < 2 && <div />}
+            {pair.length < 2 && null}
           </div>
           {activeCatInPair && <SubsPanel cat={activeCatInPair} activeSub={activeSub} onSub={clickSub} onTout={() => doSearchTout(activeCatInPair.id)} />}
         </div>
@@ -497,8 +497,8 @@ export default function App() {
         {showEmail && <EmailModal onClose={() => setShowEmail(false)} />}
         <HeroSlideshow onWeekendClick={() => setWeekendOpen(true)} />
 
-        <div style={{padding:'0 10px 0 10px', marginTop:-24, position:'relative', zIndex:10, paddingRight:10 }}>
-          <div style={{ background:'#fff', borderRadius:'22px 22px 16px 16px', padding:'6px 12px 22px', boxShadow:'0 -4px 24px rgba(0,0,0,0.07), 0 8px 40px rgba(27,43,75,0.10)', border:'1px solid #F0EBE3' }}>
+        <div style={{ padding:'0 10px', marginTop:-24, position:'relative', zIndex:10 }}>
+          <div style={{ background:'#fff', borderRadius:'22px 22px 16px 16px', padding:'6px 14px 22px', boxShadow:'0 -4px 24px rgba(0,0,0,0.07), 0 8px 40px rgba(27,43,75,0.10)', border:'1px solid #F0EBE3' }}>
 
             {/* handle bar */}
             <div style={{ width:40, height:4, borderRadius:99, background:'#E8E2DA', margin:'10px auto 18px' }} />
@@ -525,7 +525,7 @@ export default function App() {
                   style={{ background:'none', border:'none', cursor: gpsLoading ? 'wait' : 'pointer', padding:4, display:'flex', alignItems:'center', gap:5, flexShrink:0, opacity: gpsLoading ? 0.6 : 1, transition:'opacity .2s' }}>
                   <GpsIcon loading={gpsLoading} active={gpsActive} />
                   <span style={{ fontSize:12, fontWeight:700, color: gpsActive ? '#FF6B4A' : '#C5C5C5', whiteSpace:'nowrap' }}>
-                    {gpsLoading ? 'Localisation...' : 'Localisez'}
+                    {gpsLoading ? 'Localisation...' : 'Ma position'}
                   </span>
                 </button>
               </div>
@@ -610,7 +610,7 @@ export default function App() {
                 {query && <button onClick={() => setQuery('')} style={{ color:'#C5C5C5', fontSize:16, padding:4 }}>✕</button>}
               </div>
               <button onClick={() => handleTextSearch()}
-                style={{ background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', color:'#fff', padding:'14px 14px', borderRadius:16, fontSize:14, fontWeight:700, flexShrink:0, boxShadow:'0 4px 14px rgba(255,107,74,0.38)', whiteSpace:'nowrap', minHeight:54 }}>
+                style={{ background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', color:'#fff', padding:'14px 18px', borderRadius:16, fontSize:15, fontWeight:700, flexShrink:0, boxShadow:'0 4px 14px rgba(255,107,74,0.38)', whiteSpace:'nowrap', minHeight:54 }}>
                 Trouver →
               </button>
             </div>
