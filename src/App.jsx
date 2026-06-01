@@ -525,7 +525,7 @@ export default function App() {
                   style={{ background:'none', border:'none', cursor: gpsLoading ? 'wait' : 'pointer', padding:4, display:'flex', alignItems:'center', gap:5, flexShrink:0, opacity: gpsLoading ? 0.6 : 1, transition:'opacity .2s' }}>
                   <GpsIcon loading={gpsLoading} active={gpsActive} />
                   <span style={{ fontSize:12, fontWeight:700, color: gpsActive ? '#FF6B4A' : '#C5C5C5', whiteSpace:'nowrap' }}>
-                    {gpsLoading ? 'Localisation...' : 'Ma position'}
+                    {gpsLoading ? '...' : 'GPS'}
                   </span>
                 </button>
               </div>
@@ -610,7 +610,7 @@ export default function App() {
                 {query && <button onClick={() => setQuery('')} style={{ color:'#C5C5C5', fontSize:16, padding:4 }}>✕</button>}
               </div>
               <button onClick={() => handleTextSearch()}
-                style={{ background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', color:'#fff', padding:'14px 18px', borderRadius:16, fontSize:15, fontWeight:700, flexShrink:0, boxShadow:'0 4px 14px rgba(255,107,74,0.38)', whiteSpace:'nowrap', minHeight:54 }}>
+                style={{ background:'linear-gradient(135deg,#FF6B4A,#FF9A6C)', color:'#fff', padding:'14px 10px', borderRadius:16, fontSize:13, fontWeight:700, flexShrink:0, boxShadow:'0 4px 14px rgba(255,107,74,0.38)', whiteSpace:'nowrap', minHeight:54 }}>
                 Trouver →
               </button>
             </div>
