@@ -287,7 +287,7 @@ function getDiscoverQueries(ageFilter) {
   ]
 }
 
-function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasSearched, setSearchError, setActiveCat, setActiveSub, ageFilter }) {
+function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasSearched, setSearchError, setActiveCat, setActiveSub, ageFilter, setLastSearch }) {
   const [running, setRunning] = useState(false)
   const handleClick = async () => {
     if (running) return
@@ -295,7 +295,7 @@ function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasS
       document.getElementById('city-input')?.scrollIntoView({ behavior:'smooth', block:'center' })
       return
     }
-  clearCache(); setRunning(true); setLoading(true); setHasSearched(true); setSearchError(null); setActiveCat(null); setActiveSub(null)
+  clearCache(); setRunning(true); setLoading(true); setHasSearched(true); setSearchError(null); setActiveCat(null); setActiveSub(null); setLastSearch('decouvrir')
     try {
      const allResults = await Promise.allSettled(getDiscoverQueries(ageFilter).map(({ catId, subName }) => searchActivities({ city:city.trim(), radiusKm:radius, budget, catId, subName })))
       const flat = allResults.filter(r => r.status==='fulfilled').flatMap(r => r.value)
@@ -309,7 +309,7 @@ function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasS
   }
   if (!city) return null
   return (
-    <button onClick={handleClick} disabled={running} style={{ width:'100%', background:'linear-gradient(135deg,#1B2B4B,#2C3E6A)', borderRadius:16, padding:'14px 16px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:10, border:'none', cursor:running?'wait':'pointer', boxShadow:'0 3px 16px rgba(27,43,75,0.25)', transition:'transform .15s ease', opacity:running?0.9:1 }}
+    <button onClick={handleClick} <button id="decouvrir-btn" onClick={handleClick} disabled={running} style={{ width:'100%', background:'linear-gradient(135deg,#1B2B4B,#2C3E6A)', borderRadius:16, padding:'14px 16px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:10, border:'none', cursor:running?'wait':'pointer', boxShadow:'0 3px 16px rgba(27,43,75,0.25)', transition:'transform .15s ease', opacity:running?0.9:1 }}
       onMouseEnter={e => { if(!running) e.currentTarget.style.transform='scale(1.015)' }}
       onMouseLeave={e => e.currentTarget.style.transform='scale(1)'}>
       <div style={{ display:'flex', alignItems:'center', gap:12 }}>
@@ -371,17 +371,20 @@ export default function App() {
   const [gpsActive,     setGpsActive]     = useState(false)
   const [favsOpen,      setFavsOpen]      = useState(false)
   const [favsList,      setFavsList]      = useState([])
+const [lastSearch,    setLastSearch]    = useState(null)
   const cityTimer = useRef(null)
 useEffect(() => {
-  if (!hasSearched) return
+  if (!hasSearched || !lastSearch) return
   const timer = setTimeout(() => {
     clearCache()
-    if (activeSub === null && activeCat) {
+    if (lastSearch === 'decouvrir') {
+      document.getElementById('decouvrir-btn')?.click()
+    } else if (activeSub === null && activeCat) {
       doSearchTout(activeCat)
     } else if (activeCat && activeSub) {
       doSearch(activeCat, activeSub, budget, radius)
     }
-  }, 300)
+  }, 500)
   return () => clearTimeout(timer)
 }, [radius])
 
@@ -633,7 +636,7 @@ useEffect(() => {
             {city && (
               <div style={{ display:'flex', flexDirection:'column', gap:8, marginBottom:14 }}>
                 <WeatherBanner weather={weather} city={city} setActiveCat={setActiveCat} setActiveSub={setActiveSub} doSearch={doSearch} ageFilter={ageFilter} openNowFilter={openNowFilter} />
-                <DecouvrirBanner city={city} radius={radius} budget={budget} setResults={setResults} setLoading={setLoading} setHasSearched={setHasSearched} setSearchError={setSearchError} setActiveCat={setActiveCat} setActiveSub={setActiveSub} ageFilter={ageFilter} />
+                <DecouvrirBanner city={city} radius={radius} budget={budget} setResults={setResults} setLoading={setLoading} setHasSearched={setHasSearched} setSearchError={setSearchError} setActiveCat={setActiveCat} setActiveSub={setActiveSub} ageFilter={ageFilter} setLastSearch={setLastSearch} />
               </div>
             )}
 
