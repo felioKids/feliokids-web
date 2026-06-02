@@ -309,7 +309,7 @@ function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasS
   }
   if (!city) return null
   return (
-    <button onClick={handleClick} <button id="decouvrir-btn" onClick={handleClick} disabled={running} style={{ width:'100%', background:'linear-gradient(135deg,#1B2B4B,#2C3E6A)', borderRadius:16, padding:'14px 16px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:10, border:'none', cursor:running?'wait':'pointer', boxShadow:'0 3px 16px rgba(27,43,75,0.25)', transition:'transform .15s ease', opacity:running?0.9:1 }}
+    <button id="decouvrir-btn" onClick={handleClick}  disabled={running} style={{ width:'100%', background:'linear-gradient(135deg,#1B2B4B,#2C3E6A)', borderRadius:16, padding:'14px 16px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:10, border:'none', cursor:running?'wait':'pointer', boxShadow:'0 3px 16px rgba(27,43,75,0.25)', transition:'transform .15s ease', opacity:running?0.9:1 }}
       onMouseEnter={e => { if(!running) e.currentTarget.style.transform='scale(1.015)' }}
       onMouseLeave={e => e.currentTarget.style.transform='scale(1)'}>
       <div style={{ display:'flex', alignItems:'center', gap:12 }}>
@@ -463,7 +463,7 @@ useEffect(() => {
     const b   = bgt   !== undefined ? bgt   : budget
     const r   = rad   !== undefined ? rad   : radius
     if (!cat || !s) return
-    if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); setTimeout(() => document.getElementById('city-input')?.scrollIntoView({ behavior:'smooth', block:'center' }), 100); return }
+    if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 100); return }
     setLoading(true); setSearchError(null); setHasSearched(true)
     try {
       const activities = await searchActivities({ city:city.trim(), radiusKm:r, budget:b, catId:cat, subName:s })
