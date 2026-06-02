@@ -590,6 +590,11 @@ useEffect(() => {
                 <div style={{ minWidth:64, textAlign:'center', padding:'0 8px' }}>
                   <span style={{ fontSize:14, fontWeight:700, color:'#1B2B4B' }}>{radius} km</span>
                 </div>
+{hasSearched && results.length > 0 && (
+  <div style={{ fontSize:11, color:'#9AAABB', textAlign:'center', marginTop:4 }}>
+    Modifiez le rayon puis relancez la recherche 🔄
+  </div>
+)}
                 <button
                   onPointerDown={() => { const step = () => { setRadius(r => { const next=Math.min(50,r+5); setTimeout(() => { if(activeCat && activeSub) doSearch(activeCat,activeSub,budget,next); else if(activeCat) doSearchTout(activeCat); setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 500) }, 50); return next }); }; step(); const t=setInterval(step,400); window._rTimer=t }}
                   onPointerUp={() => clearInterval(window._rTimer)} onPointerLeave={() => clearInterval(window._rTimer)}
