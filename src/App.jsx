@@ -296,8 +296,7 @@ function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasS
     }
     setRunning(true); setLoading(true); setHasSearched(true); setSearchError(null); setActiveCat(null); setActiveSub(null)
     try {
-     const coords = await geocodeCity(city.trim())
-const allResults = await Promise.allSettled(getDiscoverQueries(ageFilter).map(({ catId, subName }) => searchActivitiesGoogle({ lat:coords.lat, lng:coords.lng, radius:radius*1000, catId, subName, keyword: catId+' '+subName })))
+     const allResults = await Promise.allSettled(getDiscoverQueries(ageFilter).map(({ catId, subName }) => searchActivities({ city:city.trim(), radiusKm:radius, budget, catId, subName })))
       const flat = allResults.filter(r => r.status==='fulfilled').flatMap(r => r.value)
       const seen = new Set()
       const unique = flat.filter(a => { if(seen.has(a.id)) return false; seen.add(a.id); return true })
