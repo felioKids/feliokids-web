@@ -437,7 +437,7 @@ export default function App() {
   }, [activeCat, activeSub, budget, city, radius])
 
   const doSearchTout = useCallback(async (catId) => {
-    if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); setTimeout(() => document.getElementById('city-input')?.scrollIntoView({ behavior:'smooth', block:'center' }), 100); return }
+    if (!city.trim()) { setSearchError("Entrez d'abord une ville pour lancer la recherche."); setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 100); return }
     const config = TOUT_CONFIG[catId]
     if (!config) return
     setActiveSub(null); setLoading(true); setSearchError(null); setHasSearched(true)
