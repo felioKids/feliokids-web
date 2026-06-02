@@ -572,14 +572,14 @@ export default function App() {
             <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:10 }}>
               <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #EDE8E1', borderRadius:99, overflow:'hidden', flexShrink:0 }}>
                 <button
-                  onPointerDown={() => { const step = () => { setRadius(r => { const next=Math.max(5,r-5); if(activeCat && activeSub) doSearch(activeCat,activeSub,budget,next); else if(activeCat) doSearchTout(activeCat); return next }); }; step(); const t=setInterval(step,400); window._rTimer=t }}
+                  onPointerDown={() => { const step = () => { setRadius(r => { const next=Math.max(5,r-5); setTimeout(() => { if(activeCat && activeSub) doSearch(activeCat,activeSub,budget,next); else if(activeCat) doSearchTout(activeCat); setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 500) }, 50); return next }); }; step(); const t=setInterval(step,400); window._rTimer=t }}
                   onPointerUp={() => clearInterval(window._rTimer)} onPointerLeave={() => clearInterval(window._rTimer)}
                   style={{ width:44, height:44, fontSize:20, fontWeight:700, color:'#1B2B4B', background:'#F5F3F0', borderRight:'1.5px solid #EDE8E1', flexShrink:0 }}>−</button>
                 <div style={{ minWidth:64, textAlign:'center', padding:'0 8px' }}>
                   <span style={{ fontSize:14, fontWeight:700, color:'#1B2B4B' }}>{radius} km</span>
                 </div>
                 <button
-                  onPointerDown={() => { const step = () => { setRadius(r => { const next=Math.min(50,r+5); if(activeCat && activeSub) doSearch(activeCat,activeSub,budget,next); else if(activeCat) doSearchTout(activeCat); return next }); }; step(); const t=setInterval(step,400); window._rTimer=t }}
+                  onPointerDown={() => { const step = () => { setRadius(r => { const next=Math.min(50,r+5); setTimeout(() => { if(activeCat && activeSub) doSearch(activeCat,activeSub,budget,next); else if(activeCat) doSearchTout(activeCat); setTimeout(() => document.getElementById('results-section')?.scrollIntoView({ behavior:'smooth' }), 500) }, 50); return next }); }; step(); const t=setInterval(step,400); window._rTimer=t }}
                   onPointerUp={() => clearInterval(window._rTimer)} onPointerLeave={() => clearInterval(window._rTimer)}
                   style={{ width:44, height:44, fontSize:20, fontWeight:700, color:'#1B2B4B', background:'#F5F3F0', borderLeft:'1.5px solid #EDE8E1', flexShrink:0 }}>+</button>
               </div>
