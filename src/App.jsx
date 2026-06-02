@@ -372,6 +372,18 @@ export default function App() {
   const [favsOpen,      setFavsOpen]      = useState(false)
   const [favsList,      setFavsList]      = useState([])
   const cityTimer = useRef(null)
+useEffect(() => {
+  if (!hasSearched) return
+  const timer = setTimeout(() => {
+    clearCache()
+    if (activeSub === null && activeCat) {
+      doSearchTout(activeCat)
+    } else if (activeCat && activeSub) {
+      doSearch(activeCat, activeSub, budget, radius)
+    }
+  }, 300)
+  return () => clearTimeout(timer)
+}, [radius])
 
   const fetchWeather = async (lat, lng) => {
     try {
