@@ -378,8 +378,9 @@ useEffect(() => {
   const timer = setTimeout(() => {
     clearCache()
     if (lastSearch === 'decouvrir') {
-      document.getElementById('decouvrir-btn')?.click()
-    } else if (activeSub === null && activeCat) {
+  const btn = document.getElementById('decouvrir-btn')
+  if (btn && !btn.disabled) btn.click()
+} else if (activeSub === null && activeCat) {
       doSearchTout(activeCat)
     } else if (activeCat && activeSub) {
       doSearch(activeCat, activeSub, budget, radius)
