@@ -287,7 +287,7 @@ function getDiscoverQueries(ageFilter) {
   ]
 }
 
-function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasSearched, setSearchError, setActiveCat, setActiveSub, ageFilter, setLastSearch }) {
+function DecouvrirBanner({ city, radius, budget, userLocation, setResults, setLoading, setHasSearched, setSearchError, setActiveCat, setActiveSub, ageFilter, setLastSearch }) {
   const [running, setRunning] = useState(false)
   const handleClick = async () => {
     if (running) return
@@ -297,7 +297,10 @@ function DecouvrirBanner({ city, radius, budget, setResults, setLoading, setHasS
     }
   clearCache(); setRunning(true); setLoading(true); setHasSearched(true); setSearchError(null); setActiveCat(null); setActiveSub(null); setLastSearch('decouvrir')
     try {
-     const allResults = await Promise.allSettled(getDiscoverQueries(ageFilter).map(({ catId, subName }) => searchActivities({ city:city.trim(), radiusKm:radius, budget, catId, subName })))
+    const allResults = await Promise.allSettled(getDiscoverQueries(ageFilter).map(({ catId, subName }) => userLocation
+  ? searchActivitiesGoogle({ lat:userLocation.lat, lng:userLocation.lng, radius:radius*1000, catId, subName, keyword:subName })
+  : searchActivities({ city:city.trim(), radiusKm:radius, budget, catId, subName })
+))
       const flat = allResults.filter(r => r.status==='fulfilled').flatMap(r => r.value)
       const seen = new Set()
       const unique = flat.filter(a => { if(seen.has(a.id)) return false; seen.add(a.id); return true })
@@ -637,7 +640,7 @@ useEffect(() => {
             {city && (
               <div style={{ display:'flex', flexDirection:'column', gap:8, marginBottom:14 }}>
                 <WeatherBanner weather={weather} city={city} setActiveCat={setActiveCat} setActiveSub={setActiveSub} doSearch={doSearch} ageFilter={ageFilter} openNowFilter={openNowFilter} />
-                <DecouvrirBanner city={city} radius={radius} budget={budget} setResults={setResults} setLoading={setLoading} setHasSearched={setHasSearched} setSearchError={setSearchError} setActiveCat={setActiveCat} setActiveSub={setActiveSub} ageFilter={ageFilter} setLastSearch={setLastSearch} />
+               <DecouvrirBanner city={city} radius={radius} budget={budget} userLocation={userLocation} setResults={setResults} setLoading={setLoading} setHasSearched={setHasSearched} setSearchError={setSearchError} setActiveCat={setActiveCat} setActiveSub={setActiveSub} ageFilter={ageFilter} setLastSearch={setLastSearch} />
               </div>
             )}
 
