@@ -297,10 +297,7 @@ function DecouvrirBanner({ city, radius, budget, userLocation, setResults, setLo
     }
   clearCache(); setRunning(true); setLoading(true); setHasSearched(true); setSearchError(null); setActiveCat(null); setActiveSub(null); setLastSearch('decouvrir')
     try {
-    const allResults = await Promise.allSettled(getDiscoverQueries(ageFilter).map(({ catId, subName }) => userLocation
-  ? searchActivitiesGoogle({ lat:userLocation.lat, lng:userLocation.lng, radius:radius*1000, catId, subName, keyword:subName })
-  : searchActivities({ city:city.trim(), radiusKm:radius, budget, catId, subName })
-))
+  const allResults = await Promise.allSettled(getDiscoverQueries(ageFilter).map(({ catId, subName }) => searchActivities({ city:city.trim(), radiusKm:radius, budget, catId, subName, userLat:userLocation?.lat, userLng:userLocation?.lng })))
       const flat = allResults.filter(r => r.status==='fulfilled').flatMap(r => r.value)
       const seen = new Set()
       const unique = flat.filter(a => { if(seen.has(a.id)) return false; seen.add(a.id); return true })

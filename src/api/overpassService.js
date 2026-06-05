@@ -116,12 +116,13 @@ function normalizeElement(el, centerLat, centerLng, subName) {
   }
 }
 
-export async function searchActivities({ city, radiusKm, budget, catId, subName }) {
+export async function searchActivities({ city, radiusKm, budget, catId, subName, userLat, userLng }) {
   const source = getSourceForSub(catId, subName)
 
- // Google Places
- if (source === 'google') {
-    const coords = await geocodeCity(city)
+  if (source === 'google') {
+    const coords = userLat && userLng 
+      ? { lat: userLat, lng: userLng }
+      : await geocodeCity(city)
     const filters = getFiltersForSub(catId, subName)
     const googleType = filters.find(f => f.type)?.type || null
   const googleKeyword = filters.find(f => f.keyword)?.keyword || subName
