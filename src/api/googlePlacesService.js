@@ -139,7 +139,8 @@ const activities = results
       lng:            place.geometry?.location?.lng,
       geometry:       place.geometry,           // ← DODANE: potrzebne do przycisków Parking/Manger
       openNow:        place.opening_hours?.open_now ?? null, // ← DODANE: badge Ouvert/Fermé
-      photoReference: place.photos?.[0]?.photo_reference || null,
+     photoReference: place.photos?.[0]?.photo_reference || null,
+photoReferences: (place.photos || []).slice(0, 3).map(p => p.photo_reference),
       fallbackPhoto:  getCategoryFallbackPhoto(catId),
       source:         'google',
       catId:          catId || null,
